@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Noto_Sans } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@mui/material";
+import theme from "@/assets/Theme";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const notoSans = Noto_Sans({
+  variable: "--font-noto-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// const geistMono = Geist_Mono({
+//   variable: "--font-geist-mono",
+//   subsets: ["latin"],
+// });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,10 +27,38 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${notoSans.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider theme={theme}>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
 }
+// export default function RootLayout({
+//   children,
+// }: {
+//   children: React.ReactNode;
+// }) {
+//   return (
+//     <html lang="en">
+//       <body className={`${notoSans.variable} antialiased`}>
+//         <header>
+//           <h1>My Next.js App</h1>
+//           <nav>
+//             <ul>
+//               <li><a href="">Home</a></li>
+//               <li><a href="/features/login">Feature A</a></li>
+//               <li><a href="/(features)/featureB">Feature B</a></li>
+//             </ul>
+//           </nav>
+//         </header>
+//         <main>{children}</main>
+//         <footer>
+//           <p>&copy; 2025 My Next.js App</p>
+//         </footer>
+//       </body>
+//     </html>
+//   );
+// }
