@@ -1,35 +1,105 @@
 "use client";
-import { Button } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+  Paper,
+  Link,
+} from "@mui/material";
+import styles from './Login.module.css';
 
-const Login: React.FC = () => {
-  // const handleLogin = (username: string, password: string): void => {
-  // Add your login logic here
-  //     console.log('Logging in with:', username, password);
-  // };
+const Login: React.FC<{ onSwitchToRegister: () => void }> = ({ onSwitchToRegister }) => {
+  const [email, setEmail] = useState("");
+  // const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("Register", { email, password });
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
-      <form className="flex flex-col gap-4 w-full max-w-sm">
-        <input
-          type="email"
-          placeholder="Email"
-          className="p-3 border border-gray-300 rounded"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="p-3 border border-gray-300 rounded"
-        />
-        <Button variant="contained" color="primary">
-          Add new
-        </Button>
-      </form>
-      <a href="/register" className="mt-4 text-blue-500 hover:underline">
-        Dont have an account? Register here.
-      </a>
-    </div>
+    <Container component="main" maxWidth="xs" sx={{ ml: '45%' }}>
+      <Paper
+        elevation={1}
+        className={styles.loginPaper}
+      >
+        <Typography variant="h4" className={styles.formTitle}>
+          Đăng nhập
+        </Typography>
+        
+        <Typography className={styles.fieldLabel}>
+          Email / Username 
+        </Typography>
+
+        <Box component="form" onSubmit={handleSubmit} className={styles.formContainer}>
+          <TextField
+            className={styles.customTextField}
+            variant="filled"
+            margin='dense'
+            required
+            fullWidth
+            id="email"
+            placeholder="YourEmail@gmail.com / User name"
+            name="email"
+            // autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          
+          <Typography className={styles.fieldLabel}>
+            Mật khẩu
+          </Typography>
+
+          <TextField
+            className={styles.customTextField}
+            variant="filled"
+            margin='dense'
+            required
+            fullWidth
+            name="password"
+            placeholder="Your Password"
+            type="password"
+            id="password"
+            // autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            className={styles.continueButton}
+          >
+            Đăng nhập
+          </Button>
+
+          <Box className={styles.loginLink} sx={{ mt:1 }}>
+            <Typography component="span" variant="body2">
+              Bạn chưa có tài khoản? {' '}
+            </Typography>
+            <Link
+              component="a"
+              variant="body2"
+              className={styles.loginHereLink}
+              onClick={onSwitchToRegister}
+            >
+              Đăng ký ngay
+            </Link>
+          </Box>
+          
+          <Box className={styles.termsText}>
+            <Typography variant="body2">
+              {/* By registering you with our Terms and Conditions */}
+            </Typography>
+          </Box>
+        </Box>
+      </Paper>
+    </Container>
   );
 };
 

@@ -5,7 +5,7 @@ export default function Home() {
     <div>
       Chào nga nhé
       <button>Add new</button>
-      <Link href="features/Authentication/Login">Log in</Link> 
+      <Link href="features/Authentication">Log in</Link> 
     </div>
   );
 }
