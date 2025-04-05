@@ -1,33 +1,50 @@
 /* Login.module.css */
 .loginPaper {
   display: flex;
+  height: 100%;
+  width: 30vw;
   flex-direction: column;
-  height: 90%;
-  align-items: center;
   padding: 1.5rem;
   border-radius: 1rem;
   backdrop-filter: blur(0.5px);
   position: relative;
-  background-color: rgba(0, 0, 0, 0.1) !important
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.formHeader {
+  width: 100%;
+  margin-bottom: 1.5rem;
 }
 
 .formTitle {
-  margin-bottom: 1.5rem !important;
   color: white;
   font-weight: bold !important;
   text-align: center;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.formFieldsSection {
+  width: 100%;
+}
+
+.formActionsSection {
+  width: 100%;
+  margin-top: auto;
 }
 
 .fieldLabel {
   margin-bottom: 0.5rem;
   color: white;
   width: 100%;
-  font-weight: 600 !important ;
+  font-weight: 600 !important;
   text-align: left;
-}
-
-.formContainer {
-  width: 100%;
 }
 
 .customTextField {
@@ -42,17 +59,15 @@
 .customTextField :global(.MuiFilledInput-root) {
   border-bottom: none;
   color: white;
-  /* background-color: #f0f0f086;  */
 }
 
 .continueButton {
-  margin-top: 20px;
   margin-bottom: 1rem;
   padding: 0.75rem 0;
   background: linear-gradient(45deg, #3E70A1 30%, #501794 90%);
   border-radius: 0.5rem;
   font-size: 1rem !important;
-  text-transform: none  !important;
+  text-transform: none !important;
 }
 
 .continueButton:hover {
@@ -68,6 +83,7 @@
   color: white;
   font-weight: bold;
   margin-left: 0.5rem;
+  cursor: pointer;
 }
 
 .termsText {

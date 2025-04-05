@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -9,17 +9,38 @@ import backgroundImage from '@/assets/images/background.svg';
 import Logo from '@/assets/images/logo.svg';
 import styles from './Authentication.module.css';
 import Login from "./Login/page";
-import Register from "./Register/page"; // Import component Register
+import Register from "./Register/page"; 
+import Starfield from "@/app/components/Starfield";
 
 const Authentication = () => {
-  const [authMode, setAuthMode] = useState("login"); // State để quản lý mode hiện tại
+  const [authMode, setAuthMode] = useState("login"); 
 
-  // Functions để chuyển đổi giữa các mode
-  const switchToLogin = () => setAuthMode("login");
-  const switchToRegister = () => setAuthMode("register");
+  const [isAnimating, setIsAnimating] = useState(false);
+  
+  const switchToLogin = () => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      setAuthMode("login");
+      setIsAnimating(false);
+    }, 300); // Thời gian chờ bằng với thời gian transition
+  };
+  
+  const switchToRegister = () => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      setAuthMode("register");
+      setIsAnimating(false);
+    }, 300); // Thời gian chờ bằng với thời gian transition
+  };
 
   return (
     <Box className={styles.loginContainer}>
+      <Starfield
+        starCount={1000}
+        starColor={[255, 255, 255]}
+        speedFactor={0.05}
+        backgroundColor="black"
+      />
       <Image
         src={backgroundImage}
         alt="Background"
@@ -27,7 +48,6 @@ const Authentication = () => {
         style={{ objectFit: 'cover', objectPosition: '50% 35%' }}
         priority
       />
-      
       <Box className={styles.leftSideContent}>
         <Image
           src={Logo}
@@ -45,11 +65,13 @@ const Authentication = () => {
         </Box>
       </Box>
 
-      {authMode === "login" ? (
-        <Login onSwitchToRegister={switchToRegister} />
-      ) : (
-        <Register onSwitchToLogin={switchToLogin} />
-      )}
+      <Box className={`${styles.formContainer} ${isAnimating ? styles.fadeOut : styles.fadeIn}`}>
+        {authMode === "login" ? (
+          <Login onSwitchToRegister={switchToRegister} />
+        ) : (
+          <Register onSwitchToLogin={switchToLogin} />
+        )}
+      </Box>
     </Box>
   );
 };
