@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Button,
@@ -9,19 +9,26 @@ import {
   Paper,
   Link,
 } from "@mui/material";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { loginSchema, LoginFormData } from "./schema";
 import styles from './Login.module.css';
 
 const Login: React.FC<{ onSwitchToRegister: () => void }> = ({ onSwitchToRegister }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Login", { email, password });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<LoginFormData>({
+    resolver: yupResolver(loginSchema)
+  });
+
+  const onSubmit = (data: LoginFormData) => {
+    console.log("Login", data);
   };
-  
+
   return (
-    <Container component="main" sx={{ height: '90%' }}>
+    <Container component="main" sx={{ height: '90%', overflow: 'auto' }}>
       <Paper
         elevation={1}
         className={styles.loginPaper}
@@ -32,7 +39,7 @@ const Login: React.FC<{ onSwitchToRegister: () => void }> = ({ onSwitchToRegiste
           </Typography>
         </Box>
         
-        <Box component="form" onSubmit={handleSubmit} className={styles.formContainer}>
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
           <Box className={styles.formFieldsSection}>
             <Typography className={styles.fieldLabel}>
               Email / Username
@@ -41,30 +48,28 @@ const Login: React.FC<{ onSwitchToRegister: () => void }> = ({ onSwitchToRegiste
               className={styles.customTextField}
               variant="filled"
               margin='dense'
-              required
               fullWidth
               id="email"
               placeholder="YourEmail@gmail.com / User name"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              {...register("email")}
+              error={!!errors.email}
+              helperText={errors.email?.message}
             />
             
-            <Typography className={styles.fieldLabel}>
+            <Typography className={styles.fieldLabel} sx={{marginTop: errors.email ? 0.5 : 0}}>
               Mật khẩu
             </Typography>
             <TextField
               className={styles.customTextField}
               variant="filled"
               margin='dense'
-              required
               fullWidth
-              name="password"
               placeholder="Your Password"
               type="password"
               id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              {...register("password")}
+              error={!!errors.password}
+              helperText={errors.password?.message}
             />
           </Box>
           

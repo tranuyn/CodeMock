@@ -1,14 +1,15 @@
 /* Login.module.css */
 .loginPaper {
   display: flex;
-  height: 100%;
-  width: 30vw;
+  min-height: 100%;
+  width: 33vw;
   flex-direction: column;
   padding: 1.5rem;
   border-radius: 1rem;
   backdrop-filter: blur(0.5px);
   position: relative;
-  background-color: rgba(255, 255, 255, 0.05) !important;
+  background-color: rgba(145, 145, 145, 0.05) !important;
+  border: 0.5px rgba(165, 165, 165, 0.445) solid;
 }
 
 .formHeader {
@@ -20,6 +21,15 @@
   color: white;
   font-weight: bold !important;
   text-align: center;
+}
+
+.stepperContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  height: 30px;
 }
 
 .formContainer {
@@ -36,7 +46,52 @@
 
 .formActionsSection {
   width: 100%;
-  margin-top: auto;
+  /* margin-top: 1rem; */
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes move {
+  to {
+    transform: translateX(-5%);
+  }
+}
+@keyframes back {
+  from {
+    transform: translateX(-5%);
+  }
+  to {
+    transform: translateX(0px);
+  }
+}
+
+.backButton {
+  color: white !important;
+  text-transform: none !important;
+  color: #12213054;
+  animation: fadeInRight 0.5s ease-in-out forwards;
+  margin: 0px;
+}
+
+.stepper {
+  flex: 1;
+  margin: 0 -10%;
+  animation: back 0.5s ease-in-out forwards;
+}
+
+.stepper_transition {
+  flex: 1;
+  margin: 0 -10%;
+  animation: move 0.5s ease-in-out forwards;
 }
 
 .fieldLabel {
@@ -49,20 +104,26 @@
 
 .customTextField {
   margin-bottom: 1.5rem !important;
+  height: 2.5rem;
 }
 
 .customTextField :global(.MuiInputBase-input) {
   color: white;
-  height: 10px;
+  padding: 15px 12px 8px 12px;
 }
-
+.customSelect :global(.MuiInputBase-input) {
+  color: white;
+}
+.customSelect {
+  height: 3rem;
+}
 .customTextField :global(.MuiFilledInput-root) {
   border-bottom: none;
   color: white;
 }
 
 .continueButton {
-  margin-bottom: 1rem;
+  margin: 1rem 0;
   padding: 0.75rem 0;
   background: linear-gradient(45deg, #3E70A1 30%, #501794 90%);
   border-radius: 0.5rem;
@@ -91,4 +152,29 @@
   margin-top: 1rem;
   font-size: 0.8rem;
   color: rgba(255,255,255,0.7);
+}
+
+.infoText {
+  color: rgb(160, 160, 160)
+}
+
+/* Responsive */
+@media (max-width: 1000px) {
+  .loginPaper {
+    width: 40vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .loginPaper {
+    width: 60vw; 
+    padding: 1rem; 
+  }
+}
+
+@media (max-width: 480px) {
+  .loginPaper {
+    width: 90vw; 
+    padding: 0.5rem;
+  }
 }

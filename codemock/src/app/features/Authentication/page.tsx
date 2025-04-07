@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -22,7 +22,7 @@ const Authentication = () => {
     setTimeout(() => {
       setAuthMode("login");
       setIsAnimating(false);
-    }, 300); // Thời gian chờ bằng với thời gian transition
+    }, 300);
   };
   
   const switchToRegister = () => {
@@ -30,7 +30,7 @@ const Authentication = () => {
     setTimeout(() => {
       setAuthMode("register");
       setIsAnimating(false);
-    }, 300); // Thời gian chờ bằng với thời gian transition
+    }, 300); 
   };
 
   return (
@@ -41,36 +41,40 @@ const Authentication = () => {
         speedFactor={0.05}
         backgroundColor="black"
       />
-      <Image
-        src={backgroundImage}
-        alt="Background"
-        fill
-        style={{ objectFit: 'cover', objectPosition: '50% 35%' }}
-        priority
-      />
-      <Box className={styles.leftSideContent}>
+      <div className={styles.backgroundWrapper}>
         <Image
-          src={Logo}
-          alt="logo"
-          style={{ objectFit: 'contain', width: 200 }}
+          src={backgroundImage}
+          alt="Background"
+          fill
+          style={{ objectFit: 'cover', objectPosition: '50% 35%' }}
           priority
         />
-        <Box>
-          <Typography component="h1" className={styles.signInText}>
-            {authMode === "login" ? "SIGN IN TO YOUR" : "REGISTER FOR YOUR"}
-          </Typography>
-          <Typography component="h1" className={styles.adventureText}>
-            ADVENTURE!
-          </Typography>
+      </div>
+      <Box className={styles.authContent}>
+        <Box className={styles.leftSideContent}>
+          <Image
+            src={Logo}
+            alt="logo"
+            style={{ objectFit: 'contain', width: 200 }}
+            priority
+          />
+          <Box className={styles.textContent}>
+            <Typography component="h1" className={styles.signInText}>
+              {authMode === "login" ? "SIGN IN TO YOUR" : "REGISTER FOR YOUR"}
+            </Typography>
+            <Typography component="h1" className={styles.adventureText}>
+              ADVENTURE!
+            </Typography>
+          </Box>
         </Box>
-      </Box>
 
-      <Box className={`${styles.formContainer} ${isAnimating ? styles.fadeOut : styles.fadeIn}`}>
-        {authMode === "login" ? (
-          <Login onSwitchToRegister={switchToRegister} />
-        ) : (
-          <Register onSwitchToLogin={switchToLogin} />
-        )}
+        <Box className={`${styles.formContainer} ${isAnimating ? styles.fadeOut : styles.fadeIn}`}>
+          {authMode === "login" ? (
+            <Login onSwitchToRegister={switchToRegister} />
+          ) : (
+            <Register onSwitchToLogin={switchToLogin} />
+          )}
+        </Box>
       </Box>
     </Box>
   );

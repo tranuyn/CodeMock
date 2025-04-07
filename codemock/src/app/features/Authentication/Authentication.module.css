@@ -3,15 +3,29 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
+  overflow-x: hidden;
+}
+.backgroundWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
 }
 
 .leftSideContent {
   z-index: 5;
   display: flex;
+  position: absolute;
   height: 100vh;
   flex-direction: column;
   justify-content: space-between;
   padding: 1.5% 0 5% 4% 
+}
+
+.authContent {
+  width: 100%;
 }
 
 .signInText {
@@ -38,10 +52,9 @@
   z-index: 5;
   /* width: 50%; */
   height: 100vh;
+  margin-left: 60%;
   display: flex;
   align-items: center;
-  margin-left: 40%;
-  padding-right: 5%;
   position: relative;
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
@@ -72,5 +85,70 @@
   to {
     opacity: 0;
     transform: translateX(20px);
+  }
+}
+
+
+/* Responsive */
+@media (max-width: 1000px) {
+  .formContainer {
+    z-index: 5;
+    width: 50%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .loginContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .authContent {
+    width: 100%;
+    flex-direction: column;
+  }
+  .leftSideContent {
+    z-index: 5;
+    justify-self: left;
+  }
+  .formContainer {
+    margin-left: auto;
+    width: 100%;
+    height: auto; 
+  }
+  .textContent {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .loginContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .leftSideContent {
+    z-index: 5;
+    display: contents;
+  }
+  .formContainer {
+    padding-right: 0; 
+    height: auto; 
+    flex-direction: column;
+  }
+  .authContent {
+    width: 100%;    
+    position: static;
+
+  }
+  .textContent {
+    display: none;
   }
 }
