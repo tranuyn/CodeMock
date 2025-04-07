@@ -52,7 +52,7 @@ const Login: React.FC<{ onSwitchToRegister: () => void }> = ({
   });
 
   const handleLoginSuccess = useCallback(() => {
-    console.log("vào");
+    //console.log("vào");
     router.push("/features/Home");
     dispatch(AuthActions.clearError());
   }, [router, dispatch]);
