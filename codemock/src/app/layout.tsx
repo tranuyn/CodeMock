@@ -3,6 +3,7 @@ import { Noto_Sans } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@mui/material";
 import theme from "@/assets/Theme";
+import { App } from "./page";
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
@@ -26,11 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${notoSans.variable} antialiased`}
-      >
+      <body className={`${notoSans.variable} antialiased`}>
         <ThemeProvider theme={theme}>
-          {children}
+          <App>{children}</App>
         </ThemeProvider>
       </body>
     </html>
