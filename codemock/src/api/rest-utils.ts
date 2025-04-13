@@ -71,7 +71,7 @@ class HttpClient {
         if (error.response?.status === 401) {
           if (window.location.pathname !== "/login") {
             removeCookie(COOKIE_KEY.Token);
-            window.location.href = "/features/Authentication";
+            //window.location.href = "/features/Authentication";
           }
         }
         return Promise.reject(error);

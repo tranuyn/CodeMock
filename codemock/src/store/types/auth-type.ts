@@ -6,6 +6,9 @@ export interface AuthState {
   account_type: string;
   role: string;
   is_active: boolean;
+  profession: string;
+  educationLevel: string;
+  technologies: Array<string>;
 }
 
 export interface LoginResponse {

@@ -8,10 +8,17 @@ export interface LoginRequest {
 export interface SignupRequest {
   username: string;
   email: string;
-  password: string;
-  position: [];
-  skill: [];
-  tech: [];
+  phone: string;
+  account_type: string;
+  role: string;
+  profession: string;
+  educationLevel: string;
+  technologies: Array<string>;
+}
+
+export interface VerifyCode {
+  code_id: string;
+  email: string;
 }
 
 const login = async (params: LoginRequest): Promise<any> => {
@@ -22,7 +29,12 @@ const signup = async (params: SignupRequest): Promise<void> => {
   return await post("/auth/register", params);
 };
 
+const activeAccount = async (params: VerifyCode): Promise<void> => {
+  return await post("/auth/verify-code", params);
+};
+
 export default {
   login,
   signup,
+  activeAccount,
 };
