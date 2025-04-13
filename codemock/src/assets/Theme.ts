@@ -17,6 +17,9 @@ const theme = createTheme({
       contrastText: '#FFFFFF'
     },
   },
+  typography: {
+    fontFamily: 'var(--font-noto-sans)',
+  },
 });
 
 export default theme;
