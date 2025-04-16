@@ -62,12 +62,12 @@ const Register: React.FC<{ onSwitchToLogin: () => void }> = ({
     }
 
     const isStepValid = await trigger(fieldsToValidate);
-    console.log(
-      "Validation result:",
-      isStepValid,
-      "for fields:",
-      fieldsToValidate
-    );
+    // console.log(
+    //   "Validation result:",
+    //   isStepValid,
+    //   "for fields:",
+    //   fieldsToValidate
+    // );
 
     if (activeStep === 1 && isStepValid) {
       const technologiesToArray = getValues("technologies")
