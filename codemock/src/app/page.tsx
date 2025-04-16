@@ -6,7 +6,7 @@ export default function Main() {
   return (
     <div>
       <AppBar isHomePage={true} />
-      <Home/>
+      <Home />
     </div>
   );
 }
