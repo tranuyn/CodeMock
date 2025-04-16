@@ -3,7 +3,7 @@ import { Noto_Sans } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@mui/material";
 import theme from "@/assets/Theme";
-import { App } from "./page";
+import App from "./providers";
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
