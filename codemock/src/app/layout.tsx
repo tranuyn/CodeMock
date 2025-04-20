@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Noto_Sans } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "@/assets/Theme";
 import App from "./providers";
+import AppBarWrapper from "./components/AppBar/AppBarWrapper";
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
@@ -25,10 +26,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
   return (
     <html lang="en">
       <body className={`${notoSans.variable} antialiased`}>
         <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <AppBarWrapper />
           <App>{children}</App>
         </ThemeProvider>
       </body>

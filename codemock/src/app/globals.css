@@ -2,7 +2,6 @@
 
 @theme {
   --font-sans: var(--font-noto-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 :root {
@@ -20,5 +19,5 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: noto-sans, sans-serif;
 }

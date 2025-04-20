@@ -63,7 +63,7 @@ const AppBar: React.FC<AppBarProps> = ({ isHomePage }) => {
 
   // Routes for authenticated users
   const authenticatedRoutes = [
-    { name: 'Lịch phỏng vấn', path: '/features/Schedule', icon: <CalendarMonthRoundedIcon  /> },
+    { name: 'Lịch phỏng vấn', path: '/schedule', icon: <CalendarMonthRoundedIcon  /> },
     { name: 'Tìm kiếm', path: '/search', icon: <SearchRoundedIcon /> },
   ];
 
@@ -88,7 +88,7 @@ const AppBar: React.FC<AppBarProps> = ({ isHomePage }) => {
     if (setting === 'Logout') {
       console.log('Logging out...');
     } else if (setting === 'Login') {
-      router.push('/features/Authentication');
+      router.push('/authentication');
     } 
   };
 
@@ -202,7 +202,7 @@ const AppBar: React.FC<AppBarProps> = ({ isHomePage }) => {
                 {settings.map((setting) => (
                   <MenuItem key={setting} onClick={() => handleSettingClick(setting)}>
                     <Typography sx={{ textAlign: 'center', textTransform: 'none' }}>
-                      {setting === 'Login' ? <Link href="/features/Authentication">Log in</Link> : setting}
+                      {setting === 'Login' ? <Link href="/authentication">Log in</Link> : setting}
                     </Typography>
                   </MenuItem>
                 ))}
