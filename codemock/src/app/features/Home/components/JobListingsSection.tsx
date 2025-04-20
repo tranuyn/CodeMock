@@ -42,7 +42,7 @@ export default function JobListingsSection() {
         <Typography variant="h5" fontWeight="bold">
           Bạn Có Buổi Phỏng Vấn Sắp Diễn Ra
         </Typography>
-        <Link href="/Schedule" passHref style={{ textDecoration: 'none' }}>
+        <Link href="/schedule" passHref style={{ textDecoration: 'none' }}>
           <Typography variant="body2" color="primary" sx={{ cursor: "pointer" }}>
             Xem tất cả lịch trình
           </Typography>

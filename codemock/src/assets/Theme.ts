@@ -20,6 +20,32 @@ const theme = createTheme({
   typography: {
     fontFamily: 'var(--font-noto-sans)',
   },
+  components: {
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'var(--font-noto-sans), "Noto Sans"',
+        },
+        label: {
+          fontFamily: 'var(--font-noto-sans), "Noto Sans"',
+        }
+      }
+    },
+    MuiAvatar: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'var(--font-noto-sans), "Noto Sans"',
+        },
+      }
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+        },
+      }
+    },
+  }
 });
 
 export default theme;

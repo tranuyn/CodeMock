@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, TextField, Button, InputAdornment } from '@mui/material';
+import { Box, TextField, Button, FormControl, Select, MenuItem, Divider } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
@@ -19,20 +19,19 @@ const SearchBar = ({ onSearch }) => {
       sx={{
         display: 'flex',
         bgcolor: 'white',
-        borderRadius: 28,
+        borderRadius: 3,
         boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.1)',
         padding: '8px',
-        width: '100%',
-        maxWidth: '900px',
+        width: '70%',
       }}
     >
-      <TextField
+      <TextField 
         variant="standard"
         placeholder="Tên buổi phỏng vấn"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        sx={{
-          flexGrow: 1,
+        sx={{ 
+          flex: 1,
           '& .MuiInput-root': {
             border: 'none',
             fontSize: '16px',
@@ -43,73 +42,71 @@ const SearchBar = ({ onSearch }) => {
           },
         }}
       />
+      <Divider orientation="vertical" flexItem />
 
-      <TextField
-        select
+      <FormControl
         variant="standard"
-        value={level}
-        onChange={(e) => setLevel(e.target.value)}
-        placeholder="Chọn cấp bậc"
-        SelectProps={{
-          native: true,
-          IconComponent: KeyboardArrowDownIcon,
-        }}
-        sx={{
-          width: '160px',
-          '& .MuiInput-root': {
-            border: 'none',
+        sx={{ 
+          width: '25%',
+          '& .MuiInputBase-root': {
             fontSize: '16px',
             padding: '4px 16px',
           },
-          '& .MuiInput-root:before, & .MuiInput-root:after': {
+          '& .MuiInput-underline:before, & .MuiInput-underline:after': {
             display: 'none',
           },
         }}
-        InputProps={{
-          disableUnderline: true,
-        }}
       >
-        <option value="" disabled>
-          Chọn cấp bậc
-        </option>
-        <option value="junior">Junior</option>
-        <option value="middle">Middle</option>
-        <option value="senior">Senior</option>
-      </TextField>
+        <Select
+          labelId="level-select-label"
+          id="level-select"
+          value={level}
+          onChange={(e) => setLevel(e.target.value)}
+          displayEmpty
+          IconComponent={KeyboardArrowDownIcon}
+          disableUnderline
+        >
+          <MenuItem value="" disabled>
+            Chọn cấp bậc
+          </MenuItem>
+          <MenuItem value="junior">Junior</MenuItem>
+          <MenuItem value="middle">Middle</MenuItem>
+          <MenuItem value="senior">Senior</MenuItem>
+        </Select>
+      </FormControl>
+      <Divider orientation="vertical" flexItem />
 
-      <TextField
-        select
+      <FormControl
         variant="standard"
-        value={major}
-        onChange={(e) => setMajor(e.target.value)}
-        placeholder="Chọn chuyên ngành"
-        SelectProps={{
-          native: true,
-          IconComponent: KeyboardArrowDownIcon,
-        }}
-        sx={{
-          width: '180px',
-          '& .MuiInput-root': {
-            border: 'none',
+        sx={{ 
+          width: '25%',
+          '& .MuiInputBase-root': {
             fontSize: '16px',
             padding: '4px 16px',
           },
-          '& .MuiInput-root:before, & .MuiInput-root:after': {
+          '& .MuiInput-underline:before, & .MuiInput-underline:after': {
             display: 'none',
           },
         }}
-        InputProps={{
-          disableUnderline: true,
-        }}
       >
-        <option value="" disabled>
-          Chọn chuyên ngành
-        </option>
-        <option value="frontend">Frontend</option>
-        <option value="backend">Backend</option>
-        <option value="fullstack">FullStack</option>
-        <option value="ui-ux">UI/UX</option>
-      </TextField>
+        <Select
+          labelId="major-select-label"
+          id="major-select"
+          value={major}
+          onChange={(e) => setMajor(e.target.value)}
+          displayEmpty
+          IconComponent={KeyboardArrowDownIcon}
+          disableUnderline
+        >
+          <MenuItem value="" disabled>
+            Chọn chuyên ngành
+          </MenuItem>
+          <MenuItem value="frontend">Frontend</MenuItem>
+          <MenuItem value="backend">Backend</MenuItem>
+          <MenuItem value="fullstack">FullStack</MenuItem>
+          <MenuItem value="ui-ux">UI/UX</MenuItem>
+        </Select>
+      </FormControl>
 
       <Button
         variant="contained"
@@ -118,7 +115,7 @@ const SearchBar = ({ onSearch }) => {
           borderRadius: 3,
           background: 'linear-gradient(90deg, #6A2CB6 0%, #5E77E2 100%)',
           color: 'white',
-          fontWeight: 'bold',
+          fontWeight: 'semiBold',
           padding: '8px 16px',
           '&:hover': {
             background: 'linear-gradient(90deg, #5A1CA6 0%, #4E67D2 100%)',
