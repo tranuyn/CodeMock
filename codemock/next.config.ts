@@ -20,6 +20,10 @@ const nextConfig: NextConfig = {
         destination: '/features/Schedule',
       },
       {
+        source: '/interviewReviewAndFeedback',
+        destination: '/features/InterviewReviewAndFeedback',
+      },
+      {
         source: '/settings',
         destination: '/features/Settings',
       },
