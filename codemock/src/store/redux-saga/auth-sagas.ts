@@ -8,7 +8,7 @@ import callApi, { handleError } from "./common-saga";
 function* login(action: ReturnType<typeof AuthActions.loginAction.request>) {
   const { callback, ...params } = action.payload;
   try {
-    const response: LoginResponse = yield callApi(AuthApi.login, {
+    const response: LoginResponse = yield call(AuthApi.login, {
       email: params.email,
       password: params.password,
     });
@@ -26,19 +26,41 @@ function* login(action: ReturnType<typeof AuthActions.loginAction.request>) {
   }
 }
 
-function* signup(action: ReturnType<typeof AuthActions.signupAction.request>) {
+function* signup(
+  action: ReturnType<typeof AuthActions.registerAction.request>
+) {
   const { callback, ...params } = action.payload;
   try {
-    yield callApi(AuthApi.signup, params);
-    callback();
+    const response: AuthState = yield call(AuthApi.signup, params);
+    yield put(AuthActions.registerAction.success(response));
+    if (callback) {
+      yield callback();
+    }
   } catch (error) {
-    yield put(AuthActions.signupAction.failure(error as Error));
+    yield call(handleError, error, true);
+    yield put(AuthActions.registerAction.failure(error as Error));
   }
 }
 
+function* activeAcount(
+  action: ReturnType<typeof AuthActions.activeAccountAction.request>
+) {
+  const { callback, ...params } = action.payload;
+  try {
+    yield callApi(AuthApi.activeAccount, params);
+    yield put(AuthActions.activeAccountAction.success());
+    if (callback) {
+      yield callback();
+    }
+  } catch (error) {
+    yield call(handleError, error, true);
+    yield put(AuthActions.activeAccountAction.failure(error as Error));
+  }
+}
 function* authWatcher() {
   yield takeLatest(AuthActions.loginAction.request, login);
-  yield takeLatest(AuthActions.signupAction.request, signup);
+  yield takeLatest(AuthActions.registerAction.request, signup);
+  yield takeLatest(AuthActions.activeAccountAction.request, activeAcount);
 }
 
 export default authWatcher;

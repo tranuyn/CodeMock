@@ -36,6 +36,11 @@ const apiConfig = {
   baseUrl: "http://localhost:8081/",
 };
 
+export const callApiWithoutToken = axios.create({
+  baseURL: "http://localhost:8081",
+  withCredentials: true,
+});
+
 class HttpClient {
   private instance: AxiosInstance;
 
@@ -71,7 +76,7 @@ class HttpClient {
         if (error.response?.status === 401) {
           if (window.location.pathname !== "/login") {
             removeCookie(COOKIE_KEY.Token);
-            window.location.href = "/login";
+            window.location.href = "/features/Authentication";
           }
         }
         return Promise.reject(error);

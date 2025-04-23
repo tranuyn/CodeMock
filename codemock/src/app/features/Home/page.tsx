@@ -12,15 +12,14 @@ import RecommendationsSection from "./components/RecommendationsSection";
 export default function Home() {
   return (
     <Box component="main" sx={{ position: "relative", minHeight: "100vh" }}>
-      
-      <Box 
-        sx={{ 
+      <Box
+        sx={{
           position: "fixed",
-          top: 0, 
-          left: 0, 
+          top: 0,
+          left: 0,
           width: "100vw",
           height: "100vh",
-          zIndex: -1 
+          zIndex: -1,
         }}
       >
         <Image
@@ -29,17 +28,23 @@ export default function Home() {
           fill
           sizes="100vw"
           priority
-          style={{ 
-            objectFit: "cover", 
-            objectPosition: "center", 
+          style={{
+            objectFit: "cover",
+            objectPosition: "center",
             zIndex: -10,
-            filter: 'brightness(0.8)'
+            filter: "brightness(0.8)",
           }}
         />
       </Box>
-      
+
       <Box sx={{ position: "relative", zIndex: 1 }}>
-        <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, minHeight: "80vh" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            minHeight: "80vh",
+          }}
+        >
           <HeroSection />
           <StatsSection />
         </Box>

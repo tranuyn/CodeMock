@@ -20,7 +20,7 @@ const loginAction = createAsyncAction(
   void
 >();
 
-const signupAction = createAsyncAction(
+const registerAction = createAsyncAction(
   `${PREFIX}SIGNUP_REQUEST`,
   `${PREFIX}SIGNUP_SUCCESS`,
   `${PREFIX}SIGNUP_FAILURE`,
@@ -28,14 +28,34 @@ const signupAction = createAsyncAction(
 )<
   {
     email: string;
-    password: string;
     username: string;
-    position: [];
-    skill: [];
-    tech: [];
+    password: string;
+    majorIds: string[];
+    levelIds: string[];
+    technologyIds: string[];
+    role: string;
+    account_type: string;
+    phone: string;
     callback: () => void;
   },
   AuthState,
+  Error,
+  void
+>();
+
+const sendverificationCode = createAsyncAction(
+  `${PREFIX}SEND_VERIFICATION_CODE_REQUEST`,
+  `${PREFIX}SEND_VERIFICATION_CODE_SUCCESS`,
+  `${PREFIX}SEND_VERIFICATION_CODE_FAILURE`,
+  `${PREFIX}SEND_VERIFICATION_CODE_CANCEL`
+)<
+  {
+    email: string;
+    callback: () => void;
+  },
+  {
+    isVerified: boolean;
+  },
   Error,
   void
 >();
@@ -64,7 +84,7 @@ const clearError = createAction(`${PREFIX}CLEAR_ERROR`)<void>();
 
 export default {
   loginAction,
-  signupAction,
+  registerAction,
   activeAccountAction,
   setAuthInfo,
   clearAuthInfo,
