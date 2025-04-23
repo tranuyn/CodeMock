@@ -6,6 +6,6 @@ import AppBar from './Appbar';
 export default function AppBarWrapper() {
   const pathname = usePathname();
   const isHomePage = pathname === '/' || pathname === '';
-  
-  return <AppBar isHomePage={isHomePage} />;
+  const isLoginPage = pathname === '/authentication';
+  return <AppBar isHomePage={isHomePage} isShow={!isLoginPage}/>;
 }
