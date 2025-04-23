@@ -36,9 +36,10 @@ import Image from 'next/image';
 
 interface AppBarProps {
   isHomePage: boolean;
+  isShow?: boolean;
 }
 
-const AppBar: React.FC<AppBarProps> = ({ isHomePage }) => {
+const AppBar: React.FC<AppBarProps> = ({ isHomePage, isShow = true }) => {
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -133,7 +134,7 @@ const AppBar: React.FC<AppBarProps> = ({ isHomePage }) => {
   return (
     <>
       <MuiAppBar position="static" elevation={isHomePage ? 0 : 2}
-        sx={{ background: isHomePage ? 'transparent' : 'linear-gradient(45deg, #501794 30%, #3E70A1 90%)' }}>
+        sx={{ background: isHomePage ? 'transparent' : 'linear-gradient(45deg, #501794 30%, #3E70A1 90%)', display: isShow ? 'block' : 'none' }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             {/* Logo và tiêu đề cho màn hình lớn */}
