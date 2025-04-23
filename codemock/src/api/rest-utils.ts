@@ -36,6 +36,11 @@ const apiConfig = {
   baseUrl: "http://localhost:8081/",
 };
 
+export const callApiWithoutToken = axios.create({
+  baseURL: "http://localhost:8081",
+  withCredentials: true,
+});
+
 class HttpClient {
   private instance: AxiosInstance;
 

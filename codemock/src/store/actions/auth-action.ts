@@ -30,9 +30,9 @@ const registerAction = createAsyncAction(
     email: string;
     username: string;
     password: string;
-    profession: string;
-    educationLevel: string;
-    technologies: Array<string>;
+    majorIds: string[];
+    levelIds: string[];
+    technologyIds: string[];
     role: string;
     account_type: string;
     phone: string;

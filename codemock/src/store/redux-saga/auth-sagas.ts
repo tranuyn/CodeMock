@@ -8,7 +8,7 @@ import callApi, { handleError } from "./common-saga";
 function* login(action: ReturnType<typeof AuthActions.loginAction.request>) {
   const { callback, ...params } = action.payload;
   try {
-    const response: LoginResponse = yield callApi(AuthApi.login, {
+    const response: LoginResponse = yield call(AuthApi.login, {
       email: params.email,
       password: params.password,
     });
@@ -31,7 +31,7 @@ function* signup(
 ) {
   const { callback, ...params } = action.payload;
   try {
-    const response: AuthState = yield callApi(AuthApi.signup, params);
+    const response: AuthState = yield call(AuthApi.signup, params);
     yield put(AuthActions.registerAction.success(response));
     if (callback) {
       yield callback();

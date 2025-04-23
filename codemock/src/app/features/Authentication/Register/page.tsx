@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import styles from "../Login/Login.module.css";
+import { SubmitHandler } from "react-hook-form";
 
 import CustomStepper from "./Components/CustomStepper";
 import { Step1Form, Step2Form, Step3Form } from "./Components/RegisterSteps";
@@ -37,9 +38,9 @@ const Register: React.FC<{ onSwitchToLogin: () => void }> = ({
       email: "",
       username: "",
       password: "",
-      profession: "",
-      educationLevel: "",
-      technologies: "",
+      profession: [],
+      educationLevel: [],
+      technologies: [],
       verificationCode: "",
     },
   });
@@ -70,9 +71,6 @@ const Register: React.FC<{ onSwitchToLogin: () => void }> = ({
     // );
 
     if (activeStep === 1 && isStepValid) {
-      const technologiesToArray = getValues("technologies")
-        .split(",")
-        .map((item) => item.trim());
       dispatch(
         AuthActions.registerAction.request({
           username: getValues("username"),
@@ -81,9 +79,9 @@ const Register: React.FC<{ onSwitchToLogin: () => void }> = ({
           phone: getValues("email"),
           account_type: "LOCAL",
           role: "CANDIDATE",
-          profession: getValues("profession"),
-          educationLevel: getValues("educationLevel"),
-          technologies: technologiesToArray,
+          majorIds: getValues("profession"),
+          levelIds: getValues("educationLevel"),
+          technologyIds: getValues("technologies"),
           callback: () => {
             toastService.show({
               title: "Đã lưu thông tin đăng ký",
