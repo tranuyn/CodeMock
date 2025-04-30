@@ -11,9 +11,9 @@ export interface SignupRequest {
   phone: string;
   account_type: string;
   role: string;
-  majorIds: string[];
-  levelIds: string[];
-  technologyIds: string[];
+  majors: string[];
+  levels: string[];
+  technologies: string[];
 }
 
 export interface VerifyCode {

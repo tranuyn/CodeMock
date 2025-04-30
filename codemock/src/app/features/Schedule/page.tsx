@@ -1,12 +1,24 @@
-'use client';
-import React, { useState } from 'react';
-import { format, addDays, startOfWeek, addWeeks, subWeeks, addMonths, subMonths, isSameDay } from 'date-fns';
-import { vi } from 'date-fns/locale';
-import styles from './Schedule.module.css';
-import WeeklyCalendar from './components/WeeklyCalendar';
-import MonthlyCalendar from './components/MonthlyCalendar';
-import InterviewDetails from './components/InterviewDetails';
-import { Box } from '@mui/material';
+"use client";
+import React, { useState } from "react";
+import {
+  format,
+  addDays,
+  startOfWeek,
+  addWeeks,
+  subWeeks,
+  addMonths,
+  subMonths,
+  isSameDay,
+} from "date-fns";
+//import { vi } from 'date-fns/locale';
+import styles from "./Schedule.module.css";
+import WeeklyCalendar from "./components/WeeklyCalendar";
+import MonthlyCalendar from "./components/MonthlyCalendar";
+import InterviewDetails from "./components/InterviewDetails";
+import { Box, Button } from "@mui/material";
+import { NextPageWithLayout } from "@/app/layout";
+import { ProtectedLayout } from "@/layouts/protected_layout";
+import { Color } from "@/assets/Color";
 
 interface Interview {
   id: number;
@@ -23,36 +35,36 @@ interface Interview {
 const mockInterviews: Interview[] = [
   {
     id: 1,
-    title: 'Intern Front-end Dev',
-    position: 'Front-end',
+    title: "Intern Front-end Dev",
+    position: "Front-end",
     date: new Date(2025, 2, 3),
-    startTime: '09:00',
-    endTime: '10:20',
-    type: 'Dev',
-    technologies: ['ReactJS', 'JavaScript', 'CSS', 'HTML'],
-    interviewer: 'Jessica'
+    startTime: "09:00",
+    endTime: "10:20",
+    type: "Dev",
+    technologies: ["ReactJS", "JavaScript", "CSS", "HTML"],
+    interviewer: "Jessica",
   },
   {
     id: 2,
-    title: 'Intern Front-end Dev',
-    position: 'Front-end',
+    title: "Intern Front-end Dev",
+    position: "Front-end",
     date: new Date(2025, 2, 4),
-    startTime: '10:30',
-    endTime: '11:50',
-    type: 'Dev',
-    technologies: ['JavaScript', 'Vue.js', 'CSS'],
-    interviewer: 'Michael'
+    startTime: "10:30",
+    endTime: "11:50",
+    type: "Dev",
+    technologies: ["JavaScript", "Vue.js", "CSS"],
+    interviewer: "Michael",
   },
   {
     id: 3,
-    title: 'Intern Front-end React Native',
-    position: 'Front-end',
-    date: new Date(2025, 2, 5), 
-    startTime: '13:00',
-    endTime: '14:30',
-    type: 'React Native',
-    technologies: ['React Native', 'TypeScript', 'Redux'],
-    interviewer: 'Anna'
+    title: "Intern Front-end React Native",
+    position: "Front-end",
+    date: new Date(2025, 2, 5),
+    startTime: "13:00",
+    endTime: "14:30",
+    type: "React Native",
+    technologies: ["React Native", "TypeScript", "Redux"],
+    interviewer: "Anna",
   },
 ];
 
@@ -60,16 +72,20 @@ const mockInterviews: Interview[] = [
 export type { Interview };
 export { mockInterviews };
 
-const InterviewCalendar: React.FC = () => {
+const InterviewCalendar: NextPageWithLayout = () => {
   const today = new Date(2025, 2, 3);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
-  const [selectedInterview, setSelectedInterview] = useState<Interview | null>(null);
-  const [currentWeekStart, setCurrentWeekStart] = useState<Date>(startOfWeek(today, { weekStartsOn: 1 }));
+  const [selectedInterview, setSelectedInterview] = useState<Interview | null>(
+    null
+  );
+  const [currentWeekStart, setCurrentWeekStart] = useState<Date>(
+    startOfWeek(today, { weekStartsOn: 1 })
+  );
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date(2025, 2, 1));
 
   // Lọc phỏng vấn theo ngày
   const getInterviewsByDate = (date: Date) => {
-    return mockInterviews.filter(interview => 
+    return mockInterviews.filter((interview) =>
       isSameDay(interview.date, date)
     );
   };
@@ -110,48 +126,65 @@ const InterviewCalendar: React.FC = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.calendarWrapper}>
-        <Box sx={{mb: 2}} className={styles.headerWithNav}>
-          <Box sx={{mb: 2}}>
-            <h1 className={styles.title}>Lịch phỏng vấn</h1>
-            <p className={styles.subtitle}>
-              {format(currentWeekStart, 'dd/MM')} - {format(addDays(currentWeekStart, 6), 'dd/MM/yyyy')}
-            </p>
+    <ProtectedLayout allowedRoles={["CANDIDATE", "MENTOR"]}>
+      <div className={styles.container}>
+        <div className={styles.calendarWrapper}>
+          <Box sx={{ mb: 2 }} className={styles.headerWithNav}>
+            <Box sx={{ mb: 2 }}>
+              <h1 className={styles.title}>Lịch phỏng vấn</h1>
+              <p className={styles.subtitle}>
+                {format(currentWeekStart, "dd/MM")} -{" "}
+                {format(addDays(currentWeekStart, 6), "dd/MM/yyyy")}
+              </p>
+            </Box>
+            <Box className={styles.weekNavigation}>
+              <button className={styles.navButton} onClick={handlePrevWeek}>
+                Tuần trước
+              </button>
+              <button className={styles.navButton} onClick={handleNextWeek}>
+                Tuần sau
+              </button>
+            </Box>
           </Box>
-          <Box className={styles.weekNavigation}>
-            <button className={styles.navButton} onClick={handlePrevWeek}>Tuần trước</button>
-            <button className={styles.navButton} onClick={handleNextWeek}>Tuần sau</button>
-          </Box>
-        </Box>
 
-        <WeeklyCalendar 
-          currentWeekStart={currentWeekStart}
-          selectedDate={selectedDate}
-          handleDateSelect={handleDateSelect}
-          getInterviewsByDate={getInterviewsByDate}
-          handleInterviewClick={handleInterviewClick}
-          selectedInterview={selectedInterview}
-        />
-      </div>
-
-      <div className={styles.sidebarWrapper}>
-        <MonthlyCalendar 
-          currentMonth={currentMonth}
-          selectedDate={selectedDate}
-          handleDateSelect={handleDateSelect}
-          handlePrevMonth={handlePrevMonth}
-          handleNextMonth={handleNextMonth}
-          getInterviewsByDate={getInterviewsByDate}
-        />
-
-        {selectedInterview && (
-          <InterviewDetails 
-            interview={selectedInterview}
+          <WeeklyCalendar
+            currentWeekStart={currentWeekStart}
+            selectedDate={selectedDate}
+            handleDateSelect={handleDateSelect}
+            getInterviewsByDate={getInterviewsByDate}
+            handleInterviewClick={handleInterviewClick}
+            selectedInterview={selectedInterview}
           />
-        )}
+        </div>
+
+        <div className={styles.sidebarWrapper}>
+          <Button
+            sx={{
+              width: "100%",
+              background: Color.gradient,
+              fontSize: "100%",
+              marginBottom: "10px",
+            }}
+            variant="contained"
+            href="#contained-buttons"
+          >
+            Tạo phỏng vấn
+          </Button>
+          <MonthlyCalendar
+            currentMonth={currentMonth}
+            selectedDate={selectedDate}
+            handleDateSelect={handleDateSelect}
+            handlePrevMonth={handlePrevMonth}
+            handleNextMonth={handleNextMonth}
+            getInterviewsByDate={getInterviewsByDate}
+          />
+
+          {selectedInterview && (
+            <InterviewDetails interview={selectedInterview} />
+          )}
+        </div>
       </div>
-    </div>
+    </ProtectedLayout>
   );
 };
 
