@@ -37,7 +37,7 @@ export default function JobListingsSection() {
   ]);
 
   return (
-    <Container maxWidth="lg" sx={{ py: 6, bgcolor: "rgba(240, 240, 240, 0.65)", borderRadius: 2, backdropFilter: 'blur(1px)', }}>
+    <Container maxWidth={false} sx={{ flex: 1, py: 6, bgcolor: "rgba(240, 240, 240, 0.65)", borderRadius: 2, backdropFilter: 'blur(1px)', width: '90%' }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
         <Typography variant="h5" fontWeight="bold">
           Bạn Có Buổi Phỏng Vấn Sắp Diễn Ra
@@ -51,7 +51,7 @@ export default function JobListingsSection() {
       
       <Grid container spacing={2}>
         {jobs.map((job) => (
-          <Grid item xs={12} sm={6} md={4} key={job.id}>
+          <Grid size={{ xs: 12, sm:6, md:4, lg: 3, xl: 2 }} key={job.id}>
             <Card 
               sx={{ 
                 height: "100%", 

@@ -27,19 +27,20 @@ export default function StatsSection() {
 
   return (
     <Container 
-      maxWidth="lg" 
+      maxWidth={false} 
       sx={{ 
         pt: { xs: 4, md: 12 }, 
         pb: 6, 
+        flex: {md: 1, lg: 1.5},
         display: 'flex', 
         alignItems: 'center' 
       }}
     >
       <Grid container justifyContent={{ xs: "center", md: "flex-end" }}>
-        <Grid item xs={12} md={6}>
+        <Grid  size={{ sm: 6, md: 12 }} >
           <Grid container spacing={2}>
             {stats.map((stat, index) => (
-              <Grid item xs={4} key={index}>
+              <Grid key={index}>
                 <Box 
                   sx={{ 
                     bgcolor: "rgba(75, 0, 130, 0.7)", 

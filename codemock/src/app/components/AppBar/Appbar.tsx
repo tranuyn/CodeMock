@@ -70,7 +70,7 @@ const AppBar: React.FC<AppBarProps> = ({ isHomePage, isShow = true }) => {
 
   // Routes based on specific roles
   const adminRoutes = [
-    { name: 'Xem lại và đánh giá', path: '/viewAndFeedback', icon: <VideoChatRoundedIcon />  },
+    { name: 'Xem lại và đánh giá', path: '/interviewReviewAndFeedback', icon: <VideoChatRoundedIcon />  },
     { name: 'Cài đặt', path: '/settings', icon: <SettingsIcon />},
   ];
 

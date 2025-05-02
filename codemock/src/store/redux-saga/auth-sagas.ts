@@ -4,6 +4,7 @@ import { put, take, takeLatest, call } from "redux-saga/effects";
 import { AuthActions } from "../actions";
 import { AuthState, LoginResponse } from "@/store/types";
 import callApi, { handleError } from "./common-saga";
+import { callApiWithoutToken } from "@/api/rest-utils";
 
 function* login(action: ReturnType<typeof AuthActions.loginAction.request>) {
   const { callback, ...params } = action.payload;
@@ -47,7 +48,7 @@ function* activeAcount(
 ) {
   const { callback, ...params } = action.payload;
   try {
-    yield callApi(AuthApi.activeAccount, params);
+    yield call(AuthApi.activeAccount, params);
     yield put(AuthActions.activeAccountAction.success());
     if (callback) {
       yield callback();

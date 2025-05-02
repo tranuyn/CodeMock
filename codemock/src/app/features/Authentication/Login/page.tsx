@@ -20,6 +20,7 @@ import * as z from "zod";
 import { RootState } from "@/store/redux";
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { toastService } from "@/app/components/toast/toast.service";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Vui lòng nhập email hợp lệ" }),
@@ -52,7 +53,11 @@ const Login: React.FC<{ onSwitchToRegister: () => void }> = ({
   });
 
   const handleLoginSuccess = useCallback(() => {
-    console.log("vào");
+    toastService.show({
+                  title: "Đăng nhập thành công",
+                  description: "Chào mừng bạn đến với CodeMock!",
+                  variant: "success",
+                });
     router.push("/features/Home");
     dispatch(AuthActions.clearError());
   }, [router, dispatch]);
