@@ -79,9 +79,9 @@ const Register: React.FC<{ onSwitchToLogin: () => void }> = ({
           phone: getValues("email"),
           account_type: "LOCAL",
           role: "CANDIDATE",
-          majorIds: getValues("profession"),
-          levelIds: getValues("educationLevel"),
-          technologyIds: getValues("technologies"),
+          majors: getValues("profession"),
+          levels: getValues("educationLevel"),
+          technologies: getValues("technologies"),
           callback: () => {
             toastService.show({
               title: "Đã lưu thông tin đăng ký",

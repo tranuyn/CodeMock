@@ -13,6 +13,7 @@ import {
   Toast,
 } from "@/app/components/toast/toast";
 import { toastService } from "./components/toast/toast.service";
+import AppBarWrapper from "./components/AppBar/AppBarWrapper";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -54,7 +55,14 @@ function GlobalToast() {
           key={toast.id}
           title={toast.title}
           description={toast.description}
-          variant={toast.variant as "default" | "success" | "warning" | "error" | "primary"}
+          variant={
+            toast.variant as
+              | "default"
+              | "success"
+              | "warning"
+              | "error"
+              | "primary"
+          }
         />
       ))}
       <ToastViewport />
@@ -66,6 +74,7 @@ export default function App({ children }: ProvidersProps) {
   return (
     <ReduxProvider store={store}>
       <GlobalToast />
+      <AppBarWrapper />
       {children}
     </ReduxProvider>
   );
