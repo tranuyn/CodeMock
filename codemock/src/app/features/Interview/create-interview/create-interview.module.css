@@ -1,0 +1,53 @@
+.container {
+  min-width: 100vh;
+  background-color: #f4f4f4;
+  width: 100%;
+  padding: 1.5%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.formBox {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  border-color: #cdc8c8;
+  border-width: 1px;
+}
+
+.formBox h2 {
+  font-weight: 600;
+  font-size: large;
+  text-align: center;
+}
+
+.inputContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputLabel {
+  color: #354665;
+  font-weight: 500;
+}
+.inputField {
+  border: 1px solid #bebcbc;
+  border-radius: 5px;
+  padding: 15px 10px;
+  margin-top: 7px;
+}
+
+.formFlexRow {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin: 20px 0px;
+}
+.muiContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0;
+}

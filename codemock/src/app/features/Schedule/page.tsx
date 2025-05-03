@@ -166,7 +166,7 @@ const InterviewCalendar: NextPageWithLayout = () => {
               marginBottom: "10px",
             }}
             variant="contained"
-            href="#contained-buttons"
+            href="features/Interview/create-interview"
           >
             Tạo phỏng vấn
           </Button>

@@ -5,7 +5,7 @@ import { ProtectedLayout } from "@/layouts/protected_layout";
 
 const SettingPage: NextPageWithLayout = () => {
   return (
-    <ProtectedLayout allowedRoles={["ADMIN", "MENTOR"]}>
+    <ProtectedLayout allowedRoles={["CANDIDATE", "MENTOR"]}>
       Setting
     </ProtectedLayout>
   );

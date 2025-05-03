@@ -21,7 +21,7 @@
   height: 100vh;
   flex-direction: column;
   justify-content: space-between;
-  padding: 1.5% 0 5% 4% 
+  padding: 1.5% 0 5% 4%;
 }
 
 .authContent {
@@ -38,8 +38,8 @@
 
 .adventureText {
   font-size: 3.5rem;
-  font-weight: bold; 
-  color: #9370DB;
+  font-weight: bold;
+  color: #9370db;
   line-height: 1.2;
 }
 
@@ -88,7 +88,6 @@
   }
 }
 
-
 /* Responsive */
 @media (max-width: 1000px) {
   .formContainer {
@@ -100,7 +99,6 @@
     margin-left: auto;
   }
 }
-
 
 @media (max-width: 768px) {
   .loginContent {
@@ -120,7 +118,7 @@
   .formContainer {
     margin-left: auto;
     width: 100%;
-    height: auto; 
+    height: auto;
   }
   .textContent {
     display: none;
@@ -139,14 +137,13 @@
     display: contents;
   }
   .formContainer {
-    padding-right: 0; 
-    height: auto; 
+    padding-right: 0;
+    height: auto;
     flex-direction: column;
   }
   .authContent {
-    width: 100%;    
+    width: 100%;
     position: static;
-
   }
   .textContent {
     display: none;
