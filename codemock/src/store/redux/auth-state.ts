@@ -21,7 +21,7 @@ const initialState: LoginResponse = {
     experiences: [],
     skill: [],
     educationLevel: "",
-    dateCreated: null,
+    createdAt: new Date().toISOString(),
     warning_count: 0,
     warning_until: null,
     lastLogin: null,
