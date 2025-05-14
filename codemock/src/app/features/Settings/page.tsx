@@ -17,10 +17,10 @@ const SettingPage: NextPageWithLayout = () => {
     <ProtectedLayout allowedRoles={["CANDIDATE", "MENTOR"]}>
       <Box className={styles.container}>
         <Box className={styles.leftContainer}>
-          <AvataForm />
+          <AvataForm user={user} />
           <EducationForm />
           <ExperienceForm />
-          <SkillForm />
+          <SkillForm user={user} />
         </Box>
         <Box className={styles.rightContainer}>Bên phải</Box>
       </Box>

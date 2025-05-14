@@ -1,7 +1,6 @@
 "use client";
 
-import { NextPageWithLayout } from "@/app/layout";
-import { ProtectedLayout } from "@/layouts/protected_layout";
+import { useState } from "react";
 import { RootState } from "@/store/redux";
 import { Avatar, Box } from "@mui/material";
 import { useSelector } from "react-redux";
@@ -9,9 +8,15 @@ import styles from "../setting.module.css";
 import EditIcon from "@mui/icons-material/Edit";
 import { Color } from "@/assets/Color";
 import ExperienceCard from "./ExperienceCard";
+import CustomModal from "@/app/components/Modal";
+import { AuthState } from "@/store/types";
+import UpdateAvataModal from "./UpdateAvataModal";
 
-const AvataForm = () => {
-  const user = useSelector((state: RootState) => state.auth.user);
+interface FormProp {
+  user: AuthState;
+}
+
+const AvataForm = ({ user }: FormProp) => {
   const createdAt = new Date(user.createdAt); // Giả sử user.createdAt là chuỗi ISO
   const day = String(createdAt.getDate()).padStart(2, "0");
   const month = String(createdAt.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0
@@ -19,6 +24,7 @@ const AvataForm = () => {
   const formattedDate = `${day}/${month}/${year}`;
   const bgUrl =
     "https://cellphones.com.vn/sforum/wp-content/uploads/2022/02/22-2.jpg";
+  const [open, setOpen] = useState(false);
   return (
     <Box className={styles.formContainer}>
       <img className={styles.bgImg} src={bgUrl} />
@@ -49,7 +55,11 @@ const AvataForm = () => {
               />
             )}
           </div>
-          <EditIcon sx={{ fontSize: "12" }} />
+          <EditIcon
+            fontSize="large"
+            className={styles.editIcon}
+            onClick={() => setOpen(true)}
+          />
         </Box>
 
         <Box className={styles.flexRow} sx={{ padding: "0px 20px" }}>
@@ -62,7 +72,7 @@ const AvataForm = () => {
             }}
           >
             <p className={styles.userName}>Hồ Kim Thiên Nga</p>
-            <p className={styles.bio}>UI Frontend | Call me IT girl </p>
+            <p className={styles.bio}>{user.biography || " "} </p>
             <p className={styles.in4}>
               <span style={{ color: "#6D6C6C" }}>
                 Ho Chi Minh city, Viet Nam
@@ -100,6 +110,13 @@ const AvataForm = () => {
           </div>
         </Box>
       </Box>
+      <CustomModal
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Chỉnh sửa thông tin giới thiệu"
+      >
+        <UpdateAvataModal user={user} onClose={() => setOpen(false)} />
+      </CustomModal>
     </Box>
   );
 };

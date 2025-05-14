@@ -6,7 +6,7 @@ import styles from "../create-interview.module.css";
 interface InputComponentProps {
   title: string;
   allowNumbers?: boolean;
-  register: UseFormRegister<any>; // Keep this as UseFormRegister
+  register?: UseFormRegister<any>; // Keep this as UseFormRegister
   name: string;
 }
 

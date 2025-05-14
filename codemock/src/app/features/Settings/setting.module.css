@@ -54,6 +54,16 @@
   max-width: 100px;
 }
 
+.companyImgSmall {
+  background-color: white;
+  border-radius: 10px;
+  width: 50px;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  margin-right: 10px;
+  max-width: 100px;
+}
+
 .userName {
   font-size: larger;
   font-weight: 700;
@@ -62,6 +72,7 @@
 .bio {
   font-size: medium;
   font-weight: 500;
+  margin-right: 10px;
 }
 
 .avaPoint {
@@ -84,20 +95,67 @@
   position: relative;
   width: 100%;
   margin-top: 10px;
+  border: 1px solid #dbdedb;
+  border-radius: 10px;
+  padding: 20px;
+}
+.techList {
+  list-style-type: disc;
+  padding-left: 1.5rem; /* tạo khoảng thụt vào cho dấu chấm */
+  margin: 0;
 }
 
-.gradientBorder {
-  position: relative;
+.techItem {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Bỏ đường kẻ ở item cuối cùng */
+.techItem:last-child {
+  border-bottom: none;
+}
+
+.editIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 4px; /* giữ padding */
+  border-radius: 50%; /* bo tròn */
+  transition: background-color 0.2s;
+}
+
+.editIcon:hover {
+  background-color: #e0e0e0;
+  cursor: pointer;
+}
+
+.bio1 {
+  border: 1px solid #ccc;
   padding: 10px;
-  background: white; /* Nền trắng */
-  border-radius: 10px;
-  z-index: 1; /* Đảm bảo nằm trên cùng */
 }
 
-.gradientBackground {
-  position: absolute;
-  inset: -0.5px;
-  background: linear-gradient(to right, #8a2be2, #3e70a1);
+.buttonReject {
+  border: 1px solid #6300b3;
+  padding: 10px 20px;
   border-radius: 10px;
-  z-index: 0; /* Đảm bảo nằm phía sau phần tử chính */
+  width: 100px;
+  font-weight: 500;
+  margin-right: 20px;
+}
+
+.buttonAcp {
+  padding: 10px 20px;
+  border-radius: 10px;
+  min-width: 100px;
+  font-weight: 500;
+  color: white;
+}
+
+.buttonReject:hover {
+  cursor: pointer;
+}
+
+.buttonAcp:hover {
+  cursor: pointer;
 }
