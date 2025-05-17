@@ -32,7 +32,8 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
 
   const weekDays = getWeekDays(currentWeekStart);
   // Các giờ trong ngày
-  const hours = Array.from({ length: 10 }, (_, i) => i + 9); // 9:00 đến 18:00
+  const hours = Array.from({ length: 14 }, (_, i) => i + 1); // 9:00 đến 18:00
+  console.log("Interviews on selected date:", getInterviewsByDate(selectedDate));
 
   return (
     <>
@@ -87,7 +88,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
                         onClick={() => handleInterviewClick(interview)}
                       >
                         <div className={styles.interviewTitle}>{interview.title}</div>
-                        <div className={styles.interviewType}>{interview.type}</div>
+                        {/* <div className={styles.interviewType}>{interview.type}</div> */}
                         <div className={styles.interviewTime}>{`${interview.startTime} - ${interview.endTime}`}</div>
                       </div>
                     );

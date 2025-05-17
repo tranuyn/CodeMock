@@ -1,4 +1,4 @@
-import { get, post, put } from "./rest-utils";
+import { post } from "./rest-utils";
 
 export interface LoginRequest {
   email: string;

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   format,
   addDays,
@@ -19,58 +19,43 @@ import { Box, Button } from "@mui/material";
 import { NextPageWithLayout } from "@/app/layout";
 import { ProtectedLayout } from "@/layouts/protected_layout";
 import { Color } from "@/assets/Color";
+import { mapSlotToInterview } from "./mapSlotToInterview";
+import { getInterviewSlotsByUser } from "@/api/interview/interview_slot";
+import { RootState } from "@/store/redux";
+import { useSelector } from "react-redux";
 
 interface Interview {
-  id: number;
+  id: string;
   title: string;
   position: string;
   date: Date;
   startTime: string;
   endTime: string;
-  type: string;
+  major: string;
   technologies?: string[];
   interviewer?: string;
 }
+export type InterviewSlotResult = {
+  slotId: string;
+  candidateId: string;
+  startTime: string;
+  endTime: string;
+  status: string;
+  interviewSession: {
+    title?: string;
+    sessionId: string;
+    major_id: string[];
+    level_id: string;
+    mentorId: string;
+    requiredTechnology: string[];
+    meetingLink?: string;
+    recordingURL?: string;
+  };
+};
 
-const mockInterviews: Interview[] = [
-  {
-    id: 1,
-    title: "Intern Front-end Dev",
-    position: "Front-end",
-    date: new Date(2025, 2, 3),
-    startTime: "09:00",
-    endTime: "10:20",
-    type: "Dev",
-    technologies: ["ReactJS", "JavaScript", "CSS", "HTML"],
-    interviewer: "Jessica",
-  },
-  {
-    id: 2,
-    title: "Intern Front-end Dev",
-    position: "Front-end",
-    date: new Date(2025, 2, 4),
-    startTime: "10:30",
-    endTime: "11:50",
-    type: "Dev",
-    technologies: ["JavaScript", "Vue.js", "CSS"],
-    interviewer: "Michael",
-  },
-  {
-    id: 3,
-    title: "Intern Front-end React Native",
-    position: "Front-end",
-    date: new Date(2025, 2, 5),
-    startTime: "13:00",
-    endTime: "14:30",
-    type: "React Native",
-    technologies: ["React Native", "TypeScript", "Redux"],
-    interviewer: "Anna",
-  },
-];
 
 // Export the Interview interface for use in other components
 export type { Interview };
-export { mockInterviews };
 
 const InterviewCalendar: NextPageWithLayout = () => {
   const today = new Date(2025, 2, 3);
@@ -82,13 +67,33 @@ const InterviewCalendar: NextPageWithLayout = () => {
     startOfWeek(today, { weekStartsOn: 1 })
   );
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date(2025, 2, 1));
+  const role = useSelector((state: RootState) => state.auth.user.role);
+  const userId = useSelector((state: RootState) => state.auth.user.id);
+  const [interviews, setInterviews] = useState<Interview[]>([]);
 
+  useEffect(() => {
+    const fetchInterviews = async () => {
+      try {
+        const slots = await getInterviewSlotsByUser(userId) as InterviewSlotResult[];
+        console.log(slots)
+        const mapped = slots.map(mapSlotToInterview);
+        setInterviews(mapped);
+      } catch (err) {
+        console.error("Lỗi khi lấy dữ liệu phỏng vấn:", err);
+      }
+    };
+
+    if (userId) {
+      fetchInterviews();
+    }
+  }, [userId]);
   // Lọc phỏng vấn theo ngày
   const getInterviewsByDate = (date: Date) => {
-    return mockInterviews.filter((interview) =>
-      isSameDay(interview.date, date)
+    return interviews.filter((interview) =>
+      isSameDay(new Date(interview.date), date) // So sánh ngày chính xác
     );
   };
+  
 
   // Xử lý khi click vào một cuộc phỏng vấn
   const handleInterviewClick = (interview: Interview) => {
@@ -171,6 +176,7 @@ const InterviewCalendar: NextPageWithLayout = () => {
             Tạo phỏng vấn
           </Button>
           <MonthlyCalendar
+            userRole={role} 
             currentMonth={currentMonth}
             selectedDate={selectedDate}
             handleDateSelect={handleDateSelect}

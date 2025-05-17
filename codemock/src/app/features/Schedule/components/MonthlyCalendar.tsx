@@ -6,6 +6,7 @@ import styles from '../Schedule.module.css';
 import { Interview } from '../page';
 
 interface MonthlyCalendarProps {
+  userRole: string;//"MENTOR" | "CANDIDATE";
   currentMonth: Date;
   selectedDate: Date;
   handleDateSelect: (date: Date) => void;
