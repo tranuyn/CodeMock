@@ -1,0 +1,161 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 1.5%;
+  background-color: #f4f4f4;
+}
+
+.leftContainer {
+  width: 70%;
+  margin-right: 1.5%;
+}
+
+.rightContainer {
+  width: 30%;
+}
+
+.formContainer {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 30px;
+}
+
+.bgImg {
+  width: 100%;
+  aspect-ratio: 3/1;
+  object-fit: cover;
+}
+.imgCtn {
+  background-color: white;
+  padding: 10px;
+  border-radius: 50%;
+  width: 20%;
+  aspect-ratio: 1/1;
+}
+.flexRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.contentCtn {
+  padding: 2%;
+  margin-top: -12%;
+}
+
+.companyImg {
+  background-color: white;
+  border-radius: 10px;
+  width: 20%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  margin-right: 20px;
+  max-width: 100px;
+}
+
+.companyImgSmall {
+  background-color: white;
+  border-radius: 10px;
+  width: 50px;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  margin-right: 10px;
+  max-width: 100px;
+}
+
+.userName {
+  font-size: larger;
+  font-weight: 700;
+}
+
+.bio {
+  font-size: medium;
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+.avaPoint {
+  color: #3ea145;
+  font-weight: 700;
+  background-color: rgba(0, 128, 0, 0.25);
+  padding: 10px 20px;
+  width: fit-content;
+  border-radius: 10px;
+}
+
+.containerGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.skillContainer {
+  position: relative;
+  width: 100%;
+  margin-top: 10px;
+  border: 1px solid #dbdedb;
+  border-radius: 10px;
+  padding: 20px;
+}
+.techList {
+  list-style-type: disc;
+  padding-left: 1.5rem; /* tạo khoảng thụt vào cho dấu chấm */
+  margin: 0;
+}
+
+.techItem {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Bỏ đường kẻ ở item cuối cùng */
+.techItem:last-child {
+  border-bottom: none;
+}
+
+.editIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 4px; /* giữ padding */
+  border-radius: 50%; /* bo tròn */
+  transition: background-color 0.2s;
+}
+
+.editIcon:hover {
+  background-color: #e0e0e0;
+  cursor: pointer;
+}
+
+.bio1 {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.buttonReject {
+  border: 1px solid #6300b3;
+  padding: 10px 20px;
+  border-radius: 10px;
+  width: 100px;
+  font-weight: 500;
+  margin-right: 20px;
+}
+
+.buttonAcp {
+  padding: 10px 20px;
+  border-radius: 10px;
+  min-width: 100px;
+  font-weight: 500;
+  color: white;
+}
+
+.buttonReject:hover {
+  cursor: pointer;
+}
+
+.buttonAcp:hover {
+  cursor: pointer;
+}

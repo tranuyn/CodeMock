@@ -1,5 +1,5 @@
 import { createReducer } from "typesafe-actions";
-import { AuthActions } from "../actions";
+import { AuthActions, UserActions } from "../actions";
 import { AuthState, LoginResponse } from "../types";
 import { error } from "console";
 
@@ -21,7 +21,7 @@ const initialState: LoginResponse = {
     experiences: [],
     skill: [],
     educationLevel: "",
-    dateCreated: null,
+    createdAt: new Date().toISOString(),
     warning_count: 0,
     warning_until: null,
     lastLogin: null,
@@ -136,6 +136,32 @@ const authReducer = createReducer(initialState)
         loading: false,
       };
     }
+  )
+  .handleAction(
+    UserActions.updateUserAction.request,
+    (state: AuthState, action: { payload: boolean }) => ({
+      ...state,
+      error: null,
+      loading: true,
+    })
+  )
+  .handleAction(
+    UserActions.updateUserAction.success,
+    (state: AuthState, action: { payload: AuthState }) => ({
+      ...state,
+      user: action.payload,
+      loading: false,
+      error: null,
+    })
+  )
+  .handleAction(
+    UserActions.updateUserAction.failure,
+    (state: AuthState, action: { payload: string }) => {
+      return {
+        ...state,
+        error: action.payload, // Setting the error message in state
+        loading: false,
+      };
+    }
   );
-
 export default authReducer;

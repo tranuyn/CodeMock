@@ -9,7 +9,7 @@ export interface AuthState {
   experiences: experience_detail[];
   skill: string[];
   educationLevel: string;
-  dateCreated: Date | null;
+  createdAt: string;
   warning_count: number;
   warning_until: Date | null;
   lastLogin: Date | null;

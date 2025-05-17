@@ -1,6 +1,3 @@
-import { Button } from "@mui/material";
-import { green } from "@mui/material/colors";
-
 // pages/unauthorized.js  (or app/unauthorized/page.tsx)
 const urlBG =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdCeaHABEg62_q1oDbND5Gi8trDQTW8POt3F5AKMBAJbDyVw0yxhSIdPKV-LpZsGbW0h4&usqp=CAU";

@@ -3,7 +3,7 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import { Provider as ReduxProvider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import rootReducer from "@/store/redux";
 import rootSaga from "@/store/redux-saga";
@@ -14,19 +14,41 @@ import {
 } from "@/app/components/toast/toast";
 import { toastService } from "./components/toast/toast.service";
 import AppBarWrapper from "./components/AppBar/AppBarWrapper";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import { PersistGate } from "redux-persist/integration/react";
+import authReducer from "@/store/redux/auth-state";
 
 const sagaMiddleware = createSagaMiddleware();
 
+const persistConfig = {
+  key: "root",
+  storage,
+};
+const persistedRootReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedRootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       thunk: false,
-      serializableCheck: false,
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
     }).concat(sagaMiddleware),
 });
 
 sagaMiddleware.run(rootSaga);
+
+const persistor = persistStore(store);
 
 interface ProvidersProps {
   children: ReactNode;
@@ -73,9 +95,11 @@ function GlobalToast() {
 export default function App({ children }: ProvidersProps) {
   return (
     <ReduxProvider store={store}>
-      <GlobalToast />
-      <AppBarWrapper />
-      {children}
+      <PersistGate loading={null} persistor={persistor}>
+        <GlobalToast />
+        <AppBarWrapper />
+        {children}
+      </PersistGate>
     </ReduxProvider>
   );
 }
