@@ -21,7 +21,7 @@ const ExperienceCard = ({
   return (
     <Box className={styles.flexRow}>
       <div className={styles.companyImg}>
-        <img style={{ objectFit: "cover" }} src={imageUrl} />
+        <img style={{ objectFit: "cover" }} src={url_company} />
       </div>
 
       <div style={{ flex: 1 }}>
@@ -29,7 +29,10 @@ const ExperienceCard = ({
           {position}
         </p>
         <p style={{ fontWeight: 400, marginBottom: "5px" }}>{work_space}</p>
-        <p style={{ fontWeight: 300, fontSize: "90%" }}>{yearStart}</p>
+        <p style={{ fontWeight: 300, fontSize: "90%" }}>
+          {yearStart}
+          {yearEnd !== undefined && yearEnd > 0 && <span> - {yearEnd}</span>}
+        </p>
       </div>
     </Box>
   );

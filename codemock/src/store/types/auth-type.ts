@@ -1,3 +1,14 @@
+import { Level } from "../redux-saga/level-sagas";
+import { Major } from "../redux-saga/major-sagas";
+import { Technology } from "../redux-saga/technology-sagas";
+
+export interface SkillItem {
+  detail: string;
+  work_space: string;
+  url_company: string;
+  yearStart: number;
+}
+
 export interface AuthState {
   id: string;
   username: string;
@@ -7,7 +18,7 @@ export interface AuthState {
   role: string;
   is_active: boolean;
   experiences: experience_detail[];
-  skill: string[];
+  skill: SkillItem[];
   educationLevel: string;
   createdAt: string;
   warning_count: number;
@@ -20,9 +31,9 @@ export interface AuthState {
   educationBackground: experience_detail[];
   biography: string;
   average_point: number;
-  majors: Detail[];
-  levels: Detail[];
-  technologies: Detail[];
+  majors: Major[];
+  levels: Level[];
+  technologies: Technology[];
   current_activity: experience_detail[];
   specialization_skill: String[];
   averageRating: number;
@@ -41,8 +52,8 @@ export interface experience_detail {
   work_space: string;
   url_company: string; //option
   yearStart: number;
-  yearEnd: number;
-  imageUrl: string;
+  yearEnd?: number;
+  imageUrl?: string;
 }
 
 export interface LoginResponse {

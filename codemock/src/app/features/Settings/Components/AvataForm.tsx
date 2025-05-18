@@ -95,18 +95,23 @@ const AvataForm = ({ user }: FormProp) => {
               width: "40%",
             }}
           >
-            <ExperienceCard
-              position="Student"
-              work_space="University of Information Technology"
-              yearStart={2022}
-              imageUrl="https://res.cloudinary.com/dzdso60ms/image/upload/v1746456863/ixwtbjcdwd5orhswq4qw.png"
-            />
-            <ExperienceCard
-              position="Frontend Developer Intern"
-              work_space="Spiraledge Cooporation VietNam"
-              yearStart={2025}
-              imageUrl="https://res.cloudinary.com/dzdso60ms/image/upload/v1746456780/rt9hnrcwz1ayqcrfbwyn.jpg"
-            />
+            {user.educationBackground?.length > 0 && (
+              <ExperienceCard
+                position={user.educationBackground[0].position}
+                work_space={user.educationBackground[0].work_space}
+                yearStart={user.educationBackground[0].yearStart}
+                url_company={user.educationBackground[0].url_company}
+              />
+            )}
+
+            {user.experiences?.length > 0 && (
+              <ExperienceCard
+                position={user.experiences[0].position}
+                work_space={user.experiences[0].work_space}
+                yearStart={user.experiences[0].yearStart}
+                url_company={user.experiences[0].url_company}
+              />
+            )}
           </div>
         </Box>
       </Box>

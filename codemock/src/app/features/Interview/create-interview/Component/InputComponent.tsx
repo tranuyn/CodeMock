@@ -8,6 +8,7 @@ interface InputComponentProps {
   allowNumbers?: boolean;
   register?: UseFormRegister<any>; // Keep this as UseFormRegister
   name: string;
+  inputStyle?: string;
 }
 
 const InputComponent: React.FC<InputComponentProps> = ({
@@ -15,6 +16,7 @@ const InputComponent: React.FC<InputComponentProps> = ({
   allowNumbers = false,
   register,
   name,
+  inputStyle,
 }) => {
   return (
     <div className={styles.inputContainer}>
@@ -25,7 +27,7 @@ const InputComponent: React.FC<InputComponentProps> = ({
         type={allowNumbers ? "number" : "text"}
         id={name}
         placeholder={`Nhập ${title}`}
-        className={styles.inputField}
+        className={`${styles.inputField} ${inputStyle}`}
         {...register(name, { required: true })} // This is correct
       />
     </div>
