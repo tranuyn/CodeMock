@@ -1,10 +1,6 @@
 import { get, post, put } from "@/api/rest-utils";
 
-export type RegisterSlotPayload = {
-  candidateId: string;
-};
-
-export type CancelSlotPayload = {
+export type Register_CancelSlotPayload = {
   candidateId: string;
 };
 
@@ -25,20 +21,20 @@ export const getAllInterviewSlots = async () => {
   return await get("/interview-slot");
 };
 
-export const getInterviewSlotsByUser = async (userId: string) => {
-  return await get(`/interview-slot/user/${userId}`);
+export const getInterviewSlotsByCandidate = async () => {
+  return await get(`/interview-slot/my-interview-slots`);
 };
 
 export const registerInterviewSlot = async (
   slotId: string,
-  payload: RegisterSlotPayload
+  payload: Register_CancelSlotPayload
 ) => {
   return await put(`/interview-slot/${slotId}/register`, payload);
 };
 
 export const cancelInterviewSlot = async (
   slotId: string,
-  payload: CancelSlotPayload
+  payload: Register_CancelSlotPayload
 ) => {
   return await put(`/interview-slot/${slotId}/cancel`, payload);
 };

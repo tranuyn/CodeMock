@@ -13,7 +13,7 @@ export interface AuthState {
   warning_count: number;
   warning_until: Date | null;
   lastLogin: Date | null;
-  coinBalance: Number;
+  coinBalance: number;
   avataUrl: string;
   address: string;
   resumeUrl: string;
@@ -24,7 +24,7 @@ export interface AuthState {
   levels: Detail[];
   technologies: Detail[];
   current_activity: experience_detail[];
-  specialization_skill: String[];
+  specialization_skill: string[];
   averageRating: number;
   totalInterviews: number;
   //availabilitySchedule: Schedule

@@ -1,17 +1,18 @@
-import { get, post, put, del } from "@/api/rest-utils";
+import { get, post, put, patch } from "@/api/rest-utils";
 
 export type CreateInterviewSessionPayload = {
   mentorId: string;
-  scheduleDateTime: string;
-  duration: number;
+  startTime: string;
+  totalSlots: number;
   slotDuration: number;
-  status: string;
-  major_id: string[];
-  level_id: string;
-  requiredTechnology: string[];
+  majorIds: string[];
+  levelId: string;
+  requiredTechnologyIds: string[];
   sessionPrice: number;
   meetingLink?: string;
   recordingURL?: string;
+  description: string;
+  requirement?: string;
 };
 
 export type UpdateInterviewSessionPayload =
@@ -24,14 +25,19 @@ export const createInterviewSession = async (
   return await post("/interview_sessions", payload);
 };
 
+// Lấy tất cả sessions
+export const getAllInterviewSessions = async () => {
+  return await get(`/interview_sessions`);
+};
+
 // Lấy session theo ID
 export const getInterviewSessionById = async (id: string) => {
   return await get(`/interview_sessions/${id}`);
 };
 
 // Lấy tất cả session của mentor
-export const getInterviewSessionsByMentor = async (mentorId: string) => {
-  return await get(`/interview_sessions/mentor/${mentorId}`);
+export const getInterviewSessionsByMentor = async () => {
+  return await get(`/interview_sessions/my-interview-sessions`);
 };
 
 // Cập nhật session
@@ -43,6 +49,6 @@ export const updateInterviewSession = async (
 };
 
 // Xoá session
-export const deleteInterviewSession = async (id: string) => {
-  return await del(`/interview_sessions/${id}`);
+export const cancelInterviewSession = async (id: string) => {
+  return await patch(`/interview_sessions/${id}/cancel`);
 };

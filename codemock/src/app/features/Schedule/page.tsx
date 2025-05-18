@@ -19,10 +19,11 @@ import { Box, Button } from "@mui/material";
 import { NextPageWithLayout } from "@/app/layout";
 import { ProtectedLayout } from "@/layouts/protected_layout";
 import { Color } from "@/assets/Color";
-import { mapSlotToInterview } from "./mapSlotToInterview";
-import { getInterviewSlotsByUser } from "@/api/interview/interview_slot";
+import { mapSessionToInterview, mapSlotToInterview } from "./mapSlotToInterview";
+import { getInterviewSlotsByCandidate } from "@/api/interview/interview_slot";
 import { RootState } from "@/store/redux";
 import { useSelector } from "react-redux";
+import { getInterviewSessionsByMentor } from "@/api/interview/interview_session";
 
 interface Interview {
   id: string;
@@ -35,6 +36,22 @@ interface Interview {
   technologies?: string[];
   interviewer?: string;
 }
+export type InterviewSessionResult = {
+  sessionId: string;
+  startTime: string;
+  endTime?: string;
+  totalSlots: number;
+  slotDuration: number;
+  title?: string;
+  requiredTechnologies: { id: string; name: string }[];
+  majors: { id: string; name: string }[];
+  level: { id: string; name: string };
+  meetingLink?: string;
+  recordingURL?: string;
+  mentor: { id: string; username: string };
+  description: string;
+};
+
 export type InterviewSlotResult = {
   slotId: string;
   candidateId: string;
@@ -74,14 +91,21 @@ const InterviewCalendar: NextPageWithLayout = () => {
   useEffect(() => {
     const fetchInterviews = async () => {
       try {
-        const slots = await getInterviewSlotsByUser(userId) as InterviewSlotResult[];
-        console.log(slots)
-        const mapped = slots.map(mapSlotToInterview);
-        setInterviews(mapped);
+        if (role === "CANDIDATE") {
+          const slots = await getInterviewSlotsByCandidate() as InterviewSlotResult[];
+          const mapped = slots.map(mapSlotToInterview);
+          setInterviews(mapped);
+        } else if (role === "MENTOR") {
+          const sessions = await getInterviewSessionsByMentor() as InterviewSessionResult[];
+          const mapped = sessions.map(mapSessionToInterview);
+          console.log("mapped", mapped);
+          setInterviews(mapped);
+        }
       } catch (err) {
         console.error("Lỗi khi lấy dữ liệu phỏng vấn:", err);
       }
     };
+
 
     if (userId) {
       fetchInterviews();

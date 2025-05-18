@@ -2,8 +2,8 @@
 "use client";
 
 import { useEffect, useState, ReactNode } from "react";
-import { useRouter } from "next/navigation"; // ← CHỈNH Ở ĐÂY
-import Unauthorized from "./unauthorization";
+import { useRouter } from "next/navigation";
+import ResultUnauthorized from "@/app/codemock-ui/Result/ResultUnauthorized-401";
 
 type Role = "ADMIN" | "CANDIDATE" | "MENTOR";
 
@@ -32,7 +32,7 @@ export const ProtectedLayout = ({
 
   if (loading) return <div>Loading...</div>;
   if (!user?.role || !allowedRoles.includes(user.role)) {
-    return <Unauthorized />;
+    return <ResultUnauthorized />;
   }
 
   return <>{children}</>;

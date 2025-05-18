@@ -1,7 +1,6 @@
 import { callApiWithoutToken } from "@/api/rest-utils";
 import { handleError } from "@/store/redux-saga/common-saga";
 import { AuthState } from "@/store/types";
-import axios from "axios";
 import { call, takeLatest } from "redux-saga/effects";
 
 export interface Level {

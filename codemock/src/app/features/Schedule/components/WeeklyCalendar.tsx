@@ -32,7 +32,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
 
   const weekDays = getWeekDays(currentWeekStart);
   // Các giờ trong ngày
-  const hours = Array.from({ length: 14 }, (_, i) => i + 1); // 9:00 đến 18:00
+  const hours = Array.from({ length: 15 }, (_, i) => i + 7);
   console.log("Interviews on selected date:", getInterviewsByDate(selectedDate));
 
   return (
