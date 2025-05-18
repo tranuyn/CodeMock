@@ -18,8 +18,8 @@ const SettingPage: NextPageWithLayout = () => {
       <Box className={styles.container}>
         <Box className={styles.leftContainer}>
           <AvataForm user={user} />
-          <EducationForm />
-          <ExperienceForm />
+          <EducationForm user={user} />
+          <ExperienceForm user={user} />
           <SkillForm user={user} />
         </Box>
         <Box className={styles.rightContainer}>Bên phải</Box>

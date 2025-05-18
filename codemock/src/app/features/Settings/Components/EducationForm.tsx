@@ -9,9 +9,17 @@ import styles from "../setting.module.css";
 import EditIcon from "@mui/icons-material/Edit";
 import { Color } from "@/assets/Color";
 import ExperienceCard from "./ExperienceCard";
+import { AuthState } from "@/store/types";
+import { useState } from "react";
+import CustomModal from "@/app/components/Modal";
+import UpdateEducationModal from "./Modal/UpdateEducationModal";
 
-const EducationForm = () => {
-  const user = useSelector((state: RootState) => state.auth.user);
+interface FormProp {
+  user: AuthState;
+}
+
+const EducationForm = ({ user }: FormProp) => {
+  const [open, setOpen] = useState(false);
   return (
     <Box className={styles.formContainer} style={{ padding: "20px 40px" }}>
       <Box
@@ -19,7 +27,11 @@ const EducationForm = () => {
         sx={{ alignItems: "flex-end", marginBottom: "20px" }}
       >
         <p className={styles.userName}>Trình độ học vấn</p>
-        <EditIcon sx={{ fontSize: "12" }} />
+        <EditIcon
+          fontSize="large"
+          className={styles.editIcon}
+          onClick={() => setOpen(true)}
+        />
       </Box>
 
       <div className={styles.flexRow} style={{ alignItems: "flex-end" }}>
@@ -30,32 +42,52 @@ const EducationForm = () => {
             gap: "15px",
           }}
         >
-          <ExperienceCard
-            position="Student"
-            work_space="University of Information Technology"
-            yearStart={2022}
-            imageUrl="https://res.cloudinary.com/dzdso60ms/image/upload/v1746456863/ixwtbjcdwd5orhswq4qw.png"
-          />
-          <ExperienceCard
-            position="Frontend Developer Intern"
-            work_space="Spiraledge Cooporation VietNam"
-            yearStart={2025}
-            imageUrl="https://res.cloudinary.com/dzdso60ms/image/upload/v1746456780/rt9hnrcwz1ayqcrfbwyn.jpg"
-          />
+          {user.educationBackground?.length > 0 &&
+            user.educationBackground.map((item, index) => (
+              <>
+                {index > 0 && (
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "1px",
+                      backgroundColor: "#ccc",
+                      margin: "2px 0",
+                    }}
+                  />
+                )}
+                <ExperienceCard
+                  position={item.position}
+                  work_space={item.work_space}
+                  yearStart={item.yearStart}
+                  yearEnd={item.yearEnd}
+                  url_company={item.url_company}
+                />
+              </>
+            ))}
         </div>
 
-        <Button
-          sx={{
-            width: "fit-content",
-            background: Color.gradient,
-            fontSize: "large",
-            marginBottom: "10px",
-          }}
-          variant="contained"
-        >
-          Thêm học vấn
-        </Button>
+        {user.educationBackground?.length > 0 && (
+          <Button
+            sx={{
+              width: "fit-content",
+              background: Color.gradient,
+              fontSize: "large",
+              marginBottom: "10px",
+            }}
+            variant="contained"
+          >
+            Xóa học vấn
+          </Button>
+        )}
       </div>
+
+      <CustomModal
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Chỉnh sửa thông tin học vấn"
+      >
+        <UpdateEducationModal user={user} onClose={() => setOpen(false)} />
+      </CustomModal>
     </Box>
   );
 };

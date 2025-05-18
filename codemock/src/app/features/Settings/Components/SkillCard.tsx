@@ -21,9 +21,12 @@ const SkillCard = ({
   return (
     <Box sx={{ marginTop: "10px" }}>
       <p style={{ marginBottom: "10px" }}>{title}</p>
-      <div className={styles.flexRow} style={{ alignItems: "center" }}>
+      <div
+        className={styles.flexRow}
+        style={{ alignItems: "center", justifyContent: "flex-start" }}
+      >
         <div className={styles.companyImgSmall}>
-          <img style={{ objectFit: "cover" }} src={imageUrl} />
+          <img style={{ objectFit: "cover" }} src={url_company} />
         </div>
         <p style={{ marginBottom: "5px", fontSize: "90%", color: "#6D6C6C" }}>
           {work_space}

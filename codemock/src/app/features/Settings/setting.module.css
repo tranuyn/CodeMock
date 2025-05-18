@@ -159,3 +159,7 @@
 .buttonAcp:hover {
   cursor: pointer;
 }
+
+.customInput {
+  padding: 5px 10px !important;
+}

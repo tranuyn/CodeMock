@@ -11,12 +11,16 @@ import { Color } from "@/assets/Color";
 import ExperienceCard from "./ExperienceCard";
 import { AuthState } from "@/store/types";
 import SkillCard from "./SkillCard";
+import CustomModal from "@/app/components/Modal";
+import UpdateSkillModal from "./Modal/UpdateSkillModal";
+import { useState } from "react";
 
 interface SkillFormProp {
   user: AuthState;
 }
 
 const SkillForm = ({ user }: SkillFormProp) => {
+  const [open, setOpen] = useState(false);
   return (
     <Box className={styles.formContainer} style={{ padding: "20px 40px" }}>
       <Box
@@ -30,7 +34,11 @@ const SkillForm = ({ user }: SkillFormProp) => {
             hợp.
           </p>
         </div>
-        <EditIcon sx={{ fontSize: "12" }} />
+        <EditIcon
+          fontSize="large"
+          className={styles.editIcon}
+          onClick={() => setOpen(true)}
+        />
       </Box>
 
       <div className={styles.containerGrid}>
@@ -39,12 +47,8 @@ const SkillForm = ({ user }: SkillFormProp) => {
             <p style={{ color: Color.purple, fontWeight: "bold" }}>Công nghệ</p>
             <ul className={styles.techList}>
               {user.technologies.map((item) => (
-                <li key={item.id} className={styles.techItem}>
-                  <SkillCard
-                    title={item.name}
-                    work_space="University of Information Technology"
-                    imageUrl="https://res.cloudinary.com/dzdso60ms/image/upload/v1746456863/ixwtbjcdwd5orhswq4qw.png"
-                  />
+                <li key={item.id} style={{ padding: "10px 0" }}>
+                  <a>{item.name}</a>
                 </li>
               ))}
             </ul>
@@ -56,12 +60,8 @@ const SkillForm = ({ user }: SkillFormProp) => {
             <p style={{ color: Color.blue, fontWeight: "bold" }}>Chuyên môn</p>
             <ul className={styles.techList}>
               {user.majors?.map((item) => (
-                <li key={item.id} className={styles.techItem}>
-                  <SkillCard
-                    title={item.name}
-                    work_space="University of Information Technology"
-                    imageUrl="https://res.cloudinary.com/dzdso60ms/image/upload/v1746456863/ixwtbjcdwd5orhswq4qw.png"
-                  />
+                <li key={item.id} style={{ padding: "10px 0" }}>
+                  <p>{item.name}</p>
                 </li>
               ))}
             </ul>
@@ -71,9 +71,28 @@ const SkillForm = ({ user }: SkillFormProp) => {
         <div className={styles.skillContainer}>
           <div className={styles.gradientBorder}>
             <p style={{ color: Color.purple, fontWeight: "bold" }}>Kỹ năng</p>
+            <ul className={styles.techList}>
+              {user.skill?.map((item) => (
+                <li className={styles.techItem}>
+                  <SkillCard
+                    title={item.detail}
+                    work_space={item.work_space}
+                    url_company={item.url_company}
+                  />
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
+
+      <CustomModal
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Chỉnh sửa thông tin giới thiệu"
+      >
+        <UpdateSkillModal user={user} onClose={() => setOpen(false)} />
+      </CustomModal>
     </Box>
   );
 };
