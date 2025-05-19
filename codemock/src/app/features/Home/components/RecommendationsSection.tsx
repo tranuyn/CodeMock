@@ -100,7 +100,7 @@ export default function RecommendationsSection() {
   ]);
 
   return (
-    <Container maxWidth={false} sx={{ flex: 1, py: 6, bgcolor: "rgba(240, 240, 240, 0.65)", borderRadius: 2, backdropFilter: 'blur(1px)', width: '90%' }}>
+    <Container maxWidth={false} sx={{ flex: 1, py: 6, bgcolor: "rgba(240, 240, 240, 0.65)", borderRadius: 2, backdropFilter: 'blur(1px)', width: '94%' }}>
       <Typography variant="h5" fontWeight="bold" sx={{ mb: 3 }}>
         Đề Xuất Cho Bạn
       </Typography>

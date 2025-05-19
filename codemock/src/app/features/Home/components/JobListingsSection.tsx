@@ -13,6 +13,10 @@ export default function JobListingsSection() {
   const role = useSelector((state: RootState) => state.auth.user.role);
   const userId = useSelector((state: RootState) => state.auth.user.id);
   const [interviews, setInterviews] = useState<InterviewSessionResult[]>([]);
+  const bookedSlotCount = interviews.reduce((count, session) => {
+    const bookedInSession = session.interviewSlots.filter(slot => slot.status === "booked").length;
+    return count + bookedInSession;
+  }, 0);
 
   useEffect(() => {
     const fetchInterviews = async () => {
@@ -30,7 +34,7 @@ export default function JobListingsSection() {
   }, [userId]);
 
   return (
-    <Container maxWidth={false} sx={{ flex: 1, py: 6, bgcolor: "rgba(240, 240, 240, 0.65)", borderRadius: 2, backdropFilter: 'blur(1px)', width: '90%' }}>
+    <Container maxWidth={false} sx={{ flex: 1, py: 6, bgcolor: "rgba(240, 240, 240, 0.65)", borderRadius: 2, backdropFilter: 'blur(1px)', width: '94%' }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
         <Typography variant="h5" fontWeight="bold">
           Bạn Có Buổi Phỏng Vấn Sắp Diễn Ra
@@ -49,8 +53,8 @@ export default function JobListingsSection() {
           const formattedTime = `${start.toLocaleDateString("vi-VN")} ${start.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}-${end.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}`;
           const isFree = session.sessionPrice === 0;
 
-          return (
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={session.sessionId}>
+          return ( 
+            <Grid size={{ xs: 12, sm:6, md:4, lg: 3, xl: 2 }}  key={session.sessionId}>
               <Card
                 sx={{
                   height: "100%",
@@ -103,14 +107,17 @@ export default function JobListingsSection() {
                       </Typography>
                     </Box>
                   </Box>
-                  <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                    <Typography variant="body2" color="text.secondary">
-                      {session.majors?.map(m => m.name).join(", ")}
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="body2">
+                      Chuyên ngành: {session.majors?.map(m => m.name).join(", ")}
+                    </Typography>
+                    <Typography variant="body2">
+                      Công nghệ: {session.requiredTechnologies?.map(t => t.name).join(", ")}
                     </Typography>
                   </Box>
-                  <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                    <Typography variant="body2" color="text.secondary">
-                      {session.requiredTechnologies?.map(t => t.name).join(", ")}
+                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <Typography variant="body2">
+                      {bookedSlotCount}/{session.totalSlots} Slot đã đăng ký
                     </Typography>
                   </Box>
                 </CardContent>

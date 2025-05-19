@@ -14,6 +14,29 @@ export type CreateInterviewSessionPayload = {
   description: string;
   requirement?: string;
 };
+export type InterviewSessionResult = {
+  sessionId: string;
+  startTime: string;
+  endTime?: string;
+  totalSlots: number;
+  slotDuration: number;
+  title?: string;
+  interviewSlots:  {
+    slotId: string;
+    startTime: string;
+    endTime: string;
+    status: string;
+    isPaid: boolean;
+  }[];
+  requiredTechnologies: { id: string; name: string }[];
+  majors: { id: string; name: string }[];
+  level: { id: string; name: string };
+  meetingLink?: string;
+  recordingURL?: string;
+  mentor: { id: string; username: string };
+  description: string;
+  sessionPrice: number;
+};
 
 export type UpdateInterviewSessionPayload =
   Partial<CreateInterviewSessionPayload>;

@@ -19,65 +19,32 @@ import { Box, Button } from "@mui/material";
 import { NextPageWithLayout } from "@/app/layout";
 import { ProtectedLayout } from "@/layouts/protected_layout";
 import { Color } from "@/assets/Color";
-import { mapSessionToInterview, mapSlotToInterview } from "./mapSlotToInterview";
-import { getInterviewSlotsByCandidate } from "@/api/interview/interview_slot";
+import { mapSessionToInterview, mapSlotToInterview } from "./mapToSchedule";
+import { getInterviewSlotsByCandidate, InterviewSlotResult } from "@/api/interview/interview_slot";
 import { RootState } from "@/store/redux";
 import { useSelector } from "react-redux";
-import { getInterviewSessionsByMentor } from "@/api/interview/interview_session";
+import { getInterviewSessionsByMentor, InterviewSessionResult } from "@/api/interview/interview_session";
 
-interface Interview {
-  id: string;
-  title: string;
-  position: string;
-  date: Date;
-  startTime: string;
-  endTime: string;
-  major: string;
-  technologies?: string[];
-  interviewer?: string;
-}
-export type InterviewSessionResult = {
-  sessionId: string;
-  startTime: string;
-  endTime?: string;
-  totalSlots: number;
-  slotDuration: number;
-  title?: string;
-  requiredTechnologies: { id: string; name: string }[];
-  majors: { id: string; name: string }[];
-  level: { id: string; name: string };
-  meetingLink?: string;
-  recordingURL?: string;
-  mentor: { id: string; username: string };
-  description: string;
-};
-
-export type InterviewSlotResult = {
-  slotId: string;
-  candidateId: string;
-  startTime: string;
-  endTime: string;
-  status: string;
-  interviewSession: {
-    title?: string;
-    sessionId: string;
-    major_id: string[];
-    level_id: string;
-    mentorId: string;
-    requiredTechnology: string[];
-    meetingLink?: string;
-    recordingURL?: string;
+export type InterviewInSchedule = {
+  type: "SLOT" | "SESSION";
+  raw: InterviewSlotResult | InterviewSessionResult;
+  display: {
+    id: string;
+    title: string;
+    date: Date;
+    startTime: string;
+    endTime: string;
+    requiredTechnologies: { id: string; name: string }[];
+    majors: { id: string; name: string }[];
+    level: { id: string; name: string };
+    interviewer: string;
   };
 };
-
-
-// Export the Interview interface for use in other components
-export type { Interview };
 
 const InterviewCalendar: NextPageWithLayout = () => {
   const today = new Date(2025, 2, 3);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
-  const [selectedInterview, setSelectedInterview] = useState<Interview | null>(
+  const [selectedInterview, setSelectedInterview] = useState<InterviewInSchedule | null>(
     null
   );
   const [currentWeekStart, setCurrentWeekStart] = useState<Date>(
@@ -86,7 +53,7 @@ const InterviewCalendar: NextPageWithLayout = () => {
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date(2025, 2, 1));
   const role = useSelector((state: RootState) => state.auth.user.role);
   const userId = useSelector((state: RootState) => state.auth.user.id);
-  const [interviews, setInterviews] = useState<Interview[]>([]);
+  const [interviews, setInterviews] = useState<InterviewInSchedule[]>([]);
 
   useEffect(() => {
     const fetchInterviews = async () => {
@@ -114,13 +81,13 @@ const InterviewCalendar: NextPageWithLayout = () => {
   // Lọc phỏng vấn theo ngày
   const getInterviewsByDate = (date: Date) => {
     return interviews.filter((interview) =>
-      isSameDay(new Date(interview.date), date) // So sánh ngày chính xác
+      isSameDay(new Date(interview.display.date), date) // So sánh ngày chính xác
     );
   };
   
 
   // Xử lý khi click vào một cuộc phỏng vấn
-  const handleInterviewClick = (interview: Interview) => {
+  const handleInterviewClick = (interview: InterviewInSchedule) => {
     setSelectedInterview(interview);
   };
 

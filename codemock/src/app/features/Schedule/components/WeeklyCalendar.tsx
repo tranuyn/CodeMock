@@ -3,15 +3,15 @@ import React from 'react';
 import { format, addDays, isSameDay } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import styles from '../Schedule.module.css';
-import { Interview } from '../page';
+import { InterviewInSchedule } from '../page';
 
 interface WeeklyCalendarProps {
   currentWeekStart: Date;
   selectedDate: Date;
   handleDateSelect: (date: Date) => void;
-  getInterviewsByDate: (date: Date) => Interview[];
-  handleInterviewClick: (interview: Interview) => void;
-  selectedInterview: Interview | null;
+  getInterviewsByDate: (date: Date) => InterviewInSchedule[];
+  handleInterviewClick: (interview: InterviewInSchedule) => void;
+  selectedInterview: InterviewInSchedule | null;
 }
 
 const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
@@ -68,18 +68,18 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
                 className={`${styles.dayCell} ${isSameDay(day, selectedDate) ? styles.selectedDayCell : ''}`}
               >
                 {getInterviewsByDate(day).map((interview) => {
-                  const [startHour, startMinute] = interview.startTime.split(':').map(Number);
-                  const [endHour, endMinute] = interview.endTime.split(':').map(Number);
+                  const [startHour, startMinute] = interview.display.startTime.split(':').map(Number);
+                  const [endHour, endMinute] = interview.display.endTime.split(':').map(Number);
                   
                   if (startHour === hour) {
                     const durationMinutes = (endHour - startHour) * 60 + (endMinute - startMinute);
                     const heightPercent = (durationMinutes / 60) * 100;
                     
-                    const isSelected = selectedInterview && selectedInterview.id === interview.id;
+                    const isSelected = selectedInterview && selectedInterview.display.id === interview.display.id;
                     
                     return (
                       <div
-                        key={interview.id}
+                        key={interview.display.id}
                         className={`${styles.interviewItem} ${isSelected ? styles.selectedInterviewItem : ''}`}
                         style={{
                           top: `${(startMinute / 60) * 100}%`,
@@ -87,9 +87,9 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
                         }}
                         onClick={() => handleInterviewClick(interview)}
                       >
-                        <div className={styles.interviewTitle}>{interview.title}</div>
+                        <div className={styles.interviewTitle}>{interview.display.title}</div>
                         {/* <div className={styles.interviewType}>{interview.type}</div> */}
-                        <div className={styles.interviewTime}>{`${interview.startTime} - ${interview.endTime}`}</div>
+                        <div className={styles.interviewTime}>{`${interview.display.startTime} - ${interview.display.endTime}`}</div>
                       </div>
                     );
                   }

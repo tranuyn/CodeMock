@@ -13,6 +13,31 @@ export type CreateSlotPayload = {
   isPaid?: boolean;
 };
 
+export type InterviewSlotResult = {
+  slotId: string;
+  candidateId?: string;
+  startTime: string;
+  endTime: string;
+  status: string;
+  updatedAt?: string;
+  feedback?: any;
+  interviewSession: {
+    title?: string;
+    sessionId: string;
+    requiredTechnologies: { id: string; name: string }[];
+    majors: { id: string; name: string }[];
+    level: { id: string; name: string };
+    mentorId: string;
+    slotDuration: number;
+    status: string;
+    sessionPrice: number;
+    description?: string;
+    requirement?: string | null;
+    meetingLink?: string;
+    recordingURL?: string;
+  };
+};
+
 export const createInterviewSlot = async (payload: CreateSlotPayload) => {
   return await post("/interview-slot", payload);
 };

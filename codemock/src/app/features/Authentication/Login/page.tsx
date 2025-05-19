@@ -54,11 +54,11 @@ const Login: React.FC<{ onSwitchToRegister: () => void }> = ({
 
   const handleLoginSuccess = useCallback(() => {
     toastService.show({
-                  title: "Đăng nhập thành công",
-                  description: "Chào mừng bạn đến với CodeMock!",
-                  variant: "success",
-                });
-    router.push("/features/Home");
+      title: "Đăng nhập thành công",
+      description: "Chào mừng bạn đến với CodeMock!",
+      variant: "success",
+    });
+    router.push("/");
     dispatch(AuthActions.clearError());
   }, [router, dispatch]);
 
@@ -123,7 +123,6 @@ const Login: React.FC<{ onSwitchToRegister: () => void }> = ({
               helperText={errors.password?.message}
             />
 
-            {/* Nếu có lỗi từ backend */}
             {error && (
               <Alert severity="error" sx={{ mt: 2 }}>
                 {typeof error === "string" ? error : "Đăng nhập thất bại"}
