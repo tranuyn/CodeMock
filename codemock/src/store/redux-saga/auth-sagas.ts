@@ -49,7 +49,7 @@ function* activeAcount(
 ) {
   const { callback, ...params } = action.payload;
   try {
-    yield callApi(AuthApi.activeAccount, params);
+    yield call(AuthApi.activeAccount, params);
     yield put(AuthActions.activeAccountAction.success());
     if (callback) {
       yield callback();

@@ -100,14 +100,14 @@ export default function RecommendationsSection() {
   ]);
 
   return (
-    <Container maxWidth="lg" sx={{ py: 6,  bgcolor: "rgba(240, 240, 240, 0.65)", borderRadius: 2, backdropFilter: 'blur(1px)' }}>
+    <Container maxWidth={false} sx={{ flex: 1, py: 6, bgcolor: "rgba(240, 240, 240, 0.65)", borderRadius: 2, backdropFilter: 'blur(1px)', width: '94%' }}>
       <Typography variant="h5" fontWeight="bold" sx={{ mb: 3 }}>
         Đề Xuất Cho Bạn
       </Typography>
       
       <Grid container spacing={2}>
         {jobRecommendations.map((job) => (
-          <Grid item xs={12} sm={6} md={4} key={job.id}>
+          <Grid size={{ xs: 12, sm:6, md:4, lg: 3, xl: 2 }} key={job.id}>
             <Card 
               sx={{ 
                 height: "100%", 

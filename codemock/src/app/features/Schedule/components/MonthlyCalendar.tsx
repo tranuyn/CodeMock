@@ -3,15 +3,16 @@ import React from 'react';
 import { format, startOfWeek, addDays, isSameDay } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import styles from '../Schedule.module.css';
-import { Interview } from '../page';
+import { InterviewInSchedule } from '../page';
 
 interface MonthlyCalendarProps {
+  userRole: string;//"MENTOR" | "CANDIDATE";
   currentMonth: Date;
   selectedDate: Date;
   handleDateSelect: (date: Date) => void;
   handlePrevMonth: () => void;
   handleNextMonth: () => void;
-  getInterviewsByDate: (date: Date) => Interview[];
+  getInterviewsByDate: (date: Date) => InterviewInSchedule[];
 }
 
 const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({

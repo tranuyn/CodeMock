@@ -11,6 +11,7 @@ import styles from './Authentication.module.css';
 import Login from "./Login/page";
 import Register from "./Register/page"; 
 import Starfield from "@/app/components/Starfield";
+import Link from "next/link";
 
 const Authentication = () => {
   const [authMode, setAuthMode] = useState("login"); 
@@ -52,12 +53,14 @@ const Authentication = () => {
       </div>
       <Box className={styles.authContent}>
         <Box className={styles.leftSideContent}>
+          <Link href="/" style={{ textDecoration: 'none'}}>
           <Image
             src={Logo}
             alt="logo"
             style={{ objectFit: 'contain', width: 200 }}
             priority
           />
+          </Link>
           <Box className={styles.textContent}>
             <Typography component="h1" className={styles.signInText}>
               {authMode === "login" ? "SIGN IN TO YOUR" : "REGISTER FOR YOUR"}

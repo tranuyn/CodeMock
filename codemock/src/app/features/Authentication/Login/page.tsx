@@ -20,6 +20,7 @@ import * as z from "zod";
 import { RootState } from "@/store/redux";
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { toastService } from "@/app/components/toast/toast.service";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Vui lòng nhập email hợp lệ" }),
@@ -57,7 +58,7 @@ const Login: React.FC<{ onSwitchToRegister: () => void }> = ({
       description: "Chào mừng bạn đến với CodeMock!",
       variant: "success",
     });
-    router.push("/features/Home");
+    router.push("/");
     dispatch(AuthActions.clearError());
   }, [router, dispatch]);
 
@@ -122,7 +123,6 @@ const Login: React.FC<{ onSwitchToRegister: () => void }> = ({
               helperText={errors.password?.message}
             />
 
-            {/* Nếu có lỗi từ backend */}
             {error && (
               <Alert severity="error" sx={{ mt: 2 }}>
                 {typeof error === "string" ? error : "Đăng nhập thất bại"}
