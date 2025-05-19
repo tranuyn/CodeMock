@@ -1,15 +1,18 @@
-import { AuthApi, UserApi } from "@/api";
-import { COOKIE_KEY, setCookie } from "@/api/cookies";
-import { put, take, takeLatest, call } from "redux-saga/effects";
-import { AuthActions, UserActions } from "../actions";
-import { AuthState, LoginResponse } from "@/store/types";
-import callApi, { handleError } from "./common-saga";
+import { UserApi } from "@/api";
+import { put, takeLatest, call } from "redux-saga/effects";
+import { UserActions } from "../actions";
+import { callApiWithRefresh, handleError } from "./common-saga";
+import { SagaIterator } from "redux-saga";
 
 function* update(
   action: ReturnType<typeof UserActions.updateUserAction.request>
-) {
+): SagaIterator {
   try {
-    const response: AuthState = yield call(UserApi.updateUser, action.payload);
+    const response = yield call(
+      callApiWithRefresh,
+      UserApi.updateUser,
+      action.payload
+    );
     localStorage.setItem("user", JSON.stringify(response));
     yield put(UserActions.updateUserAction.success(response));
   } catch (error) {

@@ -2,6 +2,7 @@ import { createReducer } from "typesafe-actions";
 import { AuthActions, UserActions } from "../actions";
 import { AuthState, LoginResponse } from "../types";
 import { error } from "console";
+import authAction from "../actions/auth-action";
 
 const initialState: LoginResponse = {
   error: "",
@@ -139,7 +140,7 @@ const authReducer = createReducer(initialState)
   )
   .handleAction(
     UserActions.updateUserAction.request,
-    (state: AuthState, action: { payload: boolean }) => ({
+    (state: LoginResponse, action: { payload: boolean }) => ({
       ...state,
       error: null,
       loading: true,
@@ -147,7 +148,7 @@ const authReducer = createReducer(initialState)
   )
   .handleAction(
     UserActions.updateUserAction.success,
-    (state: AuthState, action: { payload: AuthState }) => ({
+    (state: LoginResponse, action: { payload: AuthState }) => ({
       ...state,
       user: action.payload,
       loading: false,
@@ -156,12 +157,31 @@ const authReducer = createReducer(initialState)
   )
   .handleAction(
     UserActions.updateUserAction.failure,
-    (state: AuthState, action: { payload: string }) => {
+    (state: LoginResponse, action: { payload: string }) => {
       return {
         ...state,
         error: action.payload, // Setting the error message in state
         loading: false,
       };
     }
+  )
+  .handleAction(AuthActions.refreshToken.request, (state: LoginResponse) => ({
+    ...state, // giữ nguyên access_token, user, v.v.
+    loading: true, // chỉ cập nhật loading
+    error: "", // chỉ cập nhật error
+  }))
+  .handleAction(AuthActions.refreshToken.failure, (state: LoginResponse) => ({
+    ...state,
+    loading: false,
+  }))
+  // khi request thành công
+  .handleAction(
+    AuthActions.refreshToken.success,
+    (state: LoginResponse, action: { payload: string }) => ({
+      ...state,
+      loading: false,
+      error: "",
+      access_token: action.payload,
+    })
   );
 export default authReducer;

@@ -4,6 +4,8 @@ import { put, take, takeLatest, call } from "redux-saga/effects";
 import { AuthActions } from "../actions";
 import { AuthState, LoginResponse } from "@/store/types";
 import callApi, { handleError } from "./common-saga";
+import { callApiWithoutToken, refreshTokenApi } from "@/api/rest-utils";
+import authAction from "../actions/auth-action";
 
 function* login(action: ReturnType<typeof AuthActions.loginAction.request>) {
   const { callback, ...params } = action.payload;
@@ -57,10 +59,23 @@ function* activeAcount(
     yield put(AuthActions.activeAccountAction.failure(error as Error));
   }
 }
+
+function* reFreshToken() {
+  try {
+    const { access_token } = yield call(refreshTokenApi);
+    setCookie(COOKIE_KEY.Token, access_token);
+    console.log("reFreshToken", access_token);
+    yield put(AuthActions.refreshToken.success(access_token));
+  } catch (err) {
+    yield put(AuthActions.refreshToken.failure(err as Error));
+  }
+}
+
 function* authWatcher() {
   yield takeLatest(AuthActions.loginAction.request, login);
   yield takeLatest(AuthActions.registerAction.request, signup);
   yield takeLatest(AuthActions.activeAccountAction.request, activeAcount);
+  yield takeLatest(AuthActions.refreshToken.request, reFreshToken);
 }
 
 export default authWatcher;

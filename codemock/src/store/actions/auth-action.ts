@@ -82,6 +82,13 @@ const clearAuthInfo = createAction(`${PREFIX}CLEAR_AUTH_INFO`)<void>();
 
 const clearError = createAction(`${PREFIX}CLEAR_ERROR`)<void>();
 
+// actions.ts
+const refreshToken = createAsyncAction(
+  `${PREFIX}REFRESH_TOKEN_REQUEST`,
+  `${PREFIX}REFRESH_TOKEN_SUCCESS`,
+  `${PREFIX}REFRESH_TOKEN_FAILURE`
+)<void, string, Error>();
+
 export default {
   loginAction,
   registerAction,
@@ -89,4 +96,5 @@ export default {
   setAuthInfo,
   clearAuthInfo,
   clearError,
+  refreshToken,
 };

@@ -1,8 +1,9 @@
 import { Toast } from "@/app/components/toast/toast";
 import { AxiosError } from "axios";
 import { get } from "es-toolkit/compat";
-import { call, put } from "redux-saga/effects";
+import { call, put, take } from "redux-saga/effects";
 import { toastService } from "@/app/components/toast/toast.service";
+import { AuthActions } from "../actions";
 
 export default function* callApi<
   Fn extends (...args: Parameters<Fn>) => ReturnType<Fn>
@@ -49,5 +50,31 @@ export function handleError(error: any, showErrorToast: boolean) {
     }
   } catch (e) {
     console.error("Lỗi khi xử lý handleError:", e);
+  }
+}
+
+/**
+ * Gọi API function `apiFn` với args,
+ * nếu 401 thì tự động dispatch refresh, chờ kết quả
+ * và retry lại 1 lần. Nếu vẫn lỗi, throw tiếp.
+ */
+export function* callApiWithRefresh<T>(
+  apiFn: (...args: any[]) => Promise<T>,
+  ...args: any[]
+): Generator<any, T, any> {
+  try {
+    return yield call(apiFn, ...args);
+  } catch (err: any) {
+    if (err.response?.status === 401) {
+      yield put(AuthActions.refreshToken.request());
+      const result = yield take([
+        AuthActions.refreshToken.success,
+        AuthActions.refreshToken.failure,
+      ]);
+      if (result.type === AuthActions.refreshToken.success.toString()) {
+        return yield call(apiFn, ...args);
+      }
+    }
+    throw err;
   }
 }

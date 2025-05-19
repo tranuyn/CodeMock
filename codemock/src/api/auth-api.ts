@@ -1,4 +1,4 @@
-import { get, post, put } from "./rest-utils";
+import { get, post, put, patch } from "./rest-utils";
 
 export interface LoginRequest {
   email: string;
@@ -33,8 +33,13 @@ const activeAccount = async (params: VerifyCode): Promise<void> => {
   return await post("/auth/verify-code", params);
 };
 
+const refreshToken = async (): Promise<void> => {
+  return await patch("/auth/refresh-token");
+};
+
 export default {
   login,
   signup,
   activeAccount,
+  refreshToken,
 };

@@ -1,6 +1,10 @@
+import { useDispatch } from "react-redux";
 import { COOKIE_KEY, removeCookie } from "./cookies";
 import { getCookie } from "./cookies";
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
+import { AuthActions } from "@/store/actions";
+import { store } from "@/app/providers";
+import { RootState } from "@/store/redux";
 
 type HeaderProps = {
   "Content-Type": string;
@@ -41,6 +45,18 @@ export const callApiWithoutToken = axios.create({
   withCredentials: true,
 });
 
+// rest-utils.ts
+// api.ts
+export const refreshTokenApi = async () => {
+  const token = (store.getState() as RootState).auth.access_token;
+  const response = await callApiWithoutToken.patch<{ access_token: string }>(
+    "/auth/refresh-token",
+    undefined,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return response.data; // <-- return ONLY the data
+};
+
 class HttpClient {
   private instance: AxiosInstance;
 
@@ -57,9 +73,10 @@ class HttpClient {
   private initializeInterceptors() {
     this.instance.interceptors.request.use(
       (config) => {
-        const token = getCookie(COOKIE_KEY.Token);
+        const token = (store.getState() as RootState).auth.access_token;
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
+          console.log(token);
         }
         return config;
       },
@@ -74,9 +91,9 @@ class HttpClient {
       },
       (error: AxiosError) => {
         if (error.response?.status === 401) {
-          if (window.location.pathname !== "/login") {
-            removeCookie(COOKIE_KEY.Token);
-            window.location.href = "/features/Authentication";
+          if (window.location.pathname !== "/features/Authentication") {
+            console.log(401);
+            store.dispatch(AuthActions.refreshToken.request());
           }
         }
         return Promise.reject(error);
