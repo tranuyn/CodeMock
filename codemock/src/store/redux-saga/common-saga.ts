@@ -73,7 +73,7 @@ export function* callApiWithRefresh<T>(
       ]);
       if (result.type === AuthActions.refreshToken.success.toString()) {
         return yield call(apiFn, ...args);
-      }
+      } else window.location.href = "features/Authentication";
     }
     throw err;
   }

@@ -188,18 +188,7 @@ const UpdateSkillModal = ({ user, onClose }: SkillFormProp) => {
       JSON.stringify(user.technologies || []);
 
   const Reset = () => {
-    setValue(
-      "skill",
-      user.skill || [
-        {
-          position: "",
-          work_space: "",
-          yearStart: 0,
-          url_company: "",
-        },
-      ]
-    );
-
+    setValue("skill", user.skill || []);
     setValue("majors", user.majors || []);
     setValue("levels", user.levels || []);
     setValue("technologies", user.technologies || []);
@@ -215,9 +204,9 @@ const UpdateSkillModal = ({ user, onClose }: SkillFormProp) => {
   };
   const SaveeducationBackground = async () => {
     setLoading(true);
-    let updatedEducation = [...getValues("skill")];
+    let updatedSkill = [...getValues("skill")];
     if (getValues("skill").length > 0) {
-      updatedEducation = [...getValues("skill")].map((entry) => ({
+      updatedSkill = [...getValues("skill")].map((entry) => ({
         ...entry,
         yearStart: Number(entry.yearStart), // Đảm bảo là kiểu số
       }));
@@ -226,18 +215,25 @@ const UpdateSkillModal = ({ user, onClose }: SkillFormProp) => {
         const file = fileTempArray[i];
         if (file instanceof File) {
           const imageUrl = await uploadImages(file);
-          updatedEducation[i].url_company = imageUrl;
+          updatedSkill[i].url_company = imageUrl;
         }
       }
     }
 
+    const filteredSkills = updatedSkill.filter(
+      ({ detail, work_space, yearStart, url_company }) =>
+        (detail?.trim() ?? "") !== "" ||
+        (work_space?.trim() ?? "") !== "" ||
+        (typeof yearStart === "number" && !isNaN(yearStart)) ||
+        (url_company?.trim() ?? "") !== ""
+    );
+
     dispatch(
       UserActions.updateUserAction.request({
-        majorIds: getValues("majors")?.map((major) => major.id) || [],
-        levelIds: getValues("levels")?.map((level) => level.id) || [],
-        technologyIds:
-          getValues("technologies")?.map((technology) => technology.id) || [],
-        skill: updatedEducation,
+        majorIds: getValues("majors")?.map((m) => m.id) || [],
+        levelIds: getValues("levels")?.map((l) => l.id) || [],
+        technologyIds: getValues("technologies")?.map((t) => t.id) || [],
+        skill: filteredSkills,
       })
     );
 

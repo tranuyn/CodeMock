@@ -44,7 +44,7 @@ const EducationForm = ({ user }: FormProp) => {
         >
           {user.educationBackground?.length > 0 &&
             user.educationBackground.map((item, index) => (
-              <>
+              <div key={index}>
                 {index > 0 && (
                   <div
                     style={{
@@ -62,7 +62,7 @@ const EducationForm = ({ user }: FormProp) => {
                   yearEnd={item.yearEnd}
                   url_company={item.url_company}
                 />
-              </>
+              </div>
             ))}
         </div>
 
