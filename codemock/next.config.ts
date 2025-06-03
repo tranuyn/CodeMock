@@ -31,6 +31,10 @@ const nextConfig: NextConfig = {
         source: "/Interview/create-interview",
         destination: "/features/Interview/create-interview",
       },
+      {
+        source: "/interview/:id",
+        destination: "/features/Interview/InterviewSectionPage/:id"
+      },
     ];
   },
 };

@@ -4,6 +4,7 @@ import { Box, Typography } from "@mui/material";
 import SearchBar from "./components/SearchBar";
 import MajorChip from "./components/MajorChip";
 import { useState } from "react";
+import SearchingInterviews from "./Interviews";
 
 interface Major {
   id: string;
@@ -72,6 +73,9 @@ export default function Searching() {
               />
             </Box>
           ))}
+        </Box>
+        <Box sx={{p: 2}}>
+          <SearchingInterviews/>
         </Box>
       </Box>
     </Box>

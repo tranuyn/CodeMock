@@ -1,15 +1,13 @@
-// src/components/sections/RecommendationsSection.jsx
-"use client";
+'use client'
 
+import { Grid } from '@mui/material';
+import React from 'react'
 import { RootState } from "@/store/redux";
-import { Box, Typography, Container, Grid, Button, Card, CardContent, CardActions, Chip } from "@mui/material";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getAllInterviewSessions, InterviewSessionResult } from "@/api/interview/interview_session";
 import InterviewSessionCard from "@/app/components/InterviewSessionCard";
-
-export default function RecommendationsSection() {
+function SearchingInterviews() {
   const role = useSelector((state: RootState) => state.auth.user.role);
   const userId = useSelector((state: RootState) => state.auth.user.id);
   const [interviews, setInterviews] = useState<InterviewSessionResult[]>([]);
@@ -31,28 +29,21 @@ export default function RecommendationsSection() {
   }, [userId]);
 
   return (
-    <Container maxWidth={false} sx={{ flex: 1, py: 6, bgcolor: "rgba(240, 240, 240, 0.65)", borderRadius: 2, backdropFilter: 'blur(1px)', width: '94%' }}>
-      <Typography variant="h5" fontWeight="bold" sx={{ mb: 3 }}>
-        Đề Xuất Cho Bạn
-      </Typography>
-      
-      <Grid container spacing={2}>
+    <div>
+      <Grid container spacing={2} wrap="wrap"
+        justifyContent="flex-start">
         {interviews.map((session) => {
           const bookedInSession = session.interviewSlots.filter((slot) => slot.status === "booked").length;
 
           return (
-            <Grid size={{ xs: 12, sm:6, md:4, lg: 3, xl: 2 }} key={session.sessionId}>
+            <Grid sx={{ width: 300 }} key={session.sessionId}>
               <InterviewSessionCard session={session} bookedSlotCount={bookedInSession} />
             </Grid>
           );
         })}
       </Grid>
-      
-      <Box sx={{ textAlign: "center", mt: 4 }}>
-        <Link href="/jobs" passHref style={{ textDecoration: 'none' }}>
-          <Button variant="outlined">Xem thêm</Button>
-        </Link>
-      </Box>
-    </Container>
-  );
+    </div>
+  )
 }
+
+export default SearchingInterviews
