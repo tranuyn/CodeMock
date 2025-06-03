@@ -18,19 +18,19 @@ export const step1Schema = yup.object().shape({
 export const step2Schema = yup.object().shape({
   profession: yup
     .array()
-    .of(yup.string().required("Không được để trống"))
+    .of(yup.string().required("Vui lòng nhập đầy đủ thông tin"))
     .min(1, "Chọn ít nhất một lĩnh vực")
     .required("Lĩnh vực là bắt buộc"),
 
   educationLevel: yup
     .array()
-    .of(yup.string().required("Không được để trống"))
+    .of(yup.string().required("Vui lòng nhập đầy đủ thông tin"))
     .min(1, "Chọn trình độ chuyên môn")
     .required("Trình độ là bắt buộc"),
 
   technologies: yup
     .array()
-    .of(yup.string().required("Không được để trống"))
+    .of(yup.string().required("Vui lòng nhập đầy đủ thông tin"))
     .min(1, "Chọn công nghệ")
     .required("Công nghệ là bắt buộc"),
 });
