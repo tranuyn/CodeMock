@@ -92,7 +92,6 @@ class HttpClient {
       (error: AxiosError) => {
         if (error.response?.status === 401) {
           if (window.location.pathname !== "/features/Authentication") {
-            console.log(401);
             store.dispatch(AuthActions.refreshToken.request());
           }
         }

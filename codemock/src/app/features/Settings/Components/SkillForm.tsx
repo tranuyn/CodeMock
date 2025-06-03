@@ -72,8 +72,8 @@ const SkillForm = ({ user }: SkillFormProp) => {
           <div className={styles.gradientBorder}>
             <p style={{ color: Color.purple, fontWeight: "bold" }}>Kỹ năng</p>
             <ul className={styles.techList}>
-              {user.skill?.map((item) => (
-                <li className={styles.techItem}>
+              {user.skill?.map((item, index) => (
+                <li className={styles.techItem} key={index}>
                   <SkillCard
                     title={item.detail}
                     work_space={item.work_space}
