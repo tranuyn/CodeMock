@@ -6,8 +6,9 @@ import { Box, Typography, Container, Grid, Button, Card, CardContent, CardAction
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getAllInterviewSessions, InterviewSessionResult } from "@/api/interview/interview_session";
+import { getAllInterviewSessions } from "@/api/interview/interview-session";
 import InterviewSessionCard from "@/app/components/InterviewSessionCard";
+import { InterviewSessionResult } from "@/api/interview/interview-session.type";
 
 export default function RecommendationsSection() {
   const role = useSelector((state: RootState) => state.auth.user.role);

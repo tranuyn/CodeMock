@@ -1,9 +1,8 @@
 
-import { InterviewSlotResult } from "@/api/interview/interview_slot";
+import { InterviewSlotResult } from "@/api/interview-slot/interview-slot";
 import { format } from "date-fns";
 import { InterviewInSchedule } from "./page";
-import { InterviewSessionResult } from "@/api/interview/interview_session";
-
+import { InterviewSessionResult } from "@/api/interview/interview-session.type";
 export const mapSlotToInterview = (slot: InterviewSlotResult): InterviewInSchedule => {
   const start = new Date(slot.startTime);
   const end = new Date(slot.endTime);

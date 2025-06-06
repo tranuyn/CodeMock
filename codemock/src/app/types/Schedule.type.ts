@@ -1,14 +1,12 @@
 // types/index.ts
-export enum UserRole {
-  INTERVIEWER = "INTERVIEWER", // Người phỏng vấn
-  INTERVIEWEE = "INTERVIEWEE", // Người được phỏng vấn
-}
+
+import { ROLE } from "../enums/user-role.enum";
 
 export interface User {
   id: string;
   name: string;
   email: string;
-  role: UserRole;
+  role: ROLE;
   warningCount?: number;
 }
 

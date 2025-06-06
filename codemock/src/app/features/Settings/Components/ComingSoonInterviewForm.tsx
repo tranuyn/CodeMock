@@ -5,12 +5,12 @@ import { AuthState } from "@/store/types";
 import { useEffect, useState } from "react";
 import {
   getAllInterviewSessions,
-  InterviewSessionResult,
-} from "@/api/interview/interview_session";
+} from "@/api/interview/interview-session";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/redux";
 import { call } from "redux-saga/effects";
 import { handleError } from "@/store/redux-saga/common-saga";
+import { InterviewSessionResult } from "@/api/interview/interview-session.type";
 
 interface FormProp {
   user: AuthState;

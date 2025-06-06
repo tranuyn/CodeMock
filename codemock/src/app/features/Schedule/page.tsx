@@ -20,10 +20,11 @@ import { NextPageWithLayout } from "@/app/layout";
 import { ProtectedLayout } from "@/layouts/protected_layout";
 import { Color } from "@/assets/Color";
 import { mapSessionToInterview, mapSlotToInterview } from "./mapToSchedule";
-import { getInterviewSlotsByCandidate, InterviewSlotResult } from "@/api/interview/interview_slot";
+import { getInterviewSlotsByCandidate, InterviewSlotResult } from "@/api/interview-slot/interview-slot";
 import { RootState } from "@/store/redux";
 import { useSelector } from "react-redux";
-import { getInterviewSessionsByMentor, InterviewSessionResult } from "@/api/interview/interview_session";
+import { getInterviewSessionsByMentor } from "@/api/interview/interview-session";
+import { InterviewSessionResult } from "@/api/interview/interview-session.type";
 
 export type InterviewInSchedule = {
   type: "SLOT" | "SESSION";

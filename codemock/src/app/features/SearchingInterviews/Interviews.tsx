@@ -5,8 +5,9 @@ import React from 'react'
 import { RootState } from "@/store/redux";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getAllInterviewSessions, InterviewSessionResult } from "@/api/interview/interview_session";
+import { getAllInterviewSessions } from "@/api/interview/interview-session";
 import InterviewSessionCard from "@/app/components/InterviewSessionCard";
+import { InterviewSessionResult } from '@/api/interview/interview-session.type';
 function SearchingInterviews() {
   const role = useSelector((state: RootState) => state.auth.user.role);
   const userId = useSelector((state: RootState) => state.auth.user.id);

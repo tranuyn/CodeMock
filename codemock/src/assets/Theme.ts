@@ -1,6 +1,14 @@
 "use client";
 
 import { createTheme } from "@mui/material";
+declare module '@mui/material/styles' {
+  interface Palette {
+    primary_darker: Palette['primary'];
+  }
+  interface PaletteOptions {
+    primary_darker?: PaletteOptions['primary'];
+  }
+}
 
 const theme = createTheme({
   palette: {
@@ -15,6 +23,11 @@ const theme = createTheme({
       light: '#7C3BBD', 
       dark: '#3B0E6D', 
       contrastText: '#FFFFFF'
+    },
+    primary_darker: {
+      main: '#315980',
+      light: '#2B4E70',
+      dark: '#254360',
     },
   },
   typography: {

@@ -1,6 +1,6 @@
 "use client";
 
-import { InterviewSessionResult } from "@/api/interview/interview_session";
+import { InterviewSessionResult } from "@/api/interview/interview-session.type";
 import { Card, CardContent, CardActions, Typography, Box, Chip, Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 
