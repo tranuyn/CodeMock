@@ -1,4 +1,5 @@
 import { get, post, put } from "@/api/rest-utils";
+import { callApiWithRefreshAsync } from "@/store/redux-saga/common-saga";
 
 export type Register_CancelSlotPayload = {
   candidateId: string;
@@ -35,6 +36,7 @@ export type InterviewSlotResult = {
     requirement?: string | null;
     meetingLink?: string;
     recordingURL?: string;
+    roomId: string;
   };
 };
 
@@ -62,4 +64,15 @@ export const cancelInterviewSlot = async (
   payload: Register_CancelSlotPayload
 ) => {
   return await put(`/interview-slot/${slotId}/cancel`, payload);
+};
+
+export const getZegoCloudToken = async (
+  slotId: string,
+  expiredNumber: number
+): Promise<{ token: string; roomId: string }> => {
+  return await callApiWithRefreshAsync<{ token: string; roomId: string }>(
+    get,
+    `/interview_sessions/${slotId}/joinMeeting`,
+    { expiredNumber }
+  );
 };

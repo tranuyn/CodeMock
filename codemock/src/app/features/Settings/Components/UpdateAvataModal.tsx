@@ -67,8 +67,6 @@ const UpdateAvataModal = ({ user, onClose }: SkillFormProp) => {
   const nothingChanged =
     !fileTemp && watch("biography") === (user.biography || "");
 
-  console.log(nothingChanged);
-
   const Reset = () => {
     setValue("avatarUrl", user.avatarUrl);
     setPreview(user.avatarUrl);

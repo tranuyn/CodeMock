@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import CodeRoundedIcon from '@mui/icons-material/CodeRounded';
+import CodeRoundedIcon from "@mui/icons-material/CodeRounded";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import { InterviewSessionResult } from "@/api/interview/interview-session.type";
 import InfoCard from "./Components/InfoCard";
@@ -81,7 +81,7 @@ export default function InterviewSection({
                   label={`${start.getHours()}:00 - ${end.getHours()}:00`}
                 />
               </Box>
-              <Divider orientation='vertical' variant="middle" />
+              <Divider orientation="vertical" variant="middle" />
               <Typography fontSize={14} mb={2}>
                 Số lượng ban đầu: {interview.totalSlots} | Số lượng đã đăng ký:{" "}
                 {bookedCount} | Số lượng còn lại: {remainingCount}
@@ -115,13 +115,13 @@ export default function InterviewSection({
 
               <Divider sx={{ my: 2 }} />
               <Typography variant="h6" gutterBottom>
-                <CodeRoundedIcon color="secondary"/> Vị trí{" "}
+                <CodeRoundedIcon color="secondary" /> Vị trí{" "}
                 <span style={{ fontWeight: 400, fontSize: "1rem" }}>
                   {interview.level.name}
                 </span>
               </Typography>
               <Typography variant="h6" gutterBottom>
-                <CodeRoundedIcon color="secondary"/> Chuyên ngành{" "}
+                <CodeRoundedIcon color="secondary" /> Chuyên ngành{" "}
                 {interview.majors.map((tech: { id: string; name: string }) => (
                   <span
                     style={{ fontWeight: 400, fontSize: "1rem" }}
@@ -131,10 +131,16 @@ export default function InterviewSection({
                   </span>
                 ))}
               </Typography>
-              <Typography variant="h6" gutterBottom >
-                <CodeRoundedIcon color="secondary"/> Yêu cầu công nghệ
+              <Typography variant="h6" gutterBottom>
+                <CodeRoundedIcon color="secondary" /> Yêu cầu công nghệ
               </Typography>
-              <ul style={{listStylePosition: 'inside',  listStyleType: 'disc', paddingLeft: 20}}>
+              <ul
+                style={{
+                  listStylePosition: "inside",
+                  listStyleType: "disc",
+                  paddingLeft: 20,
+                }}
+              >
                 {interview.requiredTechnologies.map(
                   (tech: { id: string; name: string }) => (
                     <li key={tech.id}>{tech.name}</li>
@@ -142,10 +148,16 @@ export default function InterviewSection({
                 )}
               </ul>
 
-              <Typography variant="h6" gutterBottom sx={{ mt: 2 }} >
-                <CodeRoundedIcon color="secondary"/> Lợi ích khi tham gia
+              <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+                <CodeRoundedIcon color="secondary" /> Lợi ích khi tham gia
               </Typography>
-              <ul style={{listStylePosition: 'inside',  listStyleType: 'disc', paddingLeft: 20}}>
+              <ul
+                style={{
+                  listStylePosition: "inside",
+                  listStyleType: "disc",
+                  paddingLeft: 20,
+                }}
+              >
                 <li>Gặp chuyên gia có kinh nghiệm</li>
                 <li>Góp ý chi tiết về CV, portfolio</li>
                 <li>Cơ hội nhận offer thực tập/phù hợp</li>
@@ -153,9 +165,16 @@ export default function InterviewSection({
               </ul>
 
               <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                <CodeRoundedIcon color="secondary"/> Chuẩn bị cho buổi phỏng vấn
+                <CodeRoundedIcon color="secondary" /> Chuẩn bị cho buổi phỏng
+                vấn
               </Typography>
-              <ul style={{listStylePosition: 'inside',  listStyleType: 'disc', paddingLeft: 20}}>
+              <ul
+                style={{
+                  listStylePosition: "inside",
+                  listStyleType: "disc",
+                  paddingLeft: 20,
+                }}
+              >
                 <li>CV đã cập nhật</li>
                 <li>Portfolio các project đã làm</li>
                 <li>Laptop để demo nếu có</li>
@@ -238,7 +257,7 @@ export default function InterviewSection({
           </Grid>
         </Grid>
       ) : (
-        <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
           <CircularProgress />
         </Box>
       )}

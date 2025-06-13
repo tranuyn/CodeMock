@@ -22,6 +22,7 @@ export type InterviewSessionResult = {
   totalSlots: number;
   slotDuration: number;
   title: string;
+  roomId: string;
   interviewSlots: {
     slotId: string;
     startTime: string;

@@ -237,7 +237,7 @@
 }
 
 .interviewDay::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 2px;
   left: 50%;
@@ -327,11 +327,11 @@
 .joinButton {
   padding: 8px 16px;
   border-radius: 4px;
-  background-color: #e2e8f0;
-  color: #1f2937;
+  background-color: #2983f9;
+  color: #f4f5f7;
   cursor: pointer;
 }
 
 .joinButton:hover {
-  background-color: #cbd5e1;
+  background-color: #105cc0;
 }

@@ -1,17 +1,21 @@
 // InterviewDetails.tsx
-import React from "react";
+"use client";
+import React, { useTransition } from "react";
 import styles from "../Schedule.module.css";
 import { InterviewInSchedule } from "../page";
-import { randomID } from "@/app/utils/zegocloud";
+import { useRouter } from "next/navigation";
 
 interface InterviewDetailsProps {
   interview: InterviewInSchedule;
 }
 
 const InterviewDetails: React.FC<InterviewDetailsProps> = ({ interview }) => {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const joinMeeting = () => {
-    const roomID = randomID(5);
-    window.location.href = `http://localhost:3000/features/Meeting?roomID=${roomID}`;
+    startTransition(() => {
+      router.push(`/features/Meeting/${interview.display.roomId}`);
+    });
   };
   return (
     <div className={styles.interviewDetails}>
@@ -64,8 +68,12 @@ const InterviewDetails: React.FC<InterviewDetailsProps> = ({ interview }) => {
       </ul>
       <div className={styles.actionButtons}>
         <button className={styles.cancelButton}>Hủy</button>
-        <button onClick={() => joinMeeting()} className={styles.joinButton}>
-          Tham gia
+        <button
+          onClick={joinMeeting}
+          disabled={isPending}
+          className={styles.joinButton}
+        >
+          {isPending ? "Đang tải..." : "Tham gia"}
         </button>
       </div>
     </div>

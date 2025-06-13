@@ -64,7 +64,6 @@ function* reFreshToken() {
   try {
     const { access_token } = yield call(refreshTokenApi);
     setCookie(COOKIE_KEY.Token, access_token);
-    console.log("reFreshToken", access_token);
     yield put(AuthActions.refreshToken.success(access_token));
   } catch (err) {
     yield put(AuthActions.refreshToken.failure(err as Error));
