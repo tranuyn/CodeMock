@@ -74,9 +74,37 @@ export function* callApiWithRefresh<T>(
       if (result.type === AuthActions.refreshToken.success.toString()) {
         return yield call(apiFn, ...args);
       } else {
-        
       }
-      
+    }
+    throw err;
+  }
+}
+
+import axios from "axios";
+
+export async function callApiWithRefreshAsync<T>(
+  apiFn: (...args: any[]) => Promise<T>,
+  ...args: any[]
+): Promise<T> {
+  try {
+    return await apiFn(...args);
+  } catch (err: any) {
+    if (err.response?.status === 401) {
+      const refreshRes = await axios.post("/auth/refresh", {
+        /* refresh token here */
+      });
+      if (refreshRes.status === 200) {
+        // lưu token mới vào header/global axios
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${refreshRes.data.accessToken}`;
+
+        // retry API gốc
+        return apiFn(...args);
+      } else {
+        // refresh thất bại → logout hoặc ném lỗi
+        throw new Error("Refresh token failed");
+      }
     }
     throw err;
   }

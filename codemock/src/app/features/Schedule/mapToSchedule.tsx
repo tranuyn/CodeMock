@@ -1,9 +1,10 @@
-
 import { InterviewSlotResult } from "@/api/interview-slot/interview-slot";
 import { format } from "date-fns";
 import { InterviewInSchedule } from "./page";
 import { InterviewSessionResult } from "@/api/interview/interview-session.type";
-export const mapSlotToInterview = (slot: InterviewSlotResult): InterviewInSchedule => {
+export const mapSlotToInterview = (
+  slot: InterviewSlotResult
+): InterviewInSchedule => {
   const start = new Date(slot.startTime);
   const end = new Date(slot.endTime);
   return {
@@ -19,15 +20,21 @@ export const mapSlotToInterview = (slot: InterviewSlotResult): InterviewInSchedu
       requiredTechnologies: slot.interviewSession.requiredTechnologies ?? [],
       interviewer: "Mentor",
       level: slot.interviewSession.level,
+      roomId: slot.interviewSession.roomId,
+      sessionId: slot.interviewSession.sessionId,
     },
   };
 };
 
-export const mapSessionToInterview = (session: InterviewSessionResult): InterviewInSchedule => {
+export const mapSessionToInterview = (
+  session: InterviewSessionResult
+): InterviewInSchedule => {
   const start = new Date(session.startTime);
   const end = session.endTime
     ? new Date(session.endTime)
-    : new Date(start.getTime() + session.totalSlots * session.slotDuration * 60000);
+    : new Date(
+        start.getTime() + session.totalSlots * session.slotDuration * 60000
+      );
 
   return {
     type: "SESSION",
@@ -42,6 +49,8 @@ export const mapSessionToInterview = (session: InterviewSessionResult): Intervie
       requiredTechnologies: session.requiredTechnologies ?? [],
       interviewer: session.mentor?.username ?? "Mentor",
       level: session.level,
+      roomId: session.roomId,
+      sessionId: session.sessionId,
     },
   };
 };

@@ -20,8 +20,8 @@ const nextConfig: NextConfig = {
         destination: "/features/Schedule",
       },
       {
-        source: '/interviewReviewAndFeedback',
-        destination: '/features/InterviewReviewAndFeedback',
+        source: "/interviewReviewAndFeedback",
+        destination: "/features/InterviewReviewAndFeedback",
       },
       {
         source: "/settings",
@@ -33,10 +33,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/interview/:id",
-        destination: "/features/Interview/InterviewSectionPage/:id"
+        destination: "/features/Interview/InterviewSectionPage/:id",
       },
     ];
   },
+
+  transpilePackages: ["@zegocloud/zego-uikit-prebuilt"],
 };
 
 export default nextConfig;
