@@ -1,15 +1,9 @@
+import { call, put, takeLatest } from "redux-saga/effects";
 import { callApiWithoutToken } from "@/api/rest-utils";
 import { handleError } from "@/store/redux-saga/common-saga";
-import { AuthState } from "@/store/types";
-import axios from "axios";
-import { call, takeLatest } from "redux-saga/effects";
-
-export interface Technology {
-  id: string;
-  name: string;
-  user_count: string;
-  users: AuthState[];
-}
+import { setAllTechnology } from "@/store/actions/technology-action";
+import { GET_ALL_TECHNOLOGY } from "@/store/actions/technology-action";
+import { Technology } from "@/store/types/technology.type";
 
 interface GetAllTechnologyAction {
   type: string;
@@ -22,6 +16,9 @@ export function* getAllTechnology(action: GetAllTechnologyAction) {
       callApiWithoutToken.get,
       "/technology"
     );
+
+    yield put(setAllTechnology(response.data));
+
     if (action.callback) {
       yield call(action.callback, response.data);
     }
@@ -31,7 +28,7 @@ export function* getAllTechnology(action: GetAllTechnologyAction) {
 }
 
 function* technologyWatcher() {
-  yield takeLatest("GET_ALL_TECHNOLOGY", getAllTechnology);
+  yield takeLatest(GET_ALL_TECHNOLOGY, getAllTechnology);
 }
 
 export default technologyWatcher;

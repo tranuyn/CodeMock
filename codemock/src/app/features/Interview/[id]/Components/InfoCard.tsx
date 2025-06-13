@@ -1,5 +1,13 @@
 import React from "react";
-import { Paper, Box, List, ListItem, ListItemText, ListItemAvatar, Avatar } from "@mui/material";
+import {
+  Paper,
+  Box,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
+} from "@mui/material";
 
 type InfoSectionProps = {
   title: string;
@@ -8,19 +16,31 @@ type InfoSectionProps = {
     text: string;
     imageUrl?: string;
   }[];
-  lightTheme?: boolean 
+  lightTheme?: boolean;
 };
 
-const InfoCard: React.FC<InfoSectionProps> = ({ title, icon = "📘", items, lightTheme = true }) => {
+const InfoCard: React.FC<InfoSectionProps> = ({
+  title,
+  icon = "📘",
+  items,
+  lightTheme = true,
+}) => {
   return (
-    <Paper variant="outlined" sx={{ p: 2, borderLeft: 4, borderColor: lightTheme ? "primary.light" : "primary_darker.dark" }}>
+    <Paper
+      variant="outlined"
+      sx={{
+        p: 2,
+        borderLeft: 4,
+        borderColor: lightTheme ? "primary.light" : "primary_darker.dark",
+      }}
+    >
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
           mb: 1,
           backgroundColor: lightTheme ? "primary.light" : "primary_darker.dark",
-          color: lightTheme ?  "primary.dark" : "white",
+          color: lightTheme ? "primary.dark" : "white",
           px: 1.5,
           py: 0.5,
           borderRadius: 1,
@@ -41,7 +61,14 @@ const InfoCard: React.FC<InfoSectionProps> = ({ title, icon = "📘", items, lig
                 <Avatar src={item.imageUrl} variant="rounded" />
               </ListItemAvatar>
             )}
-            <ListItemText primary={item.text} />
+            {title === "Chuyên môn & kỹ năng" && item.text.includes(":") ? (
+              <ListItemText
+                primary={<strong>{item.text.split(":")[0]}</strong>}
+                secondary={item.text.split(":").slice(1).join(":")}
+              />
+            ) : (
+              <ListItemText primary={item.text} />
+            )}
           </ListItem>
         ))}
       </List>

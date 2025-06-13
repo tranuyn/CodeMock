@@ -52,7 +52,7 @@ const UpdateAvataModal = ({ user, onClose }: SkillFormProp) => {
     setValue,
     register,
   } = methods;
-  const [preview, setPreview] = useState<string>(user.avataUrl || "");
+  const [preview, setPreview] = useState<string>(user.avatarUrl || "");
   const [fileTemp, setFileTemp] = useState<File>();
   const loading = useSelector((state: RootState) => state.auth.loading);
   const dispatch = useDispatch();
@@ -70,8 +70,8 @@ const UpdateAvataModal = ({ user, onClose }: SkillFormProp) => {
   console.log(nothingChanged);
 
   const Reset = () => {
-    setValue("avataUrl", user.avataUrl);
-    setPreview(user.avataUrl);
+    setValue("avatarUrl", user.avatarUrl);
+    setPreview(user.avatarUrl);
     setValue("biography", user.biography);
   };
 
@@ -88,7 +88,7 @@ const UpdateAvataModal = ({ user, onClose }: SkillFormProp) => {
     const urlAvata = await uploadImages(fileTemp);
     dispatch(
       UserActions.updateUserAction.request({
-        avataUrl: urlAvata,
+        avatarUrl: urlAvata,
         biography: getValues("biography"),
       })
     );

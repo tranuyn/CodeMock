@@ -25,7 +25,7 @@ export interface AuthState {
   warning_until: Date | null;
   lastLogin: Date | null;
   coinBalance: number;
-  avataUrl: string;
+  avatarUrl: string;
   address: string;
   resumeUrl: string;
   educationBackground: experience_detail[];

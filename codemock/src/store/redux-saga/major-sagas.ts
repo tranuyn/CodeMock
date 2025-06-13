@@ -1,37 +1,18 @@
+import { call, put, takeLatest } from "redux-saga/effects";
 import { callApiWithoutToken } from "@/api/rest-utils";
 import { handleError } from "@/store/redux-saga/common-saga";
-import { AuthState } from "@/store/types";
-import axios from "axios";
-import { call, takeLatest } from "redux-saga/effects";
+import { GET_ALL_MAJOR, setAllMajor } from "@/store/actions/major-action";
+import { Major } from "../types/major.type";
 
-export interface Major {
-  id: string;
-  name: string;
-  user_count: string;
-  users: AuthState[];
-}
-
-interface GetAllMajorAction {
-  type: string;
-  callback?: (data: Major[]) => void;
-}
-
-export function* getAllMajor(action: GetAllMajorAction) {
+function* getAllMajorSaga() {
   try {
-    const response: { data: Major[] } = yield call(
-      callApiWithoutToken.get,
-      "/major"
-    );
-    if (action.callback) {
-      yield call(action.callback, response.data);
-    }
+    const response: { data: Major[] } = yield call(callApiWithoutToken.get, "/major");
+    yield put(setAllMajor(response.data));
   } catch (error) {
     yield call(handleError, error, true);
   }
 }
 
-function* majorWatcher() {
-  yield takeLatest("GET_ALL_MAJOR", getAllMajor);
+export default function* majorWatcher() {
+  yield takeLatest(GET_ALL_MAJOR, getAllMajorSaga);
 }
-
-export default majorWatcher;

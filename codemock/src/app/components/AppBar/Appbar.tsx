@@ -33,8 +33,9 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import Link from "next/link";
 import Logo from "@/assets/images/logo.svg";
 import Image from "next/image";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AuthActions } from "@/store/actions";
+import { RootState } from "@/store/redux";
 
 interface AppBarProps {
   isHomePage: boolean;
@@ -43,6 +44,7 @@ interface AppBarProps {
 
 const AppBar: React.FC<AppBarProps> = ({ isHomePage, isShow = true }) => {
   const router = useRouter();
+  const avatarUrl = useSelector((state: RootState) => state.auth.user.avatarUrl);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
@@ -82,7 +84,7 @@ const AppBar: React.FC<AppBarProps> = ({ isHomePage, isShow = true }) => {
     { name: 'Cài đặt', path: '/settings', icon: <SettingsIcon />},
   ];
 
-  const settings = ["Login", "Logout"];
+  const settings = ["Log in", "Log out"];
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -225,7 +227,7 @@ const AppBar: React.FC<AppBarProps> = ({ isHomePage, isShow = true }) => {
             >
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
+                  <Avatar alt="User Avatar" src={avatarUrl} />
                 </IconButton>
               </Tooltip>
               <Menu

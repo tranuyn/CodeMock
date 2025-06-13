@@ -1,80 +1,115 @@
 "use client";
 
-import { NextPageWithLayout } from "@/app/layout";
 import { ProtectedLayout } from "@/layouts/protected_layout";
-import { Box, TextField } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import styles from "./create-interview.module.css";
-import { FormProvider, useForm } from "react-hook-form";
-import InputComponent from "./Component/InputComponent";
-import { Color } from "@/assets/Color";
+import { FormProvider, Resolver, useForm } from "react-hook-form";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Major } from "@/store/redux-saga/major-sagas";
-import { Level } from "@/store/redux-saga/level-sagas";
-import { Technology } from "@/store/redux-saga/technology-sagas";
-import { useDispatch } from "react-redux";
-import Autocomplete from "@mui/material/Autocomplete";
-import { InterviewFormData } from "./shema";
-import GeneralInfoForm from "./Component/FormBox1";
-import SlotTimeForm from "./Component/FormBox2";
+import { useDispatch, useSelector } from "react-redux";
+import GeneralInfoForm from "./Component/GeneralInfoForm";
+import SlotTimeForm from "./Component/DetailInfoForm";
 import JoditEditor from "./Component/jopit-rich-text-editor";
+import { getAllLevel } from "@/store/actions/level-action";
+import { getAllMajor } from "@/store/actions/major-action";
+import { getAllTechnology } from "@/store/actions/technology-action";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { INTERVIEW_SESSION_SCHEMA } from "@/app/validations/interviewSession.validations";
+import { CreateInterviewSessionPayload, InterviewFormData } from "@/api/interview/interview-session.type";
+import { createInterviewSession } from "@/api/interview/interview-session";
+import { toastService } from "@/app/components/toast/toast.service";
+import { RootState } from "@/store/redux";
 
 function CreateInterview() {
-  const methods = useForm<InterviewFormData>({ mode: "onChange" });
+  const userId = useSelector((state: RootState) => state.auth.user.id);
+  const methods = useForm<InterviewFormData>({
+    resolver: yupResolver(INTERVIEW_SESSION_SCHEMA) as Resolver<InterviewFormData>,
+    mode: "onChange",
+    defaultValues: {
+      title: "",
+      description: "hehe",
+      requirement: "",
+      date: new Date(),
+      time: new Date(),
+      slotDuration: 30,
+      totalSlots: 1,
+      sessionPrice: 0,
+      majorIds: [],
+      levelId: "",
+      technologyIds: [],
+      meetingLink: "",
+      recordingURL: "",
+    },
+  });
+
   const {
     handleSubmit,
     control,
-    trigger,
-    getValues,
-    formState: { errors },
-    setValue,
     register,
+    formState: { errors },
   } = methods;
-  const [majors, setMajors] = useState<Major[]>([]);
-  const [levels, setLevels] = useState<Level[]>([]);
-  const [technologies, setTechnologies] = useState<Technology[]>([]);
-  const contentRef = useRef<string>("");
 
-  // Hàm callback để cập nhật giá trị content
-  const setContent = useCallback((newContent: string) => {
-    contentRef.current = newContent;
+  const descriptionRef = useRef<string>("");
+  const requirementRef = useRef<string>("");
+
+  const setDescription = useCallback((val: string) => {
+    descriptionRef.current = val;
+  }, []);
+  const setRequirement = useCallback((val: string) => {
+    requirementRef.current = val;
   }, []);
 
   const dispatch = useDispatch();
-
-  const fetchDropdownOptions = useCallback(async () => {
-    try {
-      dispatch({
-        type: "GET_ALL_MAJOR",
-        callback: (data: Major[]) => {
-          setMajors(data);
-        },
-      });
-
-      dispatch({
-        type: "GET_ALL_LEVEL",
-        callback: (data: Level[]) => {
-          setLevels(data);
-        },
-      });
-
-      dispatch({
-        type: "GET_ALL_TECHNOLOGY",
-        callback: (data: Technology[]) => {
-          setTechnologies(data);
-        },
-      });
-    } catch (error) {
-      console.error("Failed to fetch dropdown options:", error);
-    }
-  }, [dispatch]);
+  const majors = useSelector((state: any) => state.majors.majors || []);
+  const levels = useSelector((state: any) => state.levels.levels || []);
+  const technologies = useSelector(
+    (state: any) => state.technology.technologies || []
+  );
 
   useEffect(() => {
-    fetchDropdownOptions();
-  }, [fetchDropdownOptions]);
+    dispatch(getAllMajor());
+    dispatch(getAllLevel());
+    dispatch(getAllTechnology());
+  }, [dispatch]);
+useEffect(() => {
+  console.log("⚠️ Validation errors:", errors);
+}, [errors]);
 
-  const onSubmit = (data: InterviewFormData) => {
-    console.log(data);
-    // Handle form submission
+  const onSubmit = async (data: InterviewFormData) => {
+    try {
+      // Merge ngày + giờ
+      const start = new Date(data.date);
+      start.setHours(data.time.getHours(), data.time.getMinutes(), 0, 0);
+
+      const payload: CreateInterviewSessionPayload = {
+        mentorId: userId,
+        title: data.title,
+        startTime: start.toISOString(),
+        totalSlots: data.totalSlots,
+        slotDuration: data.slotDuration,
+        sessionPrice: data.sessionPrice,
+        levelId: data.levelId,
+        majorIds: data.majorIds,
+        requiredTechnologyIds: data.technologyIds,
+        meetingLink: data.meetingLink,
+        recordingURL: data.recordingURL,
+        description: 'êhehe',
+        requirement: requirementRef.current,
+      };
+console.log("✅ onSubmit fired", payload)
+      await createInterviewSession(payload);
+      toastService.show({
+        title: "Tạo thành công",
+        description: "Buổi phỏng vấn đã được tạo.",
+        variant: "success",
+      });
+      // TODO: redirect hoặc reset form nếu muốn
+    } catch (error: any) {
+      toastService.show({
+        title: "Thất bại",
+        description: error?.message || "Đã có lỗi xảy ra.",
+        variant: "error",
+      });
+    }
   };
 
   return (
@@ -85,31 +120,42 @@ function CreateInterview() {
             <GeneralInfoForm
               register={register}
               control={control}
+              errors={errors}
               levels={levels}
               majors={majors}
               technologies={technologies}
             />
-            <SlotTimeForm register={register} control={control} />
+            <SlotTimeForm
+              register={register}
+              control={control}
+              errors={errors}
+            />
           </Box>
+
           <Box className={styles.container}>
-            <JoditEditor
+            {/* <JoditEditor
               header="Mô tả buổi phỏng vấn"
-              content={contentRef.current}
-              setContent={setContent}
-              config={{
-                language: "vi",
-                toolbarAdaptive: false,
-              }}
+              content=""
+              setContent={setDescription}
+              config={{ language: "vi", toolbarAdaptive: false }}
             />
             <JoditEditor
               header="Yêu cầu ứng viên"
-              content={contentRef.current}
-              setContent={setContent}
-              config={{
-                language: "vi",
-                toolbarAdaptive: false,
-              }}
-            />
+              content=""
+              setContent={setRequirement}
+              config={{ language: "vi", toolbarAdaptive: false }}
+            /> */}
+          </Box>
+
+          <Box textAlign="center" marginTop={4}>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              sx={{ paddingX: 5, paddingY: 1.5 }}
+            >
+              Tạo buổi phỏng vấn
+            </Button>
           </Box>
         </form>
       </FormProvider>

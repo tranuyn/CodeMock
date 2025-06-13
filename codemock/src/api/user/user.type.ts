@@ -1,10 +1,11 @@
 import { ROLE } from "@/app/enums/user-role.enum";
 
 export type MentorSkill = {
-  detail: string;
-  yearStart: number;
-  work_space: string;
-  url_company: string;
+  name: string;
+  detail?: string | null;
+  proficiency_level?: string | null; // Beginner / Intermediate / Advanced / Expert
+  years_of_experience?: number | null; // số năm kinh nghiệm, có thể null
+  certified?: boolean | null;
 };
 
 export type MentorEducation = {
@@ -30,7 +31,7 @@ export type PublicMentorInfo = {
   role: ROLE;
   phone?: string;
   biography?: string;
-  avataUrl?: string;
+  avatarUrl?: string;
   address?: string;
   createdAt?: string;
   updatedAt?: string;

@@ -1,36 +1,21 @@
+import { call, put, takeLatest } from "redux-saga/effects";
 import { callApiWithoutToken } from "@/api/rest-utils";
 import { handleError } from "@/store/redux-saga/common-saga";
-import { AuthState } from "@/store/types";
-import { call, takeLatest } from "redux-saga/effects";
+import { SET_ALL_LEVEL, GET_ALL_LEVEL } from "@/store/actions/level-action";
+import { Level } from "../types/level.type";
 
-export interface Level {
-  id: string;
-  name: string;
-  user_count: string;
-  users: AuthState[];
-}
-
-interface GetAllLevelAction {
-  type: string;
-  callback?: (data: Level[]) => void;
-}
-
-export function* getAllLevel(action: GetAllLevelAction) {
+function* getAllLevelSaga() {
   try {
     const response: { data: Level[] } = yield call(
       callApiWithoutToken.get,
       "/level"
     );
-    if (action.callback) {
-      yield call(action.callback, response.data);
-    }
+    yield put({ type: SET_ALL_LEVEL, payload: response.data });
   } catch (error) {
     yield call(handleError, error, true);
   }
 }
 
-function* levelWatcher() {
-  yield takeLatest("GET_ALL_LEVEL", getAllLevel);
+export default function* levelWatcher() {
+  yield takeLatest(GET_ALL_LEVEL, getAllLevelSaga);
 }
-
-export default levelWatcher;

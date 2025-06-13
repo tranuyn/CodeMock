@@ -34,7 +34,7 @@ export default function InterviewSection({
       try {
         const session = (await getInterviewSessionById(
           params.id
-        )) as InterviewSessionResult;
+        )) as InterviewSessionResult; 
         setInterview(session);
       } catch (err) {
         console.error("Lỗi khi lấy dữ liệu phỏng vấn:", err);
@@ -105,7 +105,7 @@ export default function InterviewSection({
               >
                 Chi tiết buổi phỏng vấn
               </Typography>
-              <Typography paragraph>{interview.description}</Typography>
+              <Typography component={'div'} dangerouslySetInnerHTML={{ __html: interview.description }}/>
               <Typography variant="body2" color="text.secondary" mb={2}>
                 Hạn nộp hồ sơ:{" "}
                 {new Date(start.getTime() - 86400000).toLocaleDateString(
@@ -186,7 +186,7 @@ export default function InterviewSection({
               >
                 <Avatar
                   alt={interview.mentor.username}
-                  src={interview.mentor.avataUrl}
+                  src={interview.mentor.avatarUrl}
                   sx={{ width: 80, height: 80, mb: 1 }}
                 />
                 <Box>
@@ -230,7 +230,7 @@ export default function InterviewSection({
                 icon="🛠️"
                 items={
                   interview.mentor.skills?.map((skill) => ({
-                    text: skill.detail,
+                    text: `${skill.name} (${skill.proficiency_level ?? "Unknown"} - ${skill.years_of_experience ?? 0} yrs): ${skill.detail ?? ""}`,
                   })) || []
                 }
               />

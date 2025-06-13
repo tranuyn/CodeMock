@@ -37,17 +37,28 @@ export default function RecommendationsSection() {
         Đề Xuất Cho Bạn
       </Typography>
       
-      <Grid container spacing={2}>
+      <Box
+        display="grid"
+        gridTemplateColumns="repeat(auto-fit, minmax(350px, 1fr))"
+        gap={2}
+        justifyContent="center"
+        sx={{ margin: "0 auto" }}
+      >
         {interviews.map((session) => {
-          const bookedInSession = session.interviewSlots.filter((slot) => slot.status === "booked").length;
+          const bookedInSession = session.interviewSlots.filter(
+            (slot) => slot.status === "booked"
+          ).length;
 
           return (
-            <Grid size={{ xs: 12, sm:6, md:4, lg: 3, xl: 2 }} key={session.sessionId}>
-              <InterviewSessionCard session={session} bookedSlotCount={bookedInSession} />
-            </Grid>
+            <Box key={session.sessionId}>
+              <InterviewSessionCard
+                session={session}
+                bookedSlotCount={bookedInSession}
+              />
+            </Box>
           );
         })}
-      </Grid>
+      </Box>
       
       <Box sx={{ textAlign: "center", mt: 4 }}>
         <Link href="/jobs" passHref style={{ textDecoration: 'none' }}>

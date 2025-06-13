@@ -3,18 +3,51 @@
 import { Box, Typography } from "@mui/material";
 import SearchBar from "./components/SearchBar";
 import MajorChip from "./components/MajorChip";
-import { useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import SearchingInterviews from "./Interviews";
-
-interface Major {
-  id: string;
-  name: string;
-  slug: string;
-}
+import { getAllInterviewSessions, searchInterviewSessions } from "@/api/interview/interview-session";
+import { useDispatch, useSelector } from "react-redux";
+import { InterviewSessionResult } from "@/api/interview/interview-session.type";
+import { getAllMajor } from "@/store/actions/major-action";
+import { getAllLevel } from "@/store/actions/level-action";
+import { Major } from "@/store/types/major.type";
+import { Level } from "@/store/types/level.type";
 
 export default function Searching() {
-  const handleSearch = (searchTerm: string, level: string, major: string) => {
-    console.log("Searching for:", searchTerm, level, major);
+  const [selectedMajor, setSelectedMajor] = useState<Major[]>([]);
+  const [selectedLevel, setSelectedLevel] = useState<Level | null>(null);
+  const [searchResults, setSearchResults] = useState<InterviewSessionResult[]>([]);
+
+
+  const dispatch = useDispatch();
+  const majors = useSelector((state: any) => state.majors.majors || []);
+  const levels = useSelector((state: any) => state.levels.levels || []);
+
+  useEffect(() => {
+    dispatch(getAllMajor());
+    dispatch(getAllLevel());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const fetchAll = async () => {
+      const all = await getAllInterviewSessions();
+      setSearchResults(all as InterviewSessionResult[]);
+    };
+
+    fetchAll();
+  }, []);
+
+  const handleSearch = async ({ searchTerm, level, majors }) => {
+    const res = await searchInterviewSessions({
+      search: searchTerm,
+      levelId: level?.id,
+      majorIds: majors.map((m: { id: string }) => m.id).join(','),
+      pageNumber: 1,
+      pageSize: 10,
+      sortField: "createdAt",
+      sortOrder: "DESC",
+    });
+    setSearchResults(res.data || []); 
   };
 
   const handleChooseMajor = (major: Major) => {
@@ -28,41 +61,31 @@ export default function Searching() {
     });
   };
 
-  const [selectedMajor, setSelectedMajor] = useState<Major[]>([]);
-
-  const titles = [
-    { id: "1", name: "FullStack Web Dev", slug: "fullstack-web-dev" },
-    { id: "2", name: "Flutter Developer", slug: "flutter-developer" },
-    { id: "3", name: "React Native Dev", slug: "react-native-dev" },
-    { id: "4", name: "UI/UX Designer", slug: "ui-ux-designer" },
-    { id: "5", name: "iOS Dev", slug: "ios-dev" },
-    { id: "6", name: "Android Dev", slug: "android-dev" },
-    { id: "7", name: "FullStack Web Dev", slug: "fullstack-web-dev" },
-    { id: "8", name: "Flutter Developer", slug: "flutter-developer" },
-    { id: "9", name: "React Native Dev", slug: "react-native-dev" },
-    { id: "10", name: "UI/UX Designer", slug: "ui-ux-designer" },
-    { id: "11", name: "iOS Dev", slug: "ios-dev" },
-    { id: "12", name: "Android Dev", slug: "android-dev" },
-  ];
-
   return (
     <Box  sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, mt: 2}}>
-      <SearchBar onSearch={handleSearch} />
-      <Box sx={{ bgcolor: "#EDF6FE" }}>
+      <SearchBar
+        onSearch={handleSearch}
+        selectedMajors={selectedMajor}
+        onLevelChange={(level: SetStateAction<Level | null>) => setSelectedLevel(level)}
+        onMajorsChange={setSelectedMajor}
+        selectedLevel={selectedLevel}
+        levels={levels}
+        majors={majors}
+      />
+      <Box sx={{ bgcolor: "#EDF6FE", display: "flex", flexDirection: "column", width: "100%", p:2 }}>
         <Typography
           fontSize="1rem"
           fontWeight="bold"
           color="#0A4D8C"
           mb={1}
-          p={2}
         >
           Chọn chuyên ngành
         </Typography>
-        <Box sx={{ display: "flex", gap: 2, p: 2, flexWrap: "wrap" }}>
+        {/* <Box sx={{ display: "flex", gap: 2, p: 2, flexWrap: "wrap" }}>
           {titles.map((title, index) => (
             <Box
               key={index}
-              onClick={() => handleChooseMajor(title)}
+              onClick={() => handleChooseMajor(title.)}
               sx={{ cursor: "pointer" }}
             >
               <MajorChip
@@ -73,10 +96,8 @@ export default function Searching() {
               />
             </Box>
           ))}
-        </Box>
-        <Box sx={{p: 2}}>
-          <SearchingInterviews/>
-        </Box>
+        </Box> */}
+        <SearchingInterviews interviews={searchResults} />
       </Box>
     </Box>
   );

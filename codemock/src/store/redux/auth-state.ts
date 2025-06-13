@@ -27,7 +27,7 @@ const initialState: LoginResponse = {
     warning_until: null,
     lastLogin: null,
     coinBalance: 0,
-    avataUrl: "",
+    avatarUrl: "",
     address: "",
     resumeUrl: "",
     educationBackground: [],

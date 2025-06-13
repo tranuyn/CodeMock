@@ -22,20 +22,6 @@ const buildHeaders = (): HeaderProps => {
   return result;
 };
 
-export type TPagination = {
-  totalPage: number;
-  total: number;
-  perPage: number;
-  nextPage?: number;
-  offset?: number;
-  prevPage?: number;
-};
-
-export type TResponseWithPagination<T> = {
-  data: T;
-  pagination: TPagination;
-};
-
 const apiConfig = {
   baseUrl: "http://localhost:8081/",
 };

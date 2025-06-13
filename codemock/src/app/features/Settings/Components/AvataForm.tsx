@@ -34,14 +34,14 @@ const AvataForm = ({ user }: FormProp) => {
           sx={{ alignItems: "flex-end", marginBottom: "20px" }}
         >
           <div className={styles.imgCtn}>
-            {user.avataUrl ? (
+            {user.avatarUrl ? (
               <Avatar
                 alt={user.username}
                 sx={{
                   width: "100%",
                   height: "100%",
                 }}
-                src={user.avataUrl}
+                src={user.avatarUrl}
               />
             ) : (
               <Avatar

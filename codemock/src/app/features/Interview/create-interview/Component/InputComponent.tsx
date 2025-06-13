@@ -1,37 +1,39 @@
 // components/InputComponent.tsx
 import React from "react";
-import { UseFormRegister } from "react-hook-form";
-import styles from "../create-interview.module.css";
+import { TextField } from "@mui/material";
+import { FieldError, UseFormRegister, FieldValues, Path } from "react-hook-form";
 
-interface InputComponentProps {
+interface InputComponentProps<T extends FieldValues> {
   title: string;
+  name: Path<T>;
+  register: UseFormRegister<T>;
+  error?: FieldError;
   allowNumbers?: boolean;
-  register?: UseFormRegister<any>; // Keep this as UseFormRegister
-  name: string;
   inputStyle?: string;
 }
 
-const InputComponent: React.FC<InputComponentProps> = ({
+function InputComponent<T extends FieldValues>({
   title,
-  allowNumbers = false,
-  register,
   name,
+  register,
+  error,
+  allowNumbers = false,
   inputStyle,
-}) => {
+}: InputComponentProps<T>) {
   return (
-    <div className={styles.inputContainer}>
-      <label htmlFor={name} className={styles.inputLabel}>
-        {title}
-      </label>
-      <input
-        type={allowNumbers ? "number" : "text"}
-        id={name}
-        placeholder={`Nhập ${title}`}
-        className={`${styles.inputField} ${inputStyle}`}
-        {...register(name, { required: true })} // This is correct
-      />
-    </div>
+    <TextField
+      fullWidth
+      label={title}
+      type={allowNumbers ? "number" : "text"}
+      {...register(name)}
+      error={!!error}
+      helperText={error?.message}
+      className={inputStyle}
+      variant="outlined"
+      size="small"
+      margin="normal"
+    />
   );
-};
+}
 
 export default InputComponent;

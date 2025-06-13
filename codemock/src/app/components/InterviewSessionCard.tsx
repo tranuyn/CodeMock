@@ -1,7 +1,7 @@
 "use client";
 
 import { InterviewSessionResult } from "@/api/interview/interview-session.type";
-import { Card, CardContent, CardActions, Typography, Box, Chip, Button } from "@mui/material";
+import { Card, CardContent, CardActions, Typography, Box, Chip, Button, Avatar } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 interface InterviewSessionCardProps {
@@ -34,8 +34,8 @@ export default function InterviewSessionCard({ session, bookedSlotCount }: Inter
       }}
     >
       <CardContent sx={{ flexGrow: 1 }}>
-        <Typography variant="h6" gutterBottom>
-          {session.description || "Buổi phỏng vấn"}
+        <Typography variant="h6" sx={{ fontSize: "1.1rem" }} gutterBottom>
+          {session.title || "Buổi phỏng vấn"}
         </Typography>
         <Box sx={{ display: 'flex', flexDirection: "row", alignItems: "center", mb: 1 }}>
           {isFree ? (
@@ -47,8 +47,8 @@ export default function InterviewSessionCard({ session, bookedSlotCount }: Inter
             {formattedTime}
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-          <Box sx={{ width: 40, height: 40, borderRadius: "50%", bgcolor: "grey.300", mr: 1 }} />
+        <Box sx={{ display: "flex", alignItems: "center", mb: 2, gap: 1 }}>
+          <Avatar alt={session.mentor?.avatarUrl} src={session.mentor?.avatarUrl} />
           <Box>
             <Typography variant="body2">{session.mentor?.username || "Mentor"}</Typography>
             <Typography variant="caption" color="text.secondary">{session.level?.name || ""}</Typography>

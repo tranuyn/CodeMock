@@ -1,17 +1,49 @@
 import React, { useState } from 'react';
-import { Box, TextField, Button, FormControl, Select, MenuItem, Divider } from '@mui/material';
+import {
+  Box,
+  TextField,
+  Button,
+  FormControl,
+  Select,
+  MenuItem,
+  Divider,
+  InputLabel,
+  OutlinedInput,
+  Checkbox,
+  ListItemText,
+} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { Major } from '@/store/types/major.type';
+import { Level } from '@/store/types/level.type';
 
-const SearchBar = ({ onSearch }) => {
+interface SearchBarProps {
+  onSearch: (params: {
+    searchTerm: string;
+    level: Level | null;
+    majors: Major[];
+  }) => void;
+  selectedMajors: Major[];
+  selectedLevel: Level | null;
+  onLevelChange: (level: Level | null) => void;
+  onMajorsChange: (majors: Major[]) => void;
+  levels: Level[];
+  majors: Major[];
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({
+  onSearch,
+  selectedMajors,
+  selectedLevel,
+  onLevelChange,
+  onMajorsChange,
+  levels = [],
+  majors = [],
+}) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [level, setLevel] = useState('');
-  const [major, setMajor] = useState('');
 
   const handleSearch = () => {
-    if (onSearch) {
-      onSearch({ searchTerm, level, major });
-    }
+    onSearch({ searchTerm, level: selectedLevel, majors: selectedMajors });
   };
 
   return (
@@ -22,15 +54,18 @@ const SearchBar = ({ onSearch }) => {
         borderRadius: 3,
         boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.1)',
         padding: '8px',
-        width: '70%',
+        width: '90%',
+        gap: 2,
+        flexWrap: 'wrap',
       }}
     >
-      <TextField 
+      {/* Text input */}
+      <TextField
         variant="standard"
         placeholder="Tên buổi phỏng vấn"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        sx={{ 
+        sx={{
           flex: 1,
           '& .MuiInput-root': {
             border: 'none',
@@ -42,69 +77,60 @@ const SearchBar = ({ onSearch }) => {
           },
         }}
       />
-      <Divider orientation="vertical" flexItem />
 
-      <FormControl
-        variant="standard"
-        sx={{ 
-          width: '25%',
-          '& .MuiInputBase-root': {
-            fontSize: '16px',
-            padding: '4px 16px',
-          },
-          '& .MuiInput-underline:before, & .MuiInput-underline:after': {
-            display: 'none',
-          },
-        }}
-      >
+      {/* LEVEL SELECT */}
+      <FormControl variant="standard" sx={{ minWidth: 180 }}>
         <Select
-          labelId="level-select-label"
-          id="level-select"
-          value={level}
-          onChange={(e) => setLevel(e.target.value)}
+          value={selectedLevel?.id || ''}
+          onChange={(e) => {
+            const selected = levels.find((lvl) => lvl.id === e.target.value);
+            onLevelChange(selected || null);
+          }}
           displayEmpty
           IconComponent={KeyboardArrowDownIcon}
           disableUnderline
+          renderValue={(selected) => {
+            const level = levels.find((lvl) => lvl.id === selected);
+            return level?.name || 'Chọn cấp bậc';
+          }}
         >
-          <MenuItem value="" disabled>
-            Chọn cấp bậc
-          </MenuItem>
-          <MenuItem value="junior">Junior</MenuItem>
-          <MenuItem value="middle">Middle</MenuItem>
-          <MenuItem value="senior">Senior</MenuItem>
+          <MenuItem value="">Chọn cấp bậc</MenuItem>
+          {levels.map((lvl) => (
+            <MenuItem key={lvl.id} value={lvl.id}>
+              {lvl.name}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
-      <Divider orientation="vertical" flexItem />
 
-      <FormControl
-        variant="standard"
-        sx={{ 
-          width: '25%',
-          '& .MuiInputBase-root': {
-            fontSize: '16px',
-            padding: '4px 16px',
-          },
-          '& .MuiInput-underline:before, & .MuiInput-underline:after': {
-            display: 'none',
-          },
-        }}
-      >
+      {/* MAJOR MULTI SELECT */}
+      <FormControl variant="standard" sx={{ minWidth: 220, maxWidth: 300 }}>
         <Select
-          labelId="major-select-label"
-          id="major-select"
-          value={major}
-          onChange={(e) => setMajor(e.target.value)}
+          multiple
           displayEmpty
-          IconComponent={KeyboardArrowDownIcon}
           disableUnderline
+          value={selectedMajors.map((m) => m.id)}
+          onChange={(e) => {
+            const selected = majors?.filter((m) =>
+              (e.target.value as string[]).includes(m.id)
+            );
+            onMajorsChange(selected);
+          }}
+          renderValue={(selected) => {
+            if ((selected as string[]).length === 0) return 'Chọn chuyên ngành';
+            return majors
+              .filter((m) => (selected as string[]).includes(m.id))
+              .map((m) => m.name)
+              .join(', ');
+          }}
+          IconComponent={KeyboardArrowDownIcon}
         >
-          <MenuItem value="" disabled>
-            Chọn chuyên ngành
-          </MenuItem>
-          <MenuItem value="frontend">Frontend</MenuItem>
-          <MenuItem value="backend">Backend</MenuItem>
-          <MenuItem value="fullstack">FullStack</MenuItem>
-          <MenuItem value="ui-ux">UI/UX</MenuItem>
+          {majors.map((m) => (
+            <MenuItem key={m.id} value={m.id}>
+              <Checkbox checked={selectedMajors.some((mj) => mj.id === m.id)} size="small"/>
+              <ListItemText primary={m.name} />
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
 
