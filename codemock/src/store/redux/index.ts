@@ -6,8 +6,10 @@ import { LoginResponse } from "../types";
 import levelReducer from "./level-state";
 import majorReducer from "./major-state";
 import technologyReducer from "./technology-state";
+import interviewReducer, { InterviewState } from "./interview-state";
 
 export interface RootState {
+  interviews: InterviewState;
   auth: LoginResponse;
 }
 const authPersistConfig = {
@@ -19,7 +21,8 @@ const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
   majors: majorReducer,
   levels: levelReducer,
-  technology: technologyReducer
+  technology: technologyReducer,
+  interviews: interviewReducer,
   //note: noteReducer
 });
 

@@ -4,6 +4,7 @@ import { format, addDays, isSameDay } from "date-fns";
 import { vi } from "date-fns/locale";
 import styles from "../Schedule.module.css";
 import { InterviewInSchedule } from "../page";
+import { parseSessionTime } from "@/app/utils/dateUtils";
 
 interface WeeklyCalendarProps {
   currentWeekStart: Date;
@@ -69,12 +70,12 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
                 }`}
               >
                 {getInterviewsByDate(day).map((interview) => {
-                  const [startHour, startMinute] = interview.display.startTime
-                    .split(":")
-                    .map(Number);
-                  const [endHour, endMinute] = interview.display.endTime
-                    .split(":")
-                    .map(Number);
+                  const { start: startDate, end: endDate } = parseSessionTime(interview.data);
+
+                  const startHour = startDate.getHours();
+                  const startMinute = startDate.getMinutes();
+                  const endHour = endDate.getHours();
+                  const endMinute = endDate.getMinutes();
 
                   if (startHour === hour) {
                     const durationMinutes =
@@ -83,11 +84,11 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
 
                     const isSelected =
                       selectedInterview &&
-                      selectedInterview.display.id === interview.display.id;
+                      selectedInterview.data.sessionId === interview.data.sessionId;
 
                     return (
                       <div
-                        key={interview.display.id}
+                        key={interview.data.sessionId}
                         className={`${styles.interviewItem} ${
                           isSelected ? styles.selectedInterviewItem : ""
                         }`}
@@ -98,12 +99,12 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
                         onClick={() => handleInterviewClick(interview)}
                       >
                         <div className={styles.interviewTitle}>
-                          {interview.display.title}
+                          {interview.data.title}
                         </div>
                         {/* <div className={styles.interviewType}>{interview.type}</div> */}
                         <div
                           className={styles.interviewTime}
-                        >{`${interview.display.startTime} - ${interview.display.endTime}`}</div>
+                        >{format(startDate, "HH:mm")} - {format(endDate, "HH:mm")}</div>
                       </div>
                     );
                   }
