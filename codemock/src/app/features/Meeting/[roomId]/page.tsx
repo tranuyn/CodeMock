@@ -3,13 +3,18 @@
 import { useCallback, useRef, useEffect } from "react";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 import { useParams } from "next/navigation";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/redux";
+import { post } from "@/api/rest-utils";
 
 export default function Meeting() {
   const params = useParams();
   const roomID = String(params.roomId);
   const zpRef = useRef<any>(null);
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
   const isJoinedRef = useRef(false);
-
+  const user = useSelector((state: RootState) => state.auth.user);
   const myMeetingRef = useCallback(
     (element: HTMLDivElement | null) => {
       if (!element || isJoinedRef.current) return;
@@ -21,8 +26,6 @@ export default function Meeting() {
             process.env.NEXT_PUBLIC_ZEGOCLOUD_SERVERSECRET
           );
 
-          console.log("AppID:", appID);
-
           if (!appID || !serverSecret) {
             console.error("Missing ZEGOCLOUD credentials");
             return;
@@ -32,8 +35,8 @@ export default function Meeting() {
             appID,
             serverSecret,
             roomID,
-            roomID,
-            roomID
+            user.id,
+            user.username
           );
 
           const zp = ZegoUIKitPrebuilt.create(kitToken);
@@ -51,12 +54,40 @@ export default function Meeting() {
             scenario: {
               mode: ZegoUIKitPrebuilt.GroupCall,
             },
-            onJoinRoom: () => {
-              console.log("Successfully joined room:", roomID);
+            onJoinRoom: async () => {
+              try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                  audio: true,
+                });
+                const recorder = new MediaRecorder(stream);
+                chunksRef.current = [];
+                recorder.ondataavailable = (e) => {
+                  chunksRef.current.push(e.data);
+                };
+                recorder.start();
+                recorderRef.current = recorder;
+              } catch (err) {
+                console.error("MediaRecorder init failed:", err);
+              }
             },
-            onLeaveRoom: () => {
-              console.log("Left room:", roomID);
-              isJoinedRef.current = false;
+            onLeaveRoom: async () => {
+              if (recorderRef.current) {
+                recorderRef.current.stop();
+                recorderRef.current.onstop = () => {
+                  const blob = new Blob(chunksRef.current, {
+                    type: "audio/webm",
+                  });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.style.display = "none";
+                  a.href = url;
+                  a.download = `meeting_${roomID}.webm`;
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                  URL.revokeObjectURL(url);
+                };
+              }
             },
           });
         } catch (error) {
@@ -97,7 +128,7 @@ export default function Meeting() {
     <div
       className="myCallContainer"
       ref={myMeetingRef}
-      style={{ width: "100vw", height: "100vh" }}
+      style={{ width: "100%", height: "90vh" }}
     />
   );
 }
