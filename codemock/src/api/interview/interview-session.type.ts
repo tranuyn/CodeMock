@@ -1,20 +1,5 @@
 import { PublicMentorInfo } from "../user/user.type";
 
-// export type CreateInterviewSessionPayload = {
-//   mentorId: string;
-//   startTime: string;
-//   totalSlots: number;
-//   slotDuration: number;
-//   majorIds: string[];
-//   levelId: string;
-//   requiredTechnologyIds: string[];
-//   sessionPrice: number;
-//   meetingLink?: string;
-//   recordingURL?: string;
-//   description: string;
-//   requirement?: string;
-// };
-
 export type InterviewSessionResult = {
   sessionId: string;
   startTime: string;
@@ -23,12 +8,15 @@ export type InterviewSessionResult = {
   slotDuration: number;
   title: string;
   roomId: string;
+  status: string;
   interviewSlots: {
     slotId: string;
     startTime: string;
     endTime: string;
     status: string;
     isPaid: boolean;
+    resumeUrl?: string;
+    feedback?: string;
   }[];
   requiredTechnologies: { id: string; name: string }[];
   majors: { id: string; name: string }[];
@@ -37,6 +25,7 @@ export type InterviewSessionResult = {
   recordingURL?: string;
   mentor: PublicMentorInfo;
   description: string;
+  requirement?: string;
   sessionPrice: number;
 };
 

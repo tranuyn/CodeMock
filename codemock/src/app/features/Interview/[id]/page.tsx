@@ -106,6 +106,7 @@ export default function InterviewSection({
                 Chi tiết buổi phỏng vấn
               </Typography>
               <Typography component={'div'} dangerouslySetInnerHTML={{ __html: interview.description }}/>
+              {interview.requirement && <Typography component={'div'} dangerouslySetInnerHTML={{ __html: interview.requirement }}/>}
               <Typography variant="body2" color="text.secondary" mb={2}>
                 Hạn nộp hồ sơ:{" "}
                 {new Date(start.getTime() - 86400000).toLocaleDateString(

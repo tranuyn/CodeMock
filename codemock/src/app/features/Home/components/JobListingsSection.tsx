@@ -6,45 +6,28 @@ import {
   Box,
   Typography,
   Container,
-  Grid,
-  Button,
-  Card,
-  CardContent,
-  CardActions,
-  Chip,
 } from "@mui/material";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { getAllInterviewSessions } from "@/api/interview/interview-session";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import InterviewSessionCard from "@/app/components/InterviewSessionCard";
 import { InterviewSessionResult } from "@/api/interview/interview-session.type";
+import { fetchInterviewsRequest } from "@/store/actions/interview-action";
 
 export default function JobListingsSection() {
   const role = useSelector((state: RootState) => state.auth.user.role);
   const userId = useSelector((state: RootState) => state.auth.user.id);
-  const [interviews, setInterviews] = useState<InterviewSessionResult[]>([]);
-  const bookedSlotCount = interviews.reduce((count, session) => {
-    const bookedInSession = session.interviewSlots.filter(
-      (slot: { status: string }) => slot.status === "booked"
-    ).length;
-    return count + bookedInSession;
-  }, 0);
+  // const [interviews, setInterviews] = useState<InterviewSessionResult[]>([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchInterviews = async () => {
-      try {
-        const sessions =
-          (await getAllInterviewSessions()) as InterviewSessionResult[];
-        setInterviews(sessions);
-      } catch (err) {
-        console.error("Lỗi khi lấy dữ liệu phỏng vấn:", err);
-      }
-    };
+    if (userId && role) {
+      dispatch(fetchInterviewsRequest({ userId, role: role as "MENTOR" | "CANDIDATE" }));
+    }
+  }, [userId, role]);
 
-    fetchInterviews();
-  }, [userId]);
-
+  const interviews = useSelector((state: RootState) => state.interviews.interviews || []);
+  
   return (
     <Container
       maxWidth={false}
@@ -66,7 +49,7 @@ export default function JobListingsSection() {
         }}
       >
         <Typography variant="h5" fontWeight="bold">
-          Bạn Có Buổi Phỏng Vấn Sắp Diễn Ra
+          Bạn Có Buổi Phỏng Vấn Sắp Diễn Ra 
         </Typography>
         <Link href="/schedule" passHref style={{ textDecoration: "none" }}>
           <Typography
@@ -87,14 +70,16 @@ export default function JobListingsSection() {
         sx={{ margin: "0 auto" }}
       >
         {interviews.map((session) => {
-          const bookedInSession = session.interviewSlots.filter(
+          const rawSession = session.data as InterviewSessionResult;
+
+          const bookedInSession = rawSession.interviewSlots?.filter(
             (slot) => slot.status === "booked"
-          ).length;
+          ).length ?? 0;
 
           return (
-            <Box key={session.sessionId}>
+            <Box key={session.data.sessionId}>
               <InterviewSessionCard
-                session={session}
+                session={rawSession}
                 bookedSlotCount={bookedInSession}
               />
             </Box>

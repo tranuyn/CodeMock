@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 import {
@@ -12,16 +12,21 @@ import {
   Link,
 } from "@mui/material";
 import CustomModal from "./Modal";
+import { registerInterviewSlot } from "@/api/interview-slot/interview-slot";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/redux";
+import { toastService } from "@/app/components/toast/toast.service";
 
 interface RegisterSlotFormProps {
   open: boolean;
   onClose: () => void;
-  slots: { 
+  slots: {
     slotId: string;
     startTime: string;
     endTime: string;
     status: string;
-    isPaid: boolean; }[]; 
+    isPaid: boolean;
+  }[];
   interviewId: string;
 }
 
@@ -32,30 +37,56 @@ export default function RegisterSlotForm({
   interviewId,
 }: RegisterSlotFormProps) {
   const [selectedSlotId, setSelectedSlotId] = useState("");
-  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [resumeUrl, setResumeUrl] = useState("");
   const [agree, setAgree] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setCvFile(e.target.files[0]);
-    }
-  };
+  const candidateId = useSelector(
+    (state: RootState) => state.auth.user.id
+  );
 
-  const handleSubmit = () => {
-    if (selectedSlotId && cvFile && agree) {
-      console.log("Đăng ký slot:", {
-        slotId: selectedSlotId,
-        cvFile,
-        interviewId,
+  const handleSubmit = async () => {
+    if (!selectedSlotId || !resumeUrl || !agree) return;
+
+    setLoading(true);
+    try {
+      await registerInterviewSlot(selectedSlotId, {
+        candidateId,
+        resumeUrl,
       });
+
+      toastService.show({
+        title: "Đăng ký thành công",
+        description: "Bạn đã đăng ký slot phỏng vấn thành công.",
+        variant: "success",
+      });
+
       onClose();
+      setSelectedSlotId("");
+      setResumeUrl("");
+      setAgree(true);
+    } catch (error: any) {
+      toastService.show({
+        title: "Lỗi",
+        description:
+          error?.response?.data?.message || "Đăng ký thất bại",
+        variant: "error",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <CustomModal open={open} onClose={onClose} title="Bạn có chắc chắn muốn đăng ký phỏng vấn?">
+    <CustomModal
+      open={open}
+      onClose={onClose}
+      title="Bạn có chắc chắn muốn đăng ký phỏng vấn?"
+    >
       <Box display="flex" flexDirection="column" gap={2} mt={1}>
-        <Typography fontWeight="bold">Chọn ca phỏng vấn bạn muốn đăng ký</Typography>
+        <Typography fontWeight="bold">
+          Chọn ca phỏng vấn bạn muốn đăng ký
+        </Typography>
 
         <TextField
           select
@@ -67,7 +98,7 @@ export default function RegisterSlotForm({
           {slots
             .filter((slot) => slot.status !== "booked")
             .map((slot) => (
-              <MenuItem key={slot.id} value={slot.id}>
+              <MenuItem key={slot.slotId} value={slot.slotId}>
                 {new Date(slot.startTime).toLocaleTimeString("vi-VN", {
                   hour: "2-digit",
                   minute: "2-digit",
@@ -76,10 +107,13 @@ export default function RegisterSlotForm({
             ))}
         </TextField>
 
-        <Button variant="outlined" component="label">
-          {cvFile ? cvFile.name : "Tải CV tại đây"}
-          <input hidden type="file" onChange={handleFileChange} />
-        </Button>
+        <TextField
+          label="Link CV (Google Drive, Dropbox...)"
+          placeholder="https://drive.google.com/..."
+          value={resumeUrl}
+          onChange={(e) => setResumeUrl(e.target.value)}
+          fullWidth
+        />
 
         <FormControlLabel
           control={
@@ -104,8 +138,13 @@ export default function RegisterSlotForm({
           <Button variant="outlined" color="error" onClick={onClose}>
             Thoát
           </Button>
-          <Button variant="outlined" color="primary" onClick={handleSubmit} disabled={!selectedSlotId || !cvFile || !agree}>
-            Đăng ký
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleSubmit}
+            disabled={!selectedSlotId || !resumeUrl || !agree || loading}
+          >
+            {loading ? "Đang xử lý..." : "Đăng ký"}
           </Button>
         </Box>
       </Box>

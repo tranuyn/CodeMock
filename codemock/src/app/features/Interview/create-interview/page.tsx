@@ -70,9 +70,6 @@ function CreateInterview() {
     dispatch(getAllLevel());
     dispatch(getAllTechnology());
   }, [dispatch]);
-useEffect(() => {
-  console.log("⚠️ Validation errors:", errors);
-}, [errors]);
 
   const onSubmit = async (data: InterviewFormData) => {
     try {
@@ -92,21 +89,23 @@ useEffect(() => {
         requiredTechnologyIds: data.technologyIds,
         meetingLink: data.meetingLink,
         recordingURL: data.recordingURL,
-        description: 'êhehe',
+        description: descriptionRef.current,
         requirement: requirementRef.current,
       };
-console.log("✅ onSubmit fired", payload)
+
       await createInterviewSession(payload);
       toastService.show({
         title: "Tạo thành công",
         description: "Buổi phỏng vấn đã được tạo.",
         variant: "success",
       });
-      // TODO: redirect hoặc reset form nếu muốn
+      methods.reset(); // Reset lại toàn bộ form
+      descriptionRef.current = "";
+      requirementRef.current = "";
     } catch (error: any) {
       toastService.show({
         title: "Thất bại",
-        description: error?.message || "Đã có lỗi xảy ra.",
+        description: error?.response?.data?.message || "Đã có lỗi xảy ra.",
         variant: "error",
       });
     }
@@ -133,7 +132,7 @@ console.log("✅ onSubmit fired", payload)
           </Box>
 
           <Box className={styles.container}>
-            {/* <JoditEditor
+            <JoditEditor
               header="Mô tả buổi phỏng vấn"
               content=""
               setContent={setDescription}
@@ -144,7 +143,7 @@ console.log("✅ onSubmit fired", payload)
               content=""
               setContent={setRequirement}
               config={{ language: "vi", toolbarAdaptive: false }}
-            /> */}
+            />
           </Box>
 
           <Box textAlign="center" marginTop={4}>

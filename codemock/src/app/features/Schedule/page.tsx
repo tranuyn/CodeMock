@@ -19,32 +19,15 @@ import { Box, Button } from "@mui/material";
 import { NextPageWithLayout } from "@/app/layout";
 import { ProtectedLayout } from "@/layouts/protected_layout";
 import { Color } from "@/assets/Color";
-import { mapSessionToInterview, mapSlotToInterview } from "./mapToSchedule";
-import {
-  getInterviewSlotsByCandidate,
-  InterviewSlotResult,
-} from "@/api/interview-slot/interview-slot";
 import { RootState } from "@/store/redux";
-import { useSelector } from "react-redux";
-import { getInterviewSessionsByMentor } from "@/api/interview/interview-session";
+import { useDispatch, useSelector } from "react-redux";
 import { InterviewSessionResult } from "@/api/interview/interview-session.type";
+import { fetchInterviewsRequest } from "@/store/actions/interview-action";
+import { parseSessionTime } from "@/app/utils/dateUtils";
 
 export type InterviewInSchedule = {
   type: "SLOT" | "SESSION";
-  raw: InterviewSlotResult | InterviewSessionResult;
-  display: {
-    id: string;
-    title: string;
-    date: Date;
-    startTime: string;
-    endTime: string;
-    requiredTechnologies: { id: string; name: string }[];
-    majors: { id: string; name: string }[];
-    level: { id: string; name: string };
-    interviewer: string;
-    roomId: string;
-    sessionId: string;
-  };
+  data: InterviewSessionResult;
 };
 
 const InterviewCalendar: NextPageWithLayout = () => {
@@ -58,36 +41,25 @@ const InterviewCalendar: NextPageWithLayout = () => {
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date(2025, 2, 1));
   const role = useSelector((state: RootState) => state.auth.user.role);
   const userId = useSelector((state: RootState) => state.auth.user.id);
-  const [interviews, setInterviews] = useState<InterviewInSchedule[]>([]);
+  // const [interviews, setInterviews] = useState<InterviewInSchedule[]>([]);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchInterviews = async () => {
-      try {
-        if (role === "CANDIDATE") {
-          const slots =
-            (await getInterviewSlotsByCandidate()) as InterviewSlotResult[];
-          const mapped = slots.map(mapSlotToInterview);
-          setInterviews(mapped);
-        } else if (role === "MENTOR") {
-          const sessions =
-            (await getInterviewSessionsByMentor()) as InterviewSessionResult[];
-          const mapped = sessions.map(mapSessionToInterview);
-          setInterviews(mapped);
-        }
-      } catch (err) {
-        console.error("Lỗi khi lấy dữ liệu phỏng vấn:", err);
-      }
-    };
-
-    if (userId) {
-      fetchInterviews();
+    if (userId && role) {
+      dispatch(fetchInterviewsRequest({ userId, role: role as "MENTOR" | "CANDIDATE" }));
     }
-  }, [userId]);
+  }, [userId, role]);
+
+  const interviews = useSelector((state: RootState) => state.interviews.interviews || []);
+  
   // Lọc phỏng vấn theo ngày
   const getInterviewsByDate = (date: Date) => {
-    return interviews.filter(
-      (interview) => isSameDay(new Date(interview.display.date), date) // So sánh ngày chính xác
-    );
+    return interviews.filter((interview) => {
+      if (!interview?.data?.startTime) return false;
+      const { start } = parseSessionTime(interview.data);
+      return isSameDay(start, date);
+    });
   };
 
   // Xử lý khi click vào một cuộc phỏng vấn
