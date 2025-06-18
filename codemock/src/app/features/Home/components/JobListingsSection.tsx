@@ -28,6 +28,8 @@ export default function JobListingsSection() {
 
   const interviews = useSelector((state: RootState) => state.interviews.interviews || []);
   
+  console.log("Interviews in JobListingsSection:", interviews);
+
   return (
     <Container
       maxWidth={false}

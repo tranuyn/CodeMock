@@ -1,3 +1,4 @@
+import { InterviewSessionResult } from "../interview/interview-session.type";
 import { PublicMentorInfo } from "../user/user.type";
 
 export type Register_CancelSlotPayload = {
@@ -24,23 +25,5 @@ export type InterviewSlotResult = {
   feedback?: any;
   resumeUrl?: string;
   isPaid: boolean;
-  interviewSession: {
-    sessionId: string;
-    title: string;
-    startTime: string; 
-    endTime?: string; 
-    totalSlots: number;
-    slotDuration: number;
-    status: string;
-    sessionPrice: number;
-    description?: string;
-    requirement?: string | null;
-    meetingLink?: string;
-    recordingURL?: string;
-    roomId: string;
-    mentor?: PublicMentorInfo;
-    requiredTechnologies: { id: string; name: string }[];
-    majors: { id: string; name: string }[];
-    level: { id: string; name: string };
-  };
+  interviewSession: InterviewSessionResult;
 };

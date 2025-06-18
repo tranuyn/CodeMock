@@ -1,138 +1,88 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Container, Grid, Typography, Box, ListItem } from "@mui/material";
+import { useSelector } from "react-redux";
 import SearchBar from "./components/SearchBar";
 import FilterSection from "./components/FilterSection";
 import InterviewCard from "./components/InterviewCard";
+import InterviewMentorCard from "./components/InterviewMentorCard";
+import { InterviewInSchedule } from "@/app/features/Schedule/page";
+import { InterviewSlotResult } from "@/api/interview-slot/interview-slot.type";
+import { InterviewSessionResult } from "@/api/interview/interview-session.type";
+import dayjs from "dayjs";
+import { RootState } from "@/store/redux";
 
-// Sample interview data - in production, this would come from an API
-const sampleInterviews = [
-  {
-    id: 1,
-    title: "[INTERN] Phỏng vấn Intern Front-end Developer ReactJS",
-    description:
-      "Front-end Developer, Master in ReactJs, Javascript, Typescript, html, css, bootstrap, sql basic",
-    interviewer: "Jessica Mariana, Data Engineer",
-    date: "27/03/2025",
-    time: "14:00 - 14:30",
-    status: "Chưa Có Đánh Giá",
-    price: "50.000 VND",
-    rating: null,
-    score: "7/10",
-  },
-  {
-    id: 2,
-    title: "[INTERN] Phỏng vấn Intern Front-end Developer ReactJS",
-    description:
-      "Front-end Developer, Master in ReactJs, Javascript, Typescript, html, css, bootstrap, sql basic",
-    interviewer: "Jessica Mariana, Data Engineer",
-    date: "27/03/2025",
-    time: "14:00 - 14:30",
-    status: "",
-    price: "50.000 VND",
-    rating: 4.0,
-    score: "3/10",
-  },
-  {
-    id: 3,
-    title: "[INTERN] Phỏng vấn Intern Front-end Developer ReactJS",
-    description:
-      "Front-end Developer, Master in ReactJs, Javascript, Typescript, html, css, bootstrap, sql basic",
-    interviewer: "Jessica Mariana, Data Engineer",
-    date: "27/03/2025",
-    time: "14:00 - 14:30",
-    status: "Chưa Có Đánh Giá",
-    price: "Free",
-    rating: null,
-    score: "5/10",
-  },
-  {
-    id: 4,
-    title: "[INTERN] Phỏng vấn Intern Front-end Developer ReactJS",
-    description:
-      "Front-end Developer, Master in ReactJs, Javascript, Typescript, html, css, bootstrap, sql basic",
-    interviewer: "Jessica Mariana, Data Engineer",
-    date: "27/03/2025",
-    time: "14:00 - 14:30",
-    status: "",
-    price: "50.000 VND",
-    rating: 4.0,
-    score: "5/10",
-  },
-];
+// Utils
+const formatTimeRange = (start: string, end: string) =>
+  `${dayjs(start).format("HH:mm")} - ${dayjs(end).format("HH:mm")}`;
 
-// Past interview sessions
-const pastInterviews = [
-  {
-    id: 101,
-    title: "Junior - Frontend Developer",
-    instructor: "Dr. Carol D. Pollock-Yurisch",
-    timeSlot: "08:30 am - 10:30 am",
-  },
-  {
-    id: 102,
-    title: "Junior - Soft skill Improvement",
-    instructor: "Dr. Donald J. Watson",
-    timeSlot: "08:30 am - 10:30 am",
-  },
-];
+const formatDate = (date: string) => dayjs(date).format("DD/MM/YYYY");
+
+// Fake: xử lý mapping đơn giản cho InterviewCard
+const mapSlotToCard = (
+  item: InterviewInSchedule
+): InterviewSlotResult & {
+  interviewer: string;
+  title: string;
+  description: string;
+  date: string;
+  time: string;
+  price: string;
+  avatarUrl: string;
+} => {
+  const slot = item.slotData!;
+  const session = item.data;
+
+  return {
+    ...slot,
+    interviewer: session.mentor.username,
+    title: session.title,
+    description: session.description,
+    date: formatDate(slot.startTime),
+    time: formatTimeRange(slot.startTime, slot.endTime),
+    price:
+      session.sessionPrice === 0 ? "Free" : `${session.sessionPrice.toLocaleString()} VND`,
+    avatarUrl: session?.mentor?.avatarUrl ?? '',
+  };
+};
 
 export default function InterviewReviewAndFeedback() {
+  const interviews = useSelector(
+    (state: RootState) => state.interviews.interviews || []
+  );
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredInterviews, setFilteredInterviews] =
-    useState(sampleInterviews);
 
-  interface Interview {
-    id: number;
-    title: string;
-    description: string;
-    interviewer: string;
-    date: string;
-    time: string;
-    status: string;
-    price: string;
-    rating: number | null;
-    score: string;
-  }
+  const filteredInterviews = useMemo(() => {
+    if (!searchQuery.trim()) return interviews;
 
-  type HandleSearch = (query: string) => void;
-
-  const handleSearch: HandleSearch = (query) => {
-    setSearchQuery(query);
-    // Filter interviews based on search query
-    if (query.trim() === "") {
-      setFilteredInterviews(sampleInterviews);
-    } else {
-      const filtered = sampleInterviews.filter(
-        (interview: Interview) =>
-          interview.title.toLowerCase().includes(query.toLowerCase()) ||
-          interview.description.toLowerCase().includes(query.toLowerCase())
+    return interviews.filter((item) => {
+      const session = item.data;
+      return (
+        session.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        session.description.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      setFilteredInterviews(filtered);
-    }
-  };
+    });
+  }, [interviews, searchQuery]);
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Grid container spacing={3}>
-        {/* Left sidebar with filters */}
+        {/* Sidebar */}
         <Grid size={{ xs: 12, md: 3 }}>
           <ListItem>
             <FilterSection />
           </ListItem>
         </Grid>
 
-        {/* Main content area */}
+        {/* Main */}
         <Grid size={{ xs: 12, md: 9 }}>
-          {/* Search bar section */}
+          {/* Search & Filters */}
           <Grid container spacing={2} mb={3}>
             <Grid size={{ xs: 12, md: 6 }}>
               <ListItem>
                 <SearchBar
                   value={searchQuery}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    handleSearch(e.target.value)
-                  }
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Tìm buổi phỏng vấn đã tham gia"
                 />
               </ListItem>
@@ -175,68 +125,21 @@ export default function InterviewReviewAndFeedback() {
             </Grid>
           </Grid>
 
-          {/* Interview listings */}
+          {/* Interview listing */}
           <Box>
-            {filteredInterviews.map((interview) => (
-              <InterviewCard key={interview.id} interview={interview} />
-            ))}
-          </Box>
-
-          {/* Past interviews section */}
-          <Box mt={4}>
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              Bạn có buổi phỏng vấn
-            </Typography>
-
-            <Typography
-              variant="subtitle1"
-              sx={{ color: "primary.main", mb: 2 }}
-            >
-              Ngày mai, 2022
-            </Typography>
-
-            {pastInterviews.map((session) => (
-              <Box
-                key={session.id}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  p: 2,
-                  mb: 1,
-                  bgcolor: "white",
-                  borderRadius: 1,
-                  boxShadow: 1,
-                }}
-              >
-                <Box
-                  sx={{
-                    bgcolor: "#f5f5f5",
-                    borderRadius: "50%",
-                    width: 20,
-                    height: 20,
-                    mr: 2,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "0.75rem",
-                    color: "#666",
-                  }}
-                >
-                  •
-                </Box>
-                <Box>
-                  <Typography variant="body1" fontWeight="medium">
-                    {session.timeSlot}
-                  </Typography>
-                  <Typography variant="body1" fontWeight="bold">
-                    {session.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {session.instructor}
-                  </Typography>
-                </Box>
-              </Box>
-            ))}
+            {filteredInterviews.map((item) =>
+              item.type === "SLOT" && item.slotData ? (
+                <InterviewCard
+                  key={item.slotData.slotId}
+                  interview={mapSlotToCard(item)}
+                />
+              ) : (
+                <InterviewMentorCard
+                  key={item.data.sessionId}
+                  session={item.data as InterviewSessionResult}
+                />
+              )
+            )}
           </Box>
         </Grid>
       </Grid>

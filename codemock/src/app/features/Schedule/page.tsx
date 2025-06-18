@@ -24,10 +24,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { InterviewSessionResult } from "@/api/interview/interview-session.type";
 import { fetchInterviewsRequest } from "@/store/actions/interview-action";
 import { parseSessionTime } from "@/app/utils/dateUtils";
+import { InterviewSlotResult } from "@/api/interview-slot/interview-slot.type";
 
 export type InterviewInSchedule = {
   type: "SLOT" | "SESSION";
   data: InterviewSessionResult;
+  slotData?: InterviewSlotResult | undefined;
 };
 
 const InterviewCalendar: NextPageWithLayout = () => {

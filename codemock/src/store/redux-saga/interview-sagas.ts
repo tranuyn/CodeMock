@@ -6,27 +6,29 @@ import {
 import {
   getInterviewSlotsByCandidate,
 } from "@/api/interview-slot/interview-slot";
-import { mapSessionToInterview } from "@/app/features/Schedule/mapToSchedule";
+import { mapSessionToInterview, mapSlotToInterview } from "@/app/features/Schedule/mapToSchedule";
 
-import { groupCandidateSlotsToSessions } from "@/app/utils/groupCandidateSlotsToSessions";
+// import { groupCandidateSlotsToSessions } from "@/app/utils/groupCandidateSlotsToSessions";
+import { InterviewSlotResult } from "@/api/interview-slot/interview-slot.type";
 
 function* handleFetchInterviews(action: any): Generator<any, void, any> {
   try {
-    const { userId, role } = action.payload;
+    const { role } = action.payload;
     let result = [];
 
     if (role === "MENTOR") {
       const sessions = yield call(getInterviewSessionsByMentor);
-      result = sessions.map(mapSessionToInterview); // raw là SESSION
+      result = sessions.map(mapSessionToInterview);
     } else {
       const slots = yield call(getInterviewSlotsByCandidate);
-      const groupedSessions = groupCandidateSlotsToSessions(slots);
-      result = groupedSessions.map(mapSessionToInterview); // raw là SESSION
+      result = slots.map((slot: InterviewSlotResult) =>
+        mapSlotToInterview(slot.interviewSession, slot)
+      ); // mỗi slot riêng biệt
     }
 
     yield put({
       type: "FETCH_INTERVIEWS_SUCCESS",
-      payload: result, // InterviewInSchedule[]
+      payload: result,
     });
   } catch (error: any) {
     yield put({
