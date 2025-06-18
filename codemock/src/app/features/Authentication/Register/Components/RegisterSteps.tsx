@@ -14,10 +14,9 @@ import callApi from "@/store/redux-saga/common-saga";
 import axios from "axios";
 import { Detail } from "@/store/types";
 import { useDispatch } from "react-redux";
-import { Major } from "@/store/redux-saga/major-sagas";
-import { Level } from "@/store/redux-saga/level-sagas";
-import { Technology } from "@/store/redux-saga/technology-sagas";
-
+import { Major } from "@/store/types/major.type";
+import { Level } from "@/store/types/level.type";
+import { Technology } from "@/store/types/technology.type";
 export const Step1Form: React.FC = () => {
   const {
     control,
