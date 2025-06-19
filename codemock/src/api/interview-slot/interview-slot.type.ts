@@ -6,6 +6,7 @@ import { SORT_ORDER } from "@/app/enums/sortOrder";
 export type Register_CancelSlotPayload = {
   candidateId: string;
   resumeUrl?: string;
+  payByCodemockCoin?: boolean;
 };
 
 export type CreateSlotPayload = {
@@ -43,3 +44,22 @@ export type SearchInterviewSlotRequest = {
   sortField?: SORT_FIELD;
   sortOrder?: SORT_ORDER;
 };
+
+export interface MoMoPaymentRequest {
+  amount: string;
+  orderInfo?: string;
+  redirectUrl?: string;
+  ipnUrl?: string;
+  extraData?: string;
+}
+
+export interface MoMoPaymentResponse {
+  partnerCode: string;
+  requestId: string;
+  orderId: string;
+  amount: string;
+  responseTime: number;
+  message: string;
+  payUrl?: string;
+  shortLink?: string;
+}

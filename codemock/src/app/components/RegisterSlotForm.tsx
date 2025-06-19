@@ -10,12 +10,20 @@ import {
   Typography,
   Box,
   Link,
+  Avatar,
 } from "@mui/material";
 import CustomModal from "./Modal";
-import { registerInterviewSlot } from "@/api/interview-slot/interview-slot";
+import {
+  createPaymentToRegister,
+  registerInterviewSlot,
+} from "@/api/interview-slot/interview-slot";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/redux";
 import { toastService } from "@/app/components/toast/toast.service";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 
 interface RegisterSlotFormProps {
   open: boolean;
@@ -40,24 +48,21 @@ export default function RegisterSlotForm({
   const [resumeUrl, setResumeUrl] = useState("");
   const [agree, setAgree] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<"momo" | "coin" | "">("");
+  const candidateId = useSelector((state: RootState) => state.auth.user.id);
 
-  const candidateId = useSelector(
-    (state: RootState) => state.auth.user.id
-  );
-
-  const handleSubmit = async () => {
-    if (!selectedSlotId || !resumeUrl || !agree) return;
-
+  const handleCodemockCoinSubmit = async () => {
     setLoading(true);
     try {
       await registerInterviewSlot(selectedSlotId, {
         candidateId,
         resumeUrl,
+        payByCodemockCoin: true,
       });
 
       toastService.show({
         title: "Đăng ký thành công",
-        description: "Bạn đã đăng ký slot phỏng vấn thành công.",
+        description: "Bạn đã đăng ký slot bằng Codemock Coin.",
         variant: "success",
       });
 
@@ -65,15 +70,48 @@ export default function RegisterSlotForm({
       setSelectedSlotId("");
       setResumeUrl("");
       setAgree(true);
+      setPaymentMethod("");
     } catch (error: any) {
       toastService.show({
         title: "Lỗi",
-        description:
-          error?.response?.data?.message || "Đăng ký thất bại",
+        description: error?.response?.data?.message || "Đăng ký thất bại",
         variant: "error",
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleMomoPayment = async () => {
+    if (!selectedSlotId || !resumeUrl || !agree) return;
+
+    try {
+      const extraData = JSON.stringify({
+        candidateId,
+        resumeUrl,
+      });
+
+      const res = await createPaymentToRegister({
+        amount: "50000",
+        orderInfo: selectedSlotId,
+        extraData: extraData,
+      });
+
+      if (res?.payUrl) {
+        window.location.href = res.payUrl; // ✅ Redirect tới trang MoMo
+      } else {
+        toastService.show({
+          title: "Lỗi",
+          description: "Không thể khởi tạo giao dịch MoMo",
+          variant: "error",
+        });
+      }
+    } catch (error: any) {
+      toastService.show({
+        title: "Lỗi MoMo",
+        description: error?.response?.data?.message || "Thanh toán thất bại",
+        variant: "error",
+      });
     }
   };
 
@@ -134,6 +172,51 @@ export default function RegisterSlotForm({
           }
         />
 
+        <Box>
+          <FormControl>
+            <Typography fontWeight="bold">
+              Chọn phương thức thanh toán
+            </Typography>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+              onChange={(e) =>
+                setPaymentMethod(e.target.value as "momo" | "coin")
+              }
+            >
+              <FormControlLabel
+                value="momo"
+                control={<Radio />}
+                label={
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-MoMo-Circle.png"
+                      sx={{ width: 24, height: 24 }}
+                    />
+                    <Typography>Momo</Typography>
+                  </Box>
+                }
+              />
+              <FormControlLabel
+                value="coin"
+                control={<Radio />}
+                label={
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      src="https://cdn-icons-png.flaticon.com/512/10692/10692946.png"
+                      sx={{ width: 24, height: 24 }}
+                    />
+                    <Typography>Codemock Coin</Typography>
+                  </Box>
+                }
+              />
+            </RadioGroup>
+          </FormControl>
+        </Box>
+
         <Box display="flex" justifyContent="space-between" mt={2}>
           <Button variant="outlined" color="error" onClick={onClose}>
             Thoát
@@ -141,7 +224,10 @@ export default function RegisterSlotForm({
           <Button
             variant="outlined"
             color="primary"
-            onClick={handleSubmit}
+            onClick={() => {
+              if (paymentMethod === "coin") handleCodemockCoinSubmit();
+              else if (paymentMethod === "momo") handleMomoPayment();
+            }}
             disabled={!selectedSlotId || !resumeUrl || !agree || loading}
           >
             {loading ? "Đang xử lý..." : "Đăng ký"}

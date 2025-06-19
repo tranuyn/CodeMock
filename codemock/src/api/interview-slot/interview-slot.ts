@@ -1,6 +1,13 @@
 import { get, post, put } from "@/api/rest-utils";
 import { callApiWithRefreshAsync } from "@/store/redux-saga/common-saga";
-import { CreateSlotPayload, InterviewSlotResult, Register_CancelSlotPayload, SearchInterviewSlotRequest } from "./interview-slot.type";
+import {
+  CreateSlotPayload,
+  InterviewSlotResult,
+  MoMoPaymentRequest,
+  MoMoPaymentResponse,
+  Register_CancelSlotPayload,
+  SearchInterviewSlotRequest,
+} from "./interview-slot.type";
 import { PaginatedResult } from "@/types/paginate";
 
 export const createInterviewSlot = async (payload: CreateSlotPayload) => {
@@ -44,4 +51,10 @@ export const getZegoCloudToken = async (
     `/interview_sessions/${slotId}/joinMeeting`,
     { expiredNumber }
   );
+};
+
+export const createPaymentToRegister = async (
+  payload: MoMoPaymentRequest
+): Promise<MoMoPaymentResponse> => {
+  return await post(`/momo/create-payment`, payload);
 };
