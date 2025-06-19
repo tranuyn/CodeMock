@@ -1,6 +1,7 @@
 import { get, post, put } from "@/api/rest-utils";
 import { callApiWithRefreshAsync } from "@/store/redux-saga/common-saga";
-import { CreateSlotPayload, Register_CancelSlotPayload } from "./interview-slot.type";
+import { CreateSlotPayload, InterviewSlotResult, Register_CancelSlotPayload, SearchInterviewSlotRequest } from "./interview-slot.type";
+import { PaginatedResult } from "@/types/paginate";
 
 export const createInterviewSlot = async (payload: CreateSlotPayload) => {
   return await post("/interview-slot", payload);
@@ -12,6 +13,12 @@ export const getAllInterviewSlots = async () => {
 
 export const getInterviewSlotsByCandidate = async () => {
   return await get(`/interview-slot/my-interview-slots`);
+};
+
+export const searchInterviewSlots = async (
+  params: SearchInterviewSlotRequest
+): Promise<PaginatedResult<InterviewSlotResult>> => {
+  return await get("/interview-slot/search", params);
 };
 
 export const registerInterviewSlot = async (

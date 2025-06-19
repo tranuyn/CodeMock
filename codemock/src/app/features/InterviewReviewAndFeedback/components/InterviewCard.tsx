@@ -25,7 +25,6 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
         boxShadow: 1,
       }}
     >
-      {/* Image section */}
       <Box
         sx={{ width: 150, height: 150, position: "relative", flexShrink: 0 }}
       >
@@ -40,17 +39,14 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
 
       {/* Content section */}
       <Grid container sx={{ flex: 1, p: 2 }}>
-        <Grid size={{ xs:12, md:8 }}>
+        <Grid size={{ xs:12, md:8, lg: 10 }} >
+        {/* sx={{ backgroundColor: "red"}}> */}
           <Typography
             variant="subtitle1"
             component="h3"
             sx={{ fontWeight: "bold", color: "#1976d2", mb: 1 }}
           >
             {interview.interviewSession?.title}
-          </Typography>
-
-          <Typography variant="body2" sx={{ mb: 1 }}>
-            {interview.interviewSession?.description}
           </Typography>
 
           <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
@@ -60,7 +56,13 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
           </Typography>
 
           <Typography variant="body2" color="text.secondary">
-            {/* {interview.interviewer} */} Cái gì đây đ biet
+            Vị trí: <span style={{color: 'black'}}>{interview.interviewSession?.level?.name}</span>
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Chuyên ngành: <span style={{color: 'black'}}>{interview.interviewSession?.majors?.[0]?.name}</span>
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Người phỏng vấn: <span style={{color: 'black'}}>{interview.interviewSession?.mentor?.username}</span>
           </Typography>
 
           {/* Rating display if available */}
@@ -82,7 +84,7 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
             </Typography>
           )} */}
         </Grid>
-        <Grid size={{ xs:12, sm:4 }}
+        <Grid size={{ xs:12, md: 4, lg: 2 }}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -90,7 +92,6 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
             justifyContent: "space-between",
           }}
         >
-          Price
           <Typography
             variant="subtitle1"
             sx={{
@@ -128,7 +129,7 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
               // TODO: Xử lý navigation đến trang "xem lại"
             }}
           >
-            Xem lại
+            Đánh giá
           </Button>
 
           {/* Rating button nếu chưa có */}

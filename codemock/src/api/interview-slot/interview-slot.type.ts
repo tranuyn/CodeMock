@@ -1,5 +1,7 @@
+import { SORT_FIELD } from "@/app/enums/sortField";
 import { InterviewSessionResult } from "../interview/interview-session.type";
 import { PublicMentorInfo } from "../user/user.type";
+import { SORT_ORDER } from "@/app/enums/sortOrder";
 
 export type Register_CancelSlotPayload = {
   candidateId: string;
@@ -26,4 +28,18 @@ export type InterviewSlotResult = {
   resumeUrl?: string;
   isPaid: boolean;
   interviewSession: InterviewSessionResult;
+};
+
+export type SearchInterviewSlotRequest = {
+  search?: string;
+  mentorId?: string;
+  status?: string;
+  levelId?: string;
+  majorIds?: string;
+  slotDuration?: number;
+  isFree?: boolean;
+  pageNumber?: number;
+  pageSize?: number;
+  sortField?: SORT_FIELD;
+  sortOrder?: SORT_ORDER;
 };

@@ -1,4 +1,6 @@
+import { SORT_FIELD } from "@/app/enums/sortField";
 import { PublicMentorInfo } from "../user/user.type";
+import { SORT_ORDER } from "@/app/enums/sortOrder";
 
 export type InterviewSessionResult = {
   sessionId: string;
@@ -9,6 +11,7 @@ export type InterviewSessionResult = {
   title: string;
   roomId: string;
   status: string;
+  createdAt: string;
   interviewSlots: {
     slotId: string;
     startTime: string;
@@ -38,10 +41,12 @@ export type SearchInterviewSessionRequest = {
   status?: string;
   levelId?: string;
   majorIds?: string;
+  slotDuration?: number;
+  isFree?: boolean;
   pageNumber?: number;
   pageSize?: number;
-  sortField?: 'title' | 'createdAt' | 'updatedAt' | 'level' | 'major';
-  sortOrder?: 'ASC' | 'DESC';
+  sortField?: SORT_FIELD;
+  sortOrder?: SORT_ORDER;
 };
 
 export type CreateInterviewSessionPayload = {

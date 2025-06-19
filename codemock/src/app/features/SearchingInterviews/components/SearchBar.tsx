@@ -6,9 +6,6 @@ import {
   FormControl,
   Select,
   MenuItem,
-  Divider,
-  InputLabel,
-  OutlinedInput,
   Checkbox,
   ListItemText,
 } from '@mui/material';
@@ -154,5 +151,5 @@ const SearchBar: React.FC<SearchBarProps> = ({
     </Box>
   );
 };
-
+ 
 export default SearchBar;
