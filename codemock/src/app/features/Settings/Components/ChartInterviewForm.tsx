@@ -8,15 +8,15 @@ interface FormProp {
 }
 const desktopOS = [
   {
-    label: "Windows",
+    label: "Giỏi",
     value: 72.72,
   },
   {
-    label: "OS X",
+    label: "Khá",
     value: 16.38,
   },
   {
-    label: "Linux",
+    label: "Trung bình",
     value: 3.83,
   },
 ];

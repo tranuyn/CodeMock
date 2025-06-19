@@ -56,7 +56,14 @@ export default function CheckPaymentPage() {
   }, [searchParams]);
 
   return (
-    <div style={{ padding: 20 }}>
+    <div
+      style={{
+        height: "90vh",
+        justifyContent: "center",
+        alignItems: "center",
+        display: "flex",
+      }}
+    >
       <h2>{processing ? "Đang xử lý giao dịch..." : "Hoàn tất"}</h2>
     </div>
   );

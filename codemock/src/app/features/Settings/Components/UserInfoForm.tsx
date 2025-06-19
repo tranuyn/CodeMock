@@ -78,7 +78,7 @@ const UserInfoForm = ({ user }: FormProp) => {
         username: getValues("username"),
         address: getValues("address"),
         phone: getValues("phone"),
-        email: getValues("phone"),
+        email: getValues("email"),
       })
     );
 

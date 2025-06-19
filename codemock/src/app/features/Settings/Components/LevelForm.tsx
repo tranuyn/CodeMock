@@ -30,15 +30,15 @@ const LevelForm = ({ user }: FormProp) => {
           Trạng thái
         </p>
         <p style={{ fontWeight: 400, marginBottom: "5px", color: "#6D6C6C" }}>
-          {user.role} - {user.levels[0].name}
+          {user.role} - {user.levels}
         </p>
       </div>
       <div>
         <p style={{ fontWeight: 600, fontSize: "110%", marginBottom: "5px" }}>
-          URL hồ sơ
+          Codemock Coin
         </p>
         <p style={{ fontWeight: 400, color: "#6D6C6C" }}>
-          www.hireu.com/profile/ho-kim-thien-nga-630611319
+          {new Intl.NumberFormat("vi-VN").format(user.coinBalance || 0)}
         </p>
       </div>
     </Box>
