@@ -56,7 +56,8 @@ export default function InterviewMentorCard({ session }: Props) {
           src={session?.mentor?.avatarUrl || ""}
           alt="Mentor"
           style={{ objectFit: "cover" }} 
-          variant="rounded"/>
+          variant="rounded"
+        />
         <Box sx={{ ml: 2, flex: 1 }}>
           {/* Header thông tin buổi phỏng vấn */}
           <Typography variant="subtitle1" fontWeight="bold" color="primary">
@@ -89,17 +90,17 @@ export default function InterviewMentorCard({ session }: Props) {
           </Typography>
         </Box>
         
-          <Card elevation={0} sx={{ mt: 1, p: 1, maxWidth: 120, textAlign: 'center',
-              backgroundColor:
-                sessionPrice === 0
-                  ? alpha("#008000", 0.2)
-                  : (theme) => alpha(theme.palette.error.main, 0.25),
-            }}
-          >
-            <Typography variant="body2" fontWeight="bold" color={sessionPrice === 0 ? "success.main" : "error.main"}>
-              {sessionPrice === 0 ? "Miễn phí" : `${sessionPrice.toLocaleString()} VND`}
-            </Typography>
-          </Card>
+        <Card elevation={0} sx={{ mt: 1, p: 1, maxWidth: 120, textAlign: 'center',
+            backgroundColor:
+              sessionPrice === 0
+                ? alpha("#008000", 0.2)
+                : (theme) => alpha(theme.palette.error.main, 0.25),
+          }}
+        >
+          <Typography variant="body2" fontWeight="bold" color={sessionPrice === 0 ? "success.main" : "error.main"}>
+            {sessionPrice === 0 ? "Miễn phí" : `${sessionPrice.toLocaleString()} VND`}
+          </Typography>
+        </Card>
       </Box>
       {/* Accordion: slot phỏng vấn */}
       <Accordion sx={{ mt: 2 }}>

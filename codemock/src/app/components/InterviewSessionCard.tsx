@@ -106,7 +106,6 @@ export default function InterviewSessionCard({ session, bookedSlotCount, isMySes
         onClose={() => setIsCancelOpen(false)}
         onConfirm={async (reason) => {
           const mySlot = allMySlot?.find(i => i.data.sessionId === session.sessionId)?.slotData;
-          console.log(allMySlot)
           if (!mySlot) {
             setIsCancelOpen(false);
             toastService.show({
