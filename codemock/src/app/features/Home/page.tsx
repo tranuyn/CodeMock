@@ -6,10 +6,34 @@ import backgroundImage from "@/assets/images/background.svg";
 import HeroSection from "./components/HeroSection";
 import StatsSection from "./components/StatsSection";
 import JobListingsSection from "./components/JobListingsSection";
+// Ensure JobListingsSection is a React component that accepts an 'interviews' prop
 import ChangeFutureSection from "./components/ChangeFutureSection";
 import RecommendationsSection from "./components/RecommendationsSection";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchInterviewsRequest } from "@/store/actions/interview-action";
+import { RootState } from "@/store/redux";
+import { InterviewInSchedule } from "../Schedule/page";
+
+export interface MyInterviewProps {
+  interviews: InterviewInSchedule[];
+}
 
 export default function Home() {
+  const role = useSelector((state: RootState) => state.auth.user.role);
+  const userId = useSelector((state: RootState) => state.auth.user.id);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (userId && role) {
+      dispatch(fetchInterviewsRequest({ userId, role: role as "MENTOR" | "CANDIDATE" }));
+    }
+  }, [userId, role]);
+
+  const interviews = useSelector((state: RootState) => state.interviews.interviews || []);
+  const upcomingInterviews = interviews.filter(
+    (i: InterviewInSchedule) => i.data.status === "upcoming"
+  );
   return (
     <Box component="main" sx={{ minHeight: "100vh" }}>
       <Box
@@ -48,9 +72,9 @@ export default function Home() {
           <HeroSection />
           <StatsSection />
         </Box>
-        <JobListingsSection />
+        <JobListingsSection interviews={upcomingInterviews}/>
         <ChangeFutureSection />
-        <RecommendationsSection />
+        <RecommendationsSection interviews={interviews} />
       </Box>
     </Box>
   );

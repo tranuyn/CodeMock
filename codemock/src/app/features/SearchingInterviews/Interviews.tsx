@@ -2,12 +2,14 @@ import { Box } from '@mui/material';
 import React from 'react';
 import InterviewSessionCard from "@/app/components/InterviewSessionCard";
 import { InterviewSessionResult } from '@/api/interview/interview-session.type';
+import { InterviewInSchedule } from '../Schedule/page';
 
 interface Props {
   interviews: InterviewSessionResult[];
+  myInterview: InterviewInSchedule[]
 }
 
-const SearchingInterviews: React.FC<Props> = ({ interviews }) => {
+const SearchingInterviews: React.FC<Props> = ({ interviews, myInterview }) => {
   console.log("SearchingInterviews", interviews?.length);
   return (
     <Box
@@ -27,6 +29,8 @@ const SearchingInterviews: React.FC<Props> = ({ interviews }) => {
             <InterviewSessionCard
               session={session}
               bookedSlotCount={bookedInSession}
+              isMySession={myInterview.some(interview => interview.data.sessionId === session.sessionId)}
+              allMySlot={myInterview}
             />
           </Box>
         );

@@ -8,6 +8,9 @@ export type Register_CancelSlotPayload = {
   resumeUrl?: string;
   payByCodemockCoin?: boolean;
 };
+export type CancelSlotPayload = {
+  cancelReason: string;
+};
 
 export type CreateSlotPayload = {
   sessionId: string;

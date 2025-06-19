@@ -1,35 +1,17 @@
 // src/components/JobListingsSection.jsx
 "use client";
 
-import { RootState } from "@/store/redux";
 import {
   Box,
   Typography,
   Container,
 } from "@mui/material";
 import Link from "next/link";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import InterviewSessionCard from "@/app/components/InterviewSessionCard";
 import { InterviewSessionResult } from "@/api/interview/interview-session.type";
-import { fetchInterviewsRequest } from "@/store/actions/interview-action";
+import { MyInterviewProps } from "../page";
 
-export default function JobListingsSection() {
-  const role = useSelector((state: RootState) => state.auth.user.role);
-  const userId = useSelector((state: RootState) => state.auth.user.id);
-  // const [interviews, setInterviews] = useState<InterviewSessionResult[]>([]);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (userId && role) {
-      dispatch(fetchInterviewsRequest({ userId, role: role as "MENTOR" | "CANDIDATE" }));
-    }
-  }, [userId, role]);
-
-  const interviews = useSelector((state: RootState) => state.interviews.interviews || []);
-  
-  console.log("Interviews in JobListingsSection:", interviews);
-
+export default function JobListingsSection( {interviews} : MyInterviewProps) {
   return (
     <Container
       maxWidth={false}
@@ -83,6 +65,7 @@ export default function JobListingsSection() {
               <InterviewSessionCard
                 session={rawSession}
                 bookedSlotCount={bookedInSession}
+                isMySession={true}
               />
             </Box>
           );

@@ -1,12 +1,13 @@
-import { get, post, put } from "@/api/rest-utils";
+import { get, patch, post, put } from "@/api/rest-utils";
 import { callApiWithRefreshAsync } from "@/store/redux-saga/common-saga";
 import {
+  CancelSlotPayload,
   CreateSlotPayload,
   InterviewSlotResult,
-  MoMoPaymentRequest,
-  MoMoPaymentResponse,
   Register_CancelSlotPayload,
   SearchInterviewSlotRequest,
+  MoMoPaymentRequest,
+  MoMoPaymentResponse,
 } from "./interview-slot.type";
 import { PaginatedResult } from "@/types/paginate";
 
@@ -37,9 +38,9 @@ export const registerInterviewSlot = async (
 
 export const cancelInterviewSlot = async (
   slotId: string,
-  payload: Register_CancelSlotPayload
+  payload: CancelSlotPayload
 ) => {
-  return await put(`/interview-slot/${slotId}/cancel`, payload);
+  return await patch(`/interview-slot/${slotId}/cancel`, payload);
 };
 
 export const getZegoCloudToken = async (
