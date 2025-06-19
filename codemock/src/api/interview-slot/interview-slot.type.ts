@@ -7,6 +7,9 @@ export type Register_CancelSlotPayload = {
   candidateId: string;
   resumeUrl?: string;
 };
+export type CancelSlotPayload = {
+  cancelReason: string;
+};
 
 export type CreateSlotPayload = {
   sessionId: string;

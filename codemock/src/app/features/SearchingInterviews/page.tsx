@@ -12,17 +12,31 @@ import { getAllMajor } from "@/store/actions/major-action";
 import { getAllLevel } from "@/store/actions/level-action";
 import { Major } from "@/store/types/major.type";
 import { Level } from "@/store/types/level.type";
+import { RootState } from "@/store/redux";
+import { fetchInterviewsRequest } from "@/store/actions/interview-action";
+import { SORT_FIELD } from "@/app/enums/sortField";
+import { SORT_ORDER } from "@/app/enums/sortOrder";
 
 export default function Searching() {
   const [selectedMajor, setSelectedMajor] = useState<Major[]>([]);
   const [selectedLevel, setSelectedLevel] = useState<Level | null>(null);
   const [searchResults, setSearchResults] = useState<InterviewSessionResult[]>([]);
 
-
-  const dispatch = useDispatch();
   const majors = useSelector((state: any) => state.majors.majors || []);
   const levels = useSelector((state: any) => state.levels.levels || []);
 
+  const role = useSelector((state: RootState) => state.auth.user.role);
+  const userId = useSelector((state: RootState) => state.auth.user.id);
+  // const [interviews, setInterviews] = useState<InterviewSessionResult[]>([]);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (userId && role) {
+      dispatch(fetchInterviewsRequest({ userId, role: role as "MENTOR" | "CANDIDATE" }));
+    }
+  }, [userId, role]);
+
+  const interviews = useSelector((state: RootState) => state.interviews.interviews || []);
   useEffect(() => {
     dispatch(getAllMajor());
     dispatch(getAllLevel());
@@ -44,8 +58,8 @@ export default function Searching() {
       majorIds: majors.map((m: { id: string }) => m.id).join(','),
       pageNumber: 1,
       pageSize: 10,
-      sortField: "createdAt",
-      sortOrder: "DESC",
+      sortField: SORT_FIELD.CREATED_AT,
+      sortOrder: SORT_ORDER.DESC,
     });
     setSearchResults(res.data || []); 
   };
@@ -97,7 +111,7 @@ export default function Searching() {
             </Box>
           ))}
         </Box> */}
-        <SearchingInterviews interviews={searchResults} />
+        <SearchingInterviews interviews={searchResults} myInterview={interviews}/>
       </Box>
     </Box>
   );

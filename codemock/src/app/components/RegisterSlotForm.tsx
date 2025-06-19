@@ -65,6 +65,7 @@ export default function RegisterSlotForm({
       setSelectedSlotId("");
       setResumeUrl("");
       setAgree(true);
+      window.location.reload();
     } catch (error: any) {
       toastService.show({
         title: "Lỗi",
@@ -100,6 +101,9 @@ export default function RegisterSlotForm({
             .map((slot) => (
               <MenuItem key={slot.slotId} value={slot.slotId}>
                 {new Date(slot.startTime).toLocaleTimeString("vi-VN", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })} - {new Date(slot.endTime).toLocaleTimeString("vi-VN", {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}

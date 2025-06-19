@@ -9,21 +9,21 @@ import { useSelector } from "react-redux";
 import { getAllInterviewSessions } from "@/api/interview/interview-session";
 import InterviewSessionCard from "@/app/components/InterviewSessionCard";
 import { InterviewSessionResult } from "@/api/interview/interview-session.type";
+import { MyInterviewProps } from "../page";
 
-export default function RecommendationsSection() {
+export default function RecommendationsSection( {interviews} : MyInterviewProps) {
   const role = useSelector((state: RootState) => state.auth.user.role);
   const userId = useSelector((state: RootState) => state.auth.user.id);
-  const [interviews, setInterviews] = useState<InterviewSessionResult[]>([]);
-  const bookedSlotCount = interviews.reduce((count, session) => {
+  const [allInterviews, setAllInterviews] = useState<InterviewSessionResult[]>([]);
+  const bookedSlotCount = allInterviews.reduce((count, session) => {
     const bookedInSession = session.interviewSlots.filter((slot: { status: string; }) => slot.status === "booked").length;
     return count + bookedInSession;
   }, 0);
-
   useEffect(() => {
     const fetchInterviews = async () => {
       try {
         const sessions = await getAllInterviewSessions() as InterviewSessionResult[];
-        setInterviews(sessions);
+        setAllInterviews(sessions);
       } catch (err) {
         console.error("Lỗi khi lấy dữ liệu phỏng vấn:", err);
       }
@@ -31,12 +31,16 @@ export default function RecommendationsSection() {
     fetchInterviews();
   }, [userId]);
 
+  const upcomingInterviews = allInterviews.filter(
+    (i: InterviewSessionResult) => i.status === "upcoming"
+  );
+
   return (
     <Container maxWidth={false} sx={{ flex: 1, py: 6, bgcolor: "rgba(240, 240, 240, 0.65)", borderRadius: 2, backdropFilter: 'blur(1px)', width: '94%' }}>
       <Typography variant="h5" fontWeight="bold" sx={{ mb: 3 }}>
         Đề Xuất Cho Bạn
       </Typography>
-      
+       
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fit, minmax(350px, 1fr))"
@@ -44,7 +48,7 @@ export default function RecommendationsSection() {
         justifyContent="center"
         sx={{ margin: "0 auto" }}
       >
-        {interviews.map((session) => {
+        {upcomingInterviews.map((session) => {
           const bookedInSession = session.interviewSlots.filter(
             (slot) => slot.status === "booked"
           ).length;
@@ -54,6 +58,7 @@ export default function RecommendationsSection() {
               <InterviewSessionCard
                 session={session}
                 bookedSlotCount={bookedInSession}
+                isMySession={interviews.some(interview => interview.data.sessionId === session.sessionId)}
               />
             </Box>
           );
