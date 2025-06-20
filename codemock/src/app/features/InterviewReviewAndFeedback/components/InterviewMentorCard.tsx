@@ -11,12 +11,17 @@ import {
   Avatar,
   Card,
   alpha,
+  Modal,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import dayjs from "dayjs";
 import { InterviewSessionResult } from "@/api/interview/interview-session.type";
 
 import AlarmRoundedIcon from '@mui/icons-material/AlarmRounded';
+import { useState } from "react";
+import FeedbackTabs from "./Feedback_Rating/FeedbackTabs";
+import { InterviewSlotResult } from "@/api/interview-slot/interview-slot.type";
+import { getInterviewSlotById } from "@/api/interview-slot/interview-slot";
 
 interface Props {
   session: InterviewSessionResult;
@@ -40,6 +45,14 @@ export default function InterviewMentorCard({ session }: Props) {
 
   const formatTime = (iso: string) => dayjs(iso).format("HH:mm");
   const formatDate = (iso: string) => dayjs(iso).format("DD/MM/YYYY");
+  const [showFeedback, setShowFeedback] = useState<boolean>(false)
+  const [viewFBSlot, setViewFBSlot] = useState<InterviewSlotResult>()
+
+  const handleViewFeedback = async (slotId: string) => {
+    setShowFeedback(true);
+    const slotDetail = await getInterviewSlotById(slotId);
+    setViewFBSlot(slotDetail)
+  }
 
   return (
     <Box
@@ -144,12 +157,46 @@ export default function InterviewMentorCard({ session }: Props) {
                 <Grid size={{ xs:12, sm:4 }}>
                   <Button 
                     size="small"
-                    href={`/interview/feedback/${slot.slotId}`}
+                    onClick={()=> handleViewFeedback(slot.slotId)}
                     sx={{ textTransform: "none" }}
                   >
                     {slot.feedback ? 'Xem đánh giá' : 'Gửi đánh giá'}
                   </Button>
                 </Grid>
+                <Modal open={showFeedback} onClose={() => setShowFeedback(false)}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      height: "100vh",
+                      overflow: "auto",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        bgcolor: "white",
+                        p: 3,
+                        borderRadius: 2,
+                        width: "100%",
+                        maxWidth: 600,
+                        maxHeight: "90vh",
+                        overflowY: "auto",
+                        boxShadow: 24,
+                      }}
+                    >
+                      <FeedbackTabs
+                        userRole="MENTOR"
+                        slot={viewFBSlot}
+                        onSubmitted={() => {
+                          setShowFeedback(false);
+                          window.location.reload();
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                </Modal>
+
               </Grid>
             </Box>
           ))}

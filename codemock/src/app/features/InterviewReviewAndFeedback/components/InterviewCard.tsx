@@ -151,7 +151,7 @@ export default function InterviewCard({ interview, reloadData }: InterviewCardPr
             color="primary"
             startIcon={<HotelClassRoundedIcon />}
             sx={{ mt: 1 }}
-             onClick={() => setShowFeedback(true)}
+            onClick={() => setShowFeedback(true)}
           >
             Đánh giá
           </Button>

@@ -10,28 +10,29 @@ import RatingDisplay from './RatingDisplay';
 
 interface FeedbackTabsProps {
   userRole: 'MENTOR' | 'CANDIDATE';
-  slot: InterviewSlotResult;
+  slot: InterviewSlotResult | undefined;
   onSubmitted?: () => void;
 }
 
 export default function FeedbackTabs({ userRole, slot, onSubmitted }: FeedbackTabsProps) {
   const [tab, setTab] = useState(0);
 
-  const hasFeedback = !!slot.feedback;
-  const hasRating = !!slot.rating;
+  const hasFeedback = !!slot?.feedback;
+  const hasRating = !!slot?.rating;
 
   return (
+    slot ? 
     <Box>
       <Tabs value={tab} onChange={(_, val) => setTab(val)} sx={{ mb: 2 }}>
-        <Tab label="Nhận xét của chuyên gia" />
-        <Tab label="Đánh giá về chuyên gia" />
-      </Tabs>
+      <Tab label="Nhận xét của chuyên gia" />
+      {userRole === 'CANDIDATE' && <Tab label="Đánh giá về chuyên gia" />}
+    </Tabs>
 
       {/* Tab 1: Mentor feedback */}
       {tab === 0 &&
         (userRole === 'MENTOR' && !hasFeedback ? (
           <FeedbackForm slotId={slot.slotId} onSuccess={onSubmitted} />
-        ) : (slot.feedback === undefined) ? (
+        ) : (slot.feedback === undefined ) ? (
           <FeedbackDisplay feedback={slot.feedback} />
         ) : <Typography>Hiện chuyên gia chưa gửi đánh giá đến cho bạn</Typography>
       )}
@@ -48,6 +49,6 @@ export default function FeedbackTabs({ userRole, slot, onSubmitted }: FeedbackTa
         ) : (
           <RatingDisplay rating={slot.rating?.ratingStar ?? 0} comment={slot.rating?.comment} />
         ))}
-    </Box>
+    </Box> : <>Lỗi</>
   );
 }
