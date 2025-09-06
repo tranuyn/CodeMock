@@ -3,9 +3,7 @@ import { Box } from "@mui/material";
 import styles from "../setting.module.css";
 import { AuthState } from "@/store/types";
 import { useEffect, useState } from "react";
-import {
-  getAllInterviewSessions,
-} from "@/api/interview/interview-session";
+import { getAllInterviewSessions } from "@/api/interview/interview-session";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/redux";
 import { call } from "redux-saga/effects";
@@ -53,12 +51,20 @@ const ComingSoonInterview = ({ user }: FormProp) => {
         Bạn có buổi phỏng vấn
       </p>
       <div className={styles.dateLine}>
-        <p>{formatDate(interviews[0]?.startTime)}</p>
-        <div className={styles.line} />
+        {interviews[0]?.status === "upcoming"
+          ? "Sắp tới"
+          : "Chưa có lịch phỏng vấn"}
+        {interviews[0]?.status === "upcoming" && (
+          <>
+            <p>{formatDate(interviews[0]?.startTime)}</p>
+            <div className={styles.line} />
+          </>
+        )}
       </div>
       <div>
         {interviews.length > 0 &&
           user.id === userId &&
+          interviews[0]?.status === "upcoming" &&
           interviews[0].interviewSlots.map((item) => (
             <div className={styles.interviewCardContainer} key={item.slotId}>
               <span className={styles.detailsBullet}>•</span>

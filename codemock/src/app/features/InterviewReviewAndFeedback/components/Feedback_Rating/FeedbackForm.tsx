@@ -2,7 +2,7 @@
 
 import { createFeedback } from '@/api/feedback/feedback';
 import { toastService } from '@/app/components/toast/toast.service';
-import { Box, Typography, TextField, Button, Rating, Grid } from '@mui/material';
+import { Box, Typography, TextField, Button, Rating, Grid, Input } from '@mui/material';
 import { useState } from 'react';
 
 export default function FeedbackForm({ slotId, onSuccess }: { slotId: string; onSuccess?: () => void }) {
@@ -35,17 +35,29 @@ export default function FeedbackForm({ slotId, onSuccess }: { slotId: string; on
     <Box>
       <Typography fontWeight="bold" mb={2}>Các điểm tương quan</Typography>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={4}>
+        <Grid size={{ xs: 12, sm: 4 }} >
           <Typography variant="body2">Kỹ thuật</Typography>
-          <Rating value={techScore} onChange={(_, v) => setTechScore(v || 1)} />
+            <Input
+              type='number'
+              value={techScore}
+              onChange={e => setTechScore(Number(e.target.value) || 0)}
+            />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid size={{ xs: 12, sm: 4}} >
           <Typography variant="body2">Giao tiếp</Typography>
-          <Rating value={comScore} onChange={(_, v) => setComScore(v || 1)} />
+          <Input
+            type='number'
+            value={comScore}
+            onChange={e => setComScore(Number(e.target.value) || 0)}
+          />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid size={{ xs: 12, sm: 4}}>
           <Typography variant="body2">Giải quyết vấn đề</Typography>
-          <Rating value={probScore} onChange={(_, v) => setProbScore(v || 1)} />
+          <Input
+            type='number'
+            value={probScore}
+            onChange={e => setProbScore(Number(e.target.value) || 0)}
+          />
         </Grid>
       </Grid>
 

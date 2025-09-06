@@ -32,9 +32,10 @@ export default function FeedbackTabs({ userRole, slot, onSubmitted }: FeedbackTa
       {tab === 0 &&
         (userRole === 'MENTOR' && !hasFeedback ? (
           <FeedbackForm slotId={slot.slotId} onSuccess={onSubmitted} />
-        ) : (slot.feedback === undefined ) ? (
+        ) : 
+        // (slot.feedback === undefined ) ? (
           <FeedbackDisplay feedback={slot.feedback} />
-        ) : <Typography>Hiện chuyên gia chưa gửi đánh giá đến cho bạn</Typography>
+        // ) : <Typography>Hiện chuyên gia chưa gửi đánh giá đến cho bạn</Typography>
       )}
 
       {/* Tab 2: Candidate rating */}

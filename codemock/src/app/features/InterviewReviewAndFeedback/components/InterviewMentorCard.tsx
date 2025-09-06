@@ -180,7 +180,7 @@ export default function InterviewMentorCard({ session }: Props) {
                         borderRadius: 2,
                         width: "100%",
                         maxWidth: 600,
-                        maxHeight: "90vh",
+                        maxHeight: "95vh",
                         overflowY: "auto",
                         boxShadow: 24,
                       }}

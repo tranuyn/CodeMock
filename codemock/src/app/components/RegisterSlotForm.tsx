@@ -24,6 +24,7 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+import TermsModal from "./TermsModal";
 
 interface RegisterSlotFormProps {
   open: boolean;
@@ -44,6 +45,8 @@ export default function RegisterSlotForm({
   slots,
   interviewId,
 }: RegisterSlotFormProps) {
+  const [openTermsModal, setOpenTermsModal] = useState(false);
+
   const [selectedSlotId, setSelectedSlotId] = useState("");
   const [resumeUrl, setResumeUrl] = useState("");
   const [agree, setAgree] = useState(true);
@@ -170,9 +173,12 @@ export default function RegisterSlotForm({
           label={
             <Typography>
               Tôi đồng ý với{" "}
-              <Link href="#" target="_blank">
+              <span
+                onClick={() => setOpenTermsModal(true)}
+                style={{ color: "#1976d2", textDecoration: "underline", cursor: "pointer" }}
+              >
                 điều khoản và quy định
-              </Link>{" "}
+              </span>{" "}
               tham gia phỏng vấn của HireU
             </Typography>
           }
@@ -240,6 +246,7 @@ export default function RegisterSlotForm({
           </Button>
         </Box>
       </Box>
+      <TermsModal open={openTermsModal} onClose={() => setOpenTermsModal(false)} />
     </CustomModal>
   );
 }
