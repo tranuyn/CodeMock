@@ -11,12 +11,17 @@ import {
   Avatar,
   Card,
   alpha,
+  Modal,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import dayjs from "dayjs";
 import { InterviewSessionResult } from "@/api/interview/interview-session.type";
 
 import AlarmRoundedIcon from '@mui/icons-material/AlarmRounded';
+import { useState } from "react";
+import FeedbackTabs from "./Feedback_Rating/FeedbackTabs";
+import { InterviewSlotResult } from "@/api/interview-slot/interview-slot.type";
+import { getInterviewSlotById } from "@/api/interview-slot/interview-slot";
 
 interface Props {
   session: InterviewSessionResult;
@@ -40,6 +45,14 @@ export default function InterviewMentorCard({ session }: Props) {
 
   const formatTime = (iso: string) => dayjs(iso).format("HH:mm");
   const formatDate = (iso: string) => dayjs(iso).format("DD/MM/YYYY");
+  const [showFeedback, setShowFeedback] = useState<boolean>(false)
+  const [viewFBSlot, setViewFBSlot] = useState<InterviewSlotResult>()
+
+  const handleViewFeedback = async (slotId: string) => {
+    setShowFeedback(true);
+    const slotDetail = await getInterviewSlotById(slotId);
+    setViewFBSlot(slotDetail)
+  }
 
   return (
     <Box
@@ -56,7 +69,8 @@ export default function InterviewMentorCard({ session }: Props) {
           src={session?.mentor?.avatarUrl || ""}
           alt="Mentor"
           style={{ objectFit: "cover" }} 
-          variant="rounded"/>
+          variant="rounded"
+        />
         <Box sx={{ ml: 2, flex: 1 }}>
           {/* Header thông tin buổi phỏng vấn */}
           <Typography variant="subtitle1" fontWeight="bold" color="primary">
@@ -89,17 +103,17 @@ export default function InterviewMentorCard({ session }: Props) {
           </Typography>
         </Box>
         
-          <Card elevation={0} sx={{ mt: 1, p: 1, maxWidth: 120, textAlign: 'center',
-              backgroundColor:
-                sessionPrice === 0
-                  ? alpha("#008000", 0.2)
-                  : (theme) => alpha(theme.palette.error.main, 0.25),
-            }}
-          >
-            <Typography variant="body2" fontWeight="bold" color={sessionPrice === 0 ? "success.main" : "error.main"}>
-              {sessionPrice === 0 ? "Miễn phí" : `${sessionPrice.toLocaleString()} VND`}
-            </Typography>
-          </Card>
+        <Card elevation={0} sx={{ mt: 1, p: 1, maxWidth: 120, textAlign: 'center',
+            backgroundColor:
+              sessionPrice === 0
+                ? alpha("#008000", 0.2)
+                : (theme) => alpha(theme.palette.error.main, 0.25),
+          }}
+        >
+          <Typography variant="body2" fontWeight="bold" color={sessionPrice === 0 ? "success.main" : "error.main"}>
+            {sessionPrice === 0 ? "Miễn phí" : `${sessionPrice.toLocaleString()} VND`}
+          </Typography>
+        </Card>
       </Box>
       {/* Accordion: slot phỏng vấn */}
       <Accordion sx={{ mt: 2 }}>
@@ -143,12 +157,46 @@ export default function InterviewMentorCard({ session }: Props) {
                 <Grid size={{ xs:12, sm:4 }}>
                   <Button 
                     size="small"
-                    href={`/interview/feedback/${slot.slotId}`}
+                    onClick={()=> handleViewFeedback(slot.slotId)}
                     sx={{ textTransform: "none" }}
                   >
                     {slot.feedback ? 'Xem đánh giá' : 'Gửi đánh giá'}
                   </Button>
                 </Grid>
+                <Modal open={showFeedback} onClose={() => setShowFeedback(false)}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      height: "100vh",
+                      overflow: "auto",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        bgcolor: "white",
+                        p: 3,
+                        borderRadius: 2,
+                        width: "100%",
+                        maxWidth: 600,
+                        maxHeight: "95vh",
+                        overflowY: "auto",
+                        boxShadow: 24,
+                      }}
+                    >
+                      <FeedbackTabs
+                        userRole="MENTOR"
+                        slot={viewFBSlot}
+                        onSubmitted={() => {
+                          setShowFeedback(false);
+                          window.location.reload();
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                </Modal>
+
               </Grid>
             </Box>
           ))}

@@ -1,18 +1,37 @@
-import { Box, Grid, Typography, Button, Rating } from "@mui/material";
+import { Box, Grid, Typography, Button, Rating, Avatar, Chip, Card, alpha, Modal } from "@mui/material";
 import { mapStatusToColor } from "@/app/constants/color";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { InterviewSlotResult } from "@/api/interview-slot/interview-slot.type";
-
+import dayjs from "dayjs";
+import HotelClassRoundedIcon from '@mui/icons-material/HotelClassRounded';
+import { useState } from "react";
+import FeedbackTabs from "./Feedback_Rating/FeedbackTabs";
 interface InterviewCardProps {
   interview: InterviewSlotResult;
+  reloadData?: () => void;
 }
 
-export default function InterviewCard({ interview }: InterviewCardProps) {
-  const getScoreColor = (score: string | null, isText = false): string => {
-    if (!score) return "#f5f5f5";
-    const numScore = parseInt(score.split("/")[0]);
-    return isText ? mapStatusToColor(numScore) : mapStatusToColor(numScore, false);
+export default function InterviewCard({ interview, reloadData }: InterviewCardProps) {
+  const [showFeedback, setShowFeedback] = useState<boolean>(false)
+
+  const getScoreColor = (score: number | null, isText = false): string => {
+    if (score === null || score === undefined) return "#f5f5f5";
+    return mapStatusToColor(score, isText);
   };
+
+  const formatTime = (iso: string) => dayjs(iso).format("HH:mm");
+  const formatDate = (iso: string) => dayjs(iso).format("DD/MM/YYYY");
+
+  const overallScore = interview.feedback
+    ? Number(
+        (
+          (interview.feedback.technicalScore +
+            interview.feedback.communicationScore +
+            interview.feedback.problemSolvingScore) /
+          3
+        ).toFixed(1)
+      )
+    : null;
 
   return (
     <Box
@@ -22,20 +41,15 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
         borderRadius: 1,
         mb: 2,
         overflow: "hidden",
-        boxShadow: 1,
+        boxShadow: 1, 
       }}
     >
-      <Box
-        sx={{ width: 150, height: 150, position: "relative", flexShrink: 0 }}
-      >
-        <img
-          src={interview?.interviewSession?.mentor?.avatarUrl || ""} // fallback nếu thiếu avatar
-          alt="Mentor"
-          width={150}
-          height={150}
-          style={{ objectFit: "cover" }}
-        />
-      </Box>
+      <Avatar sx={{width: 150, height: 150, position: "relative", flexShrink: 0, borderRadius: 2, overflow: 'hidden'}}
+        src={interview?.interviewSession?.mentor?.avatarUrl|| ""}
+        alt="Mentor"
+        style={{ objectFit: "cover" }} 
+        variant="rounded"
+      />
 
       {/* Content section */}
       <Grid container sx={{ flex: 1, p: 2 }}>
@@ -50,19 +64,30 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
           </Typography>
 
           <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
-            {/* {interview.date} | {interview.time} */}
-            {/* ngày vs giờ:  */}
-            {interview.startTime ? new Date(interview.startTime).toLocaleString() : "Chưa xác định"}
+            {formatDate(interview.startTime)} | 
+            {interview.startTime ? formatTime(interview.startTime) : "Chưa xác định"} -
+            {interview.endTime ? formatTime(interview.endTime) : "Chưa xác định"}
           </Typography>
 
           <Typography variant="body2" color="text.secondary">
-            Vị trí: <span style={{color: 'black'}}>{interview.interviewSession?.level?.name}</span>
+            Vị trí: <span style={{color: 'black'}}>{interview.interviewSession?.level?.name}</span> | Chuyên ngành: <span style={{color: 'black'}}>{interview.interviewSession?.majors?.[0]?.name}</span>
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Chuyên ngành: <span style={{color: 'black'}}>{interview.interviewSession?.majors?.[0]?.name}</span>
+            
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Người phỏng vấn: <span style={{color: 'black'}}>{interview.interviewSession?.mentor?.username}</span>
+          </Typography>
+          <Typography variant="body2" sx={{ mt: 1 }} >
+            Công nghệ yêu cầu:{" "}
+            {interview.interviewSession?.requiredTechnologies.map((tech) => (
+              <Chip
+                key={tech.id}
+                label={tech.name}
+                size="small"
+                sx={{ mr: 0.5, mb: 0.5 }}
+              />
+            ))}
           </Typography>
 
           {/* Rating display if available */}
@@ -92,22 +117,23 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
             justifyContent: "space-between",
           }}
         >
-          <Typography
-            variant="subtitle1"
-            sx={{
-              fontWeight: "bold",
-              color: interview.interviewSession?.sessionPrice === 0 ? "#4caf50" : "#ff0000",
+          <Card elevation={0} sx={{ p: 1, textAlign: 'center', width: '100%',
+            backgroundColor:
+              interview.interviewSession?.sessionPrice === 0
+                ? alpha("#008000", 0.2)
+                : (theme) => alpha(theme.palette.error.main, 0.25),
             }}
           >
-            {interview.interviewSession?.sessionPrice}
-          </Typography>
-
+            <Typography variant="body2" fontWeight="bold" color={interview.interviewSession?.sessionPrice === 0 ? "success.main" : "error.main"}>
+              {interview.interviewSession?.sessionPrice === 0 ? "Miễn phí" : `${interview.interviewSession?.sessionPrice.toLocaleString()} VND`}
+            </Typography>
+          </Card>
           {/* Score pill */}
           {interview.feedback && (
             <Box
               sx={{
-                bgcolor: getScoreColor(interview.feedback),
-                color: getScoreColor(interview.feedback, true),
+                bgcolor: getScoreColor(overallScore),
+                color: getScoreColor(overallScore, true),
                 py: 0.5,
                 px: 2,
                 borderRadius: 1,
@@ -115,7 +141,7 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
                 my: 1,
               }}
             >
-              {interview.feedback}
+              {overallScore}
             </Box>
           )}
 
@@ -123,29 +149,20 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
           <Button
             variant="outlined"
             color="primary"
-            startIcon={<VisibilityIcon />}
+            startIcon={<HotelClassRoundedIcon />}
             sx={{ mt: 1 }}
-            onClick={() => {
-              // TODO: Xử lý navigation đến trang "xem lại"
-            }}
+            onClick={() => setShowFeedback(true)}
           >
             Đánh giá
           </Button>
-
-          {/* Rating button nếu chưa có */}
-          {/* {interview.rating === null && (
-            <Button
-              variant="text"
-              color="primary"
-              startIcon={<span>⭐</span>}
-              sx={{ mt: 1 }}
-              onClick={() => {
-                // TODO: mở modal đánh giá
-              }}
-            >
-              Đánh giá
-            </Button>
-          )} */}
+          <Modal open={showFeedback} onClose={() => setShowFeedback(false)} >
+            <Box sx={{ bgcolor: "white", p: 3, borderRadius: 1, width: "100%", maxWidth: 600, m: "auto", marginTop: '100px' }}>
+              <FeedbackTabs userRole={'CANDIDATE'} slot={interview} onSubmitted={() => {
+                  reloadData?.();           // gọi lại API từ cha
+                  setShowFeedback(false);   // đóng modal
+                }} />
+            </Box>
+          </Modal>
         </Grid>
       </Grid>
     </Box>

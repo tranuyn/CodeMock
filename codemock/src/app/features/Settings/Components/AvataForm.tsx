@@ -71,21 +71,21 @@ const AvataForm = ({ user }: FormProp) => {
               width: "60%",
             }}
           >
-            <p className={styles.userName}>Hồ Kim Thiên Nga</p>
+            <p className={styles.userName}>{user.username || " "}</p>
             <p className={styles.bio}>{user.biography || " "} </p>
             <p className={styles.in4}>
-              <span style={{ color: "#6D6C6C" }}>
-                Ho Chi Minh city, Viet Nam
-              </span>
+              <span style={{ color: "#6D6C6C" }}>{user?.address || " "}</span>
               <span> - </span>
               <span style={{ color: "#0074C2" }}>{user.email}</span>
-              <span> - </span>
-              <span style={{ color: "#0EA75D" }}>
-                Đã tham gia từ {formattedDate}
-              </span>
+              <p style={{ color: "#0EA75D" }}>Đã tham gia từ {formattedDate}</p>
             </p>
-
-            <p className={styles.avaPoint}>Điểm trung bình: 9.5</p>
+            {user?.average_point ? (
+              <p className={styles.avaPoint}>
+                Điểm trung bình: {user?.average_point}
+              </p>
+            ) : (
+              <p className={styles.avaPoint} style={{backgroundColor: "grey", color: 'black'}}>Chưa có điểm đánh giá</p>
+            )}
           </div>
           <div
             style={{

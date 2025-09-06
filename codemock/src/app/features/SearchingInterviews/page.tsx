@@ -87,14 +87,14 @@ export default function Searching() {
         majors={majors}
       />
       <Box sx={{ bgcolor: "#EDF6FE", display: "flex", flexDirection: "column", width: "100%", p:2 }}>
-        <Typography
+        {/* <Typography
           fontSize="1rem"
           fontWeight="bold"
           color="#0A4D8C"
           mb={1}
         >
           Chọn chuyên ngành
-        </Typography>
+        </Typography> */}
         {/* <Box sx={{ display: "flex", gap: 2, p: 2, flexWrap: "wrap" }}>
           {titles.map((title, index) => (
             <Box

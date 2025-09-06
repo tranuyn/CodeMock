@@ -43,7 +43,7 @@ export default function HeroSection() {
           bay cao của bạn!
         </Typography>
 
-        <Box sx={{ display: "flex", alignItems: "center", mb: 6 }}>
+        {/* <Box sx={{ display: "flex", alignItems: "center", mb: 6 }}>
           <AvatarGroup max={4}>
             <Avatar
               alt="Remy Sharp"
@@ -69,9 +69,9 @@ export default function HeroSection() {
           <Typography variant="body2" sx={{ ml: 2, color: "white" }}>
             Hơn 1000+ người dùng đã tin tưởng chúng tôi
           </Typography>
-        </Box>
+        </Box> */}
 
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             alignItems: "center",
@@ -88,10 +88,9 @@ export default function HeroSection() {
               sx={{ color: "white", fontWeight: "bold" }}
             >
               {company.name}
-              {/* <Image src={company.logo} alt={company.name} width={80} height={24} /> */}
             </Typography>
           ))}
-        </Box>
+        </Box> */}
       </Grid>
     </Container>
   );

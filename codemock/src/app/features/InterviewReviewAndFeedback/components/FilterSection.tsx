@@ -103,7 +103,7 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
       {/* Programming Language Filter */}
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>Ngôn ngữ lập trình</Typography>
+          <Typography>Chuyên ngành</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <List dense disablePadding>

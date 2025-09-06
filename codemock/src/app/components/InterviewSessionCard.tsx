@@ -85,7 +85,7 @@ export default function InterviewSessionCard({ session, bookedSlotCount, isMySes
           <Button variant="outlined" size="small" onClick={handleDetailClick}>
             Xem chi tiết
           </Button>
-          {session.status !== 'upcoming' ? <></> : 
+          {session?.status !== 'upcoming' ? <></> : 
             <Button variant="contained" color="primary" size="small" 
             onClick={isMySession ? () => setIsCancelOpen(true) : () => setIsRegisterOpen(true)}>
               {isMySession ? 'Hủy đăng ký':'Đăng ký' }
@@ -106,7 +106,6 @@ export default function InterviewSessionCard({ session, bookedSlotCount, isMySes
         onClose={() => setIsCancelOpen(false)}
         onConfirm={async (reason) => {
           const mySlot = allMySlot?.find(i => i.data.sessionId === session.sessionId)?.slotData;
-          console.log(allMySlot)
           if (!mySlot) {
             setIsCancelOpen(false);
             toastService.show({

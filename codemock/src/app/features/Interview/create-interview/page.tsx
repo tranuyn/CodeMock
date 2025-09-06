@@ -146,7 +146,7 @@ function CreateInterview() {
             />
           </Box>
 
-          <Box textAlign="center" marginTop={4}>
+          <Box textAlign="center" marginTop={2} marginBottom={2}>
             <Button
               variant="contained"
               color="primary"

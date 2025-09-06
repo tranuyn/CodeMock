@@ -28,6 +28,10 @@ export const searchInterviewSlots = async (
 ): Promise<PaginatedResult<InterviewSlotResult>> => {
   return await get("/interview-slot/search", params);
 };
+export const getInterviewSlotById = async (slotId: string): Promise<InterviewSlotResult> => {
+  return await get(`/interview-slot/${slotId}`);
+};
+
 
 export const registerInterviewSlot = async (
   slotId: string,
