@@ -60,7 +60,7 @@ const ExperienceForm = ({ user }: FormProp) => {
         >
           {user.experiences?.length > 0 &&
             user.experiences.map((item, index) => (
-              <>
+              <div key={index}>
                 {index > 0 && (
                   <div
                     style={{
@@ -78,7 +78,7 @@ const ExperienceForm = ({ user }: FormProp) => {
                   yearEnd={item.yearEnd}
                   url_company={item.url_company}
                 />
-              </>
+              </div>
             ))}
         </div>
 

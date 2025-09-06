@@ -4,10 +4,25 @@ import { handleError } from "@/store/redux-saga/common-saga";
 import { GET_ALL_MAJOR, setAllMajor } from "@/store/actions/major-action";
 import { Major } from "../types/major.type";
 
-function* getAllMajorSaga() {
+interface GetAllMajorAction {
+  type: string;
+  callback?: (data: Major[]) => void;
+}
+
+function* getAllMajorSaga(action: GetAllMajorAction) {
   try {
-    const response: { data: Major[] } = yield call(callApiWithoutToken.get, "/major");
+    const response: { data: Major[] } = yield call(
+      callApiWithoutToken.get,
+      "/major"
+    );
+
     yield put(setAllMajor(response.data));
+
+    if (action.callback) {
+      yield call(action.callback, response.data);
+    }
+
+    //yield put(setAllMajor(response.data));
   } catch (error) {
     yield call(handleError, error, true);
   }

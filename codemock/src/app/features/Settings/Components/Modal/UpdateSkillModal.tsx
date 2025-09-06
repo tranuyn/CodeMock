@@ -49,6 +49,12 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 const UpdateSkillModal = ({ user, onClose }: SkillFormProp) => {
+  const toArray = <T,>(v?: T | T[]): T[] => {
+    if (!v) return [];
+    return Array.isArray(v) ? v : [v];
+  };
+
+  const initialLevels = toArray(user.level);
   const methods = useForm<{
     majors?: Major[];
     levels?: Level[];
@@ -57,9 +63,9 @@ const UpdateSkillModal = ({ user, onClose }: SkillFormProp) => {
   }>({
     defaultValues: {
       majors: user.majors?.length ? user.majors : [],
-      levels: user.levels?.length ? user.levels : [],
+      levels: initialLevels.length ? initialLevels : [],
       technologies: user.technologies?.length ? user.technologies : [],
-      skill: user.skill?.length ? user.skill : [{}],
+      skill: user.skills?.length ? user.skills : [{}],
     },
     mode: "onChange",
     reValidateMode: "onChange",
@@ -93,6 +99,7 @@ const UpdateSkillModal = ({ user, onClose }: SkillFormProp) => {
       dispatch({
         type: "GET_ALL_LEVEL",
         callback: (data: Level[]) => {
+          console.log(data);
           setLevels(data);
         },
       });
@@ -167,7 +174,7 @@ const UpdateSkillModal = ({ user, onClose }: SkillFormProp) => {
     // skill
     JSON.stringify(watch("skill")) ===
       JSON.stringify(
-        user.skill || [
+        user.skills || [
           {
             position: "",
             work_space: "",
@@ -182,15 +189,15 @@ const UpdateSkillModal = ({ user, onClose }: SkillFormProp) => {
     // majors
     JSON.stringify(watch("majors")) === JSON.stringify(user.majors || []) &&
     // levels
-    JSON.stringify(watch("levels")) === JSON.stringify(user.levels || []) &&
+    JSON.stringify(watch("levels")) === JSON.stringify(user.level || []) &&
     // technologies
     JSON.stringify(watch("technologies")) ===
       JSON.stringify(user.technologies || []);
 
   const Reset = () => {
-    setValue("skill", user.skill || []);
+    setValue("skill", user.skills || []);
     setValue("majors", user.majors || []);
-    setValue("levels", user.levels || []);
+    setValue("levels", user.level || []);
     setValue("technologies", user.technologies || []);
 
     setPreviews(
@@ -233,7 +240,7 @@ const UpdateSkillModal = ({ user, onClose }: SkillFormProp) => {
         majorIds: getValues("majors")?.map((m) => m.id) || [],
         levelIds: getValues("levels")?.map((l) => l.id) || [],
         technologyIds: getValues("technologies")?.map((t) => t.id) || [],
-        skill: filteredSkills,
+        skills: filteredSkills,
       })
     );
 

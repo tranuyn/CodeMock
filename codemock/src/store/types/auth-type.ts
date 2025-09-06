@@ -18,7 +18,7 @@ export interface AuthState {
   role: string;
   is_active: boolean;
   experiences: experience_detail[];
-  skill: SkillItem[];
+  skills: SkillItem[];
   educationLevel: string;
   createdAt: string;
   warning_count: number;
@@ -32,7 +32,7 @@ export interface AuthState {
   biography: string;
   average_point: number;
   majors: Major[];
-  levels: Level[];
+  level: Level;
   technologies: Technology[];
   current_activity: experience_detail[];
   specialization_skill: string[];

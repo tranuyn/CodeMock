@@ -30,7 +30,7 @@ const LevelForm = ({ user }: FormProp) => {
           Trạng thái
         </p>
         <p style={{ fontWeight: 400, marginBottom: "5px", color: "#6D6C6C" }}>
-          {user.role} - {user.levels}
+          {user.role} - {user.level.name}
         </p>
       </div>
       <div>

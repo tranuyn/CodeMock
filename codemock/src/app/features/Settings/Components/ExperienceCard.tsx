@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Avatar } from "@mui/material";
 import styles from "../setting.module.css";
 
 interface Prop {
@@ -18,10 +18,23 @@ const ExperienceCard = ({
   yearEnd,
   imageUrl,
 }: Prop) => {
+  const hasImage = !!(url_company && url_company.trim());
   return (
     <Box className={styles.flexRow}>
       <div className={styles.companyImg}>
-        <img style={{ objectFit: "cover" }} src={url_company} />
+        {hasImage ? (
+          // pass undefined if no src to avoid src=""
+          <img
+            style={{ objectFit: "cover", width: "100%", height: "100%" }}
+            src={url_company || undefined}
+            alt={work_space ?? "company image"}
+          />
+        ) : (
+          // fallback (MUI Avatar)
+          <Avatar sx={{ width: "100%", height: "100%" }}>
+            {work_space ? work_space.charAt(0).toUpperCase() : "?"}
+          </Avatar>
+        )}
       </div>
 
       <div style={{ flex: 1 }}>

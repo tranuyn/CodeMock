@@ -73,18 +73,23 @@ const AvataForm = ({ user }: FormProp) => {
           >
             <p className={styles.userName}>{user.username || " "}</p>
             <p className={styles.bio}>{user.biography || " "} </p>
-            <p className={styles.in4}>
+            <div className={styles.in4}>
               <span style={{ color: "#6D6C6C" }}>{user?.address || " "}</span>
               <span> - </span>
               <span style={{ color: "#0074C2" }}>{user.email}</span>
               <p style={{ color: "#0EA75D" }}>Đã tham gia từ {formattedDate}</p>
-            </p>
+            </div>
             {user?.average_point ? (
               <p className={styles.avaPoint}>
                 Điểm trung bình: {user?.average_point}
               </p>
             ) : (
-              <p className={styles.avaPoint} style={{backgroundColor: "grey", color: 'black'}}>Chưa có điểm đánh giá</p>
+              <p
+                className={styles.avaPoint}
+                style={{ backgroundColor: "grey", color: "black" }}
+              >
+                Chưa có điểm đánh giá
+              </p>
             )}
           </div>
           <div
