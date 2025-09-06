@@ -26,24 +26,32 @@ import { RootState } from "@/store/redux";
 import { toastService } from "@/app/components/toast/toast.service";
 import { cancelInterviewSlot } from "@/api/interview-slot/interview-slot";
 import CancelSlotModal from "@/app/components/Register&CancelSlotModal/CancelSlotModal";
- 
+import { Color } from "@/assets/Color";
+import CustomModal from "@/app/components/Modal";
+import ReportModal from "./Components/reportModal";
+
 export default function InterviewSection({
   params,
 }: {
   params: { id: string };
-}) {  
+}) {
   const role = useSelector((state: RootState) => state.auth.user.role);
   const userId = useSelector((state: RootState) => state.auth.user.id);
   // const [interviews, setInterviews] = useState<InterviewSessionResult[]>([]);
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (userId && role) {
-      dispatch(fetchInterviewsRequest({ userId, role: role as "MENTOR" | "CANDIDATE" }));
+      dispatch(
+        fetchInterviewsRequest({ userId, role: role as "MENTOR" | "CANDIDATE" })
+      );
     }
   }, [userId, role]);
 
-  const interviews = useSelector((state: RootState) => state.interviews.interviews || []);
+  const interviews = useSelector(
+    (state: RootState) => state.interviews.interviews || []
+  );
   const [interview, setInterview] = useState<InterviewSessionResult>();
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [isCancelOpen, setIsCancelOpen] = useState(false);
@@ -53,7 +61,7 @@ export default function InterviewSection({
       try {
         const session = (await getInterviewSessionById(
           params.id
-        )) as InterviewSessionResult; 
+        )) as InterviewSessionResult;
         setInterview(session);
       } catch (err) {
         console.error("Lỗi khi lấy dữ liệu phỏng vấn:", err);
@@ -75,7 +83,7 @@ export default function InterviewSection({
     ).length ?? 0;
   const remainingCount = (interview?.totalSlots ?? 0) - bookedCount;
 
-  const isMySession = interviews.some(i => i.data.sessionId === params.id)
+  const isMySession = interviews.some((i) => i.data.sessionId === params.id);
 
   return (
     <Box sx={{ p: 2, bgcolor: "#f9f9f9" }}>
@@ -103,23 +111,29 @@ export default function InterviewSection({
                 />
               </Box>
               <Divider orientation="vertical" variant="middle" />
-              {interview.status !== 'upcoming' ? <></> : 
-              <>
-                <Typography fontSize={14} mb={2}>
-                  Số lượng ban đầu: {interview.totalSlots} | Số lượng đã đăng ký:{" "}
-                  {bookedCount} | Số lượng còn lại: {remainingCount}
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  sx={{ mb: 3 }}
-                  onClick={isMySession ? () => setIsCancelOpen(true) : () => setIsRegisterOpen(true)}
-                >
-                  {isMySession ? 'Hủy đăng ký':'Đăng ký ngay' }
-                </Button>
+              {interview.status !== "upcoming" ? (
+                <></>
+              ) : (
+                <>
+                  <Typography fontSize={14} mb={2}>
+                    Số lượng ban đầu: {interview.totalSlots} | Số lượng đã đăng
+                    ký: {bookedCount} | Số lượng còn lại: {remainingCount}
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    sx={{ mb: 3 }}
+                    onClick={
+                      isMySession
+                        ? () => setIsCancelOpen(true)
+                        : () => setIsRegisterOpen(true)
+                    }
+                  >
+                    {isMySession ? "Hủy đăng ký" : "Đăng ký ngay"}
+                  </Button>
                 </>
-              }
+              )}
             </Paper>
             <Paper sx={{ p: 3 }}>
               <Typography
@@ -129,8 +143,16 @@ export default function InterviewSection({
               >
                 Chi tiết buổi phỏng vấn
               </Typography>
-              <Typography component={'div'} dangerouslySetInnerHTML={{ __html: interview.description }}/>
-              {interview.requirement && <Typography component={'div'} dangerouslySetInnerHTML={{ __html: interview.requirement }}/>}
+              <Typography
+                component={"div"}
+                dangerouslySetInnerHTML={{ __html: interview.description }}
+              />
+              {interview.requirement && (
+                <Typography
+                  component={"div"}
+                  dangerouslySetInnerHTML={{ __html: interview.requirement }}
+                />
+              )}
               <Typography variant="body2" color="text.secondary" mb={2}>
                 Hạn nộp hồ sơ:{" "}
                 {new Date(start.getTime() - 86400000).toLocaleDateString(
@@ -219,6 +241,27 @@ export default function InterviewSection({
           {/* RIGHT SIDEBAR */}
           <Grid size={{ xs: 12, md: 4 }}>
             <Box display="flex" flexDirection="column" gap={2}>
+              <Button
+                sx={{
+                  width: "100%",
+                  background: Color.gradient,
+                  fontSize: "100%",
+                  marginBottom: "10px",
+                }}
+                variant="contained"
+                onClick={() => setOpen(true)}
+              >
+                Tố cáo
+              </Button>
+
+              <CustomModal
+                open={open}
+                onClose={() => setOpen(false)}
+                title="Tố cáo buổi phỏng vấn"
+              >
+                <ReportModal onClose={() => setOpen(false)} />
+              </CustomModal>
+
               <Paper
                 sx={{
                   display: "flex",
@@ -274,7 +317,11 @@ export default function InterviewSection({
                 icon="🛠️"
                 items={
                   interview.mentor.skills?.map((skill) => ({
-                    text: `${skill.name} (${skill.proficiency_level ?? "Unknown"} - ${skill.years_of_experience ?? 0} yrs): ${skill.detail ?? ""}`,
+                    text: `${skill.name} (${
+                      skill.proficiency_level ?? "Unknown"
+                    } - ${skill.years_of_experience ?? 0} yrs): ${
+                      skill.detail ?? ""
+                    }`,
                   })) || []
                 }
               />
@@ -297,7 +344,9 @@ export default function InterviewSection({
         open={isCancelOpen}
         onClose={() => setIsCancelOpen(false)}
         onConfirm={async (reason) => {
-          const mySlot = interviews.find(i => i.data.sessionId === params.id)?.slotData;
+          const mySlot = interviews.find(
+            (i) => i.data.sessionId === params.id
+          )?.slotData;
 
           if (!mySlot) {
             setIsCancelOpen(false);
@@ -318,7 +367,12 @@ export default function InterviewSection({
             });
             setIsCancelOpen(false);
             window.location.reload();
-            dispatch(fetchInterviewsRequest({ userId, role: role as "MENTOR" | "CANDIDATE" }));
+            dispatch(
+              fetchInterviewsRequest({
+                userId,
+                role: role as "MENTOR" | "CANDIDATE",
+              })
+            );
           } catch (err) {
             console.error(err);
             setIsCancelOpen(false);
@@ -330,7 +384,6 @@ export default function InterviewSection({
           }
         }}
       />
-
     </Box>
   );
 }

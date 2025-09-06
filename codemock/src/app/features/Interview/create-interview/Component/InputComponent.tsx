@@ -1,7 +1,12 @@
 // components/InputComponent.tsx
 import React from "react";
 import { TextField } from "@mui/material";
-import { FieldError, UseFormRegister, FieldValues, Path } from "react-hook-form";
+import {
+  FieldError,
+  UseFormRegister,
+  FieldValues,
+  Path,
+} from "react-hook-form";
 
 interface InputComponentProps<T extends FieldValues> {
   title: string;
